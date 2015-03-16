@@ -23,12 +23,12 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
     if(OpenDialog1->Execute())
     {
         fp = fopen(OpenDialog1->FileName.c_str(), "r+");
-        Memo1->Lines->Add(OpenDialog1->FileName.c_str());
+        Input_memo->Lines->Add(OpenDialog1->FileName.c_str());
         fclose(fp);
     }
     else
     {
-        Memo1->Lines->Add("Nothing happens.");
+        Input_memo->Lines->Add("Nothing happens.");
     }
 }
 //---------------------------------------------------------------------------
