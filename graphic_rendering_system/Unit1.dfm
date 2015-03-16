@@ -19,6 +19,8 @@ object Form1: TForm1
     Top = 30
     Width = 600
     Height = 400
+    ParentShowHint = False
+    ShowHint = False
   end
   object Draw_button: TBitBtn
     Left = 400
@@ -33,6 +35,7 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
     TabOrder = 3
+    OnClick = Draw_buttonClick
   end
   object Vertex_group: TGroupBox
     Left = 80
@@ -40,6 +43,12 @@ object Form1: TForm1
     Width = 465
     Height = 200
     Caption = 'Vertex'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 0
     object VX_edit: TLabeledEdit
       Left = 24
@@ -156,7 +165,10 @@ object Form1: TForm1
       Top = 160
       Width = 121
       Height = 25
+      Hint = 'Enter the three vertices of a triangle.'
       Caption = 'Add Vertex'
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 9
     end
     object ClearV_edit: TBitBtn
@@ -421,6 +433,7 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
     TabOrder = 4
+    OnClick = Reset_buttonClick
   end
   object MainMenu1: TMainMenu
     object F1: TMenuItem
