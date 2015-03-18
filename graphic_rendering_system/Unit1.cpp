@@ -118,7 +118,6 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
                 draw_area->Canvas->Pixels[j][i] = make_pixel(i,j);
             }
         }
-
         fclose(fp);
     }
     else
@@ -274,3 +273,6 @@ void __fastcall TForm1::Draw_buttonClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+
+
+

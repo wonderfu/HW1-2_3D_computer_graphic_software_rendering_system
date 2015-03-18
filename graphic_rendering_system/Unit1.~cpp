@@ -44,12 +44,7 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
 
         if(Tri!=NULL)
         {
-            free(Tricolor);
-            Tricolor = NULL;
-            for(i=0; i<Tnum; ++i)
-                free(Tri[i]);
-            free(Tri);
-            Tri = NULL;
+            clean_mem();
         }
         /*
         while( fscanf(fp,"%c",&input_object) == 1 )
@@ -123,7 +118,6 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
                 draw_area->Canvas->Pixels[j][i] = make_pixel(i,j);
             }
         }
-
         fclose(fp);
     }
     else
@@ -245,6 +239,16 @@ void make_map()
     }
 }
 
+void clean_mem(void)
+{
+    free(Tricolor);
+    Tricolor = NULL;
+    for(int i=0; i<Tnum; ++i)
+        free(Tri[i]);
+    free(Tri);
+    Tri = NULL;
+}
+
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Reset_buttonClick(TObject *Sender)
 {
@@ -258,3 +262,17 @@ void __fastcall TForm1::Reset_buttonClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+void __fastcall TForm1::Draw_buttonClick(TObject *Sender)
+{
+    for(int i=0; i<MAXi; ++i)
+    {
+        for(int j=0; j<MAXj; ++j)
+        {
+            draw_area->Canvas->Pixels[j][i] = make_pixel(i,j);
+        }
+    }
+}
+//---------------------------------------------------------------------------
+
+
+
