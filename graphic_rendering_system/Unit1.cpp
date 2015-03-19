@@ -37,7 +37,7 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
     if(OpenDialog1->Execute())
     {
         fp = fopen(OpenDialog1->FileName.c_str(), "r");
-        Input_memo->Clear();
+        Msg_Memo->Clear();
 
         if(Tri!=NULL)
         {
@@ -89,7 +89,7 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
             Tri[i] = (node*) malloc( sizeof(node)*3);
             strcpy(str,"Triangle ");
             strcat(str,IntToStr(i+1).c_str());
-            Input_memo->Lines->Add(str);
+            Msg_Memo->Lines->Add(str);
             for(j=0; j<3; ++j)
             {
                 fscanf(fp,"%f%f%f",&Tri[i][j].x,&Tri[i][j].y,&Tri[i][j].z);
@@ -102,10 +102,10 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
                 strcat(str," , ");
                 strcat(str,FloatToStr(Tri[i][j].z).c_str());
                 strcat(str," )");
-                Input_memo->Lines->Add(str);
+                Msg_Memo->Lines->Add(str);
             }
             fscanf(fp,"%d",&Tricolor[i]);
-            Input_memo->Lines->Add("");
+            Msg_Memo->Lines->Add("");
         }
         // get the pixels
         for(i=0; i<WindowH; ++i)
@@ -119,7 +119,7 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
     }
     else
     {
-        Input_memo->Lines->Add("[!]Open failed.");
+        Msg_Memo->Lines->Add("[!]Open failed.");
     }
 }
 
@@ -249,7 +249,7 @@ void clean_mem(void)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
 {
-    Input_memo->Clear();
+    Msg_Memo->Clear();
     for(int i=0; i<WindowH; ++i)
     {
         for(int j=0; j<WindowW; ++j)

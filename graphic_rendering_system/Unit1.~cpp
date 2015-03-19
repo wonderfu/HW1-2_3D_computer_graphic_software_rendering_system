@@ -8,9 +8,6 @@
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 
-#define WindowH 600
-#define MAXj 800
-
 TForm1 *Form1;
 
 int Tnum, *Tricolor;
@@ -250,7 +247,7 @@ void clean_mem(void)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Reset_buttonClick(TObject *Sender)
+void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
 {
     Input_memo->Clear();
     for(int i=0; i<WindowH; ++i)
@@ -262,7 +259,7 @@ void __fastcall TForm1::Reset_buttonClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Draw_buttonClick(TObject *Sender)
+void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
 {
     for(int i=0; i<WindowH; ++i)
     {

@@ -28,7 +28,7 @@ object Form1: TForm1
     Width = 600
     Height = 400
   end
-  object Draw_button: TBitBtn
+  object Draw_Button: TBitBtn
     Left = 384
     Top = 704
     Width = 121
@@ -41,9 +41,9 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
     TabOrder = 1
-    OnClick = Draw_buttonClick
+    OnClick = Draw_ButtonClick
   end
-  object Input_memo: TMemo
+  object Msg_Memo: TMemo
     Left = 600
     Top = 450
     Width = 600
@@ -56,7 +56,7 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 3
   end
-  object Reset_button: TBitBtn
+  object Reset_Button: TBitBtn
     Left = 240
     Top = 704
     Width = 121
@@ -69,9 +69,9 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
     TabOrder = 2
-    OnClick = Reset_buttonClick
+    OnClick = Reset_ButtonClick
   end
-  object PageControl1: TPageControl
+  object SetC_Button: TPageControl
     Left = 50
     Top = 40
     Width = 500
@@ -87,7 +87,7 @@ object Form1: TForm1
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Vertex'
-      object addV_button: TBitBtn
+      object AddV_Button: TBitBtn
         Left = 184
         Top = 520
         Width = 121
@@ -98,7 +98,7 @@ object Form1: TForm1
         ShowHint = True
         TabOrder = 3
       end
-      object ClearV_edit: TBitBtn
+      object ClearV_Button: TBitBtn
         Left = 328
         Top = 520
         Width = 121
@@ -106,7 +106,7 @@ object Form1: TForm1
         Caption = 'Clear'
         TabOrder = 4
       end
-      object GroupBox1: TGroupBox
+      object VPos_GroupBox: TGroupBox
         Left = 16
         Top = 24
         Width = 457
@@ -152,7 +152,7 @@ object Form1: TForm1
           TabOrder = 0
         end
       end
-      object GroupBox2: TGroupBox
+      object VN_GroupBox: TGroupBox
         Left = 16
         Top = 128
         Width = 457
@@ -196,7 +196,7 @@ object Form1: TForm1
           TabOrder = 2
         end
       end
-      object GroupBox3: TGroupBox
+      object VPro_GroupBox: TGroupBox
         Left = 16
         Top = 232
         Width = 457
@@ -312,7 +312,7 @@ object Form1: TForm1
           TabOrder = 6
         end
       end
-      object StaticText1: TStaticText
+      object V_StaticText: TStaticText
         Left = 40
         Top = 448
         Width = 350
@@ -330,21 +330,21 @@ object Form1: TForm1
     object TabSheet2: TTabSheet
       Caption = 'Light'
       ImageIndex = 1
-      object GroupBox4: TGroupBox
+      object LA_GroupBox: TGroupBox
         Left = 16
         Top = 24
         Width = 457
         Height = 81
         Caption = 'Ambient Light'
         TabOrder = 0
-        object Edit1: TEdit
+        object LA_Edit: TEdit
           Left = 24
           Top = 40
           Width = 121
           Height = 24
           TabOrder = 0
         end
-        object BitBtn1: TBitBtn
+        object SetLA_Button: TBitBtn
           Left = 168
           Top = 40
           Width = 121
@@ -353,21 +353,21 @@ object Form1: TForm1
           TabOrder = 1
         end
       end
-      object GroupBox5: TGroupBox
+      object LS_GroupBox: TGroupBox
         Left = 16
         Top = 128
         Width = 457
         Height = 345
         Caption = 'Light Source'
         TabOrder = 1
-        object GroupBox6: TGroupBox
+        object LSP_GroupBox: TGroupBox
           Left = 8
           Top = 40
           Width = 441
           Height = 81
           Caption = 'Position'
           TabOrder = 0
-          object LX_edit: TLabeledEdit
+          object LX_Edit: TLabeledEdit
             Left = 16
             Top = 41
             Width = 121
@@ -379,7 +379,7 @@ object Form1: TForm1
             LabelSpacing = 3
             TabOrder = 0
           end
-          object LY_edit: TLabeledEdit
+          object LY_Edit: TLabeledEdit
             Left = 160
             Top = 41
             Width = 121
@@ -391,7 +391,7 @@ object Form1: TForm1
             LabelSpacing = 3
             TabOrder = 1
           end
-          object LZ_edit: TLabeledEdit
+          object LZ_Edit: TLabeledEdit
             Left = 304
             Top = 41
             Width = 121
@@ -404,14 +404,14 @@ object Form1: TForm1
             TabOrder = 2
           end
         end
-        object GroupBox7: TGroupBox
+        object LSC_GroupBox: TGroupBox
           Left = 8
           Top = 136
           Width = 441
           Height = 81
           Caption = 'Color'
           TabOrder = 1
-          object CG_edit: TLabeledEdit
+          object CG_Edit: TLabeledEdit
             Left = 160
             Top = 41
             Width = 121
@@ -423,7 +423,7 @@ object Form1: TForm1
             LabelSpacing = 3
             TabOrder = 1
           end
-          object CB_edit: TLabeledEdit
+          object CB_Edit: TLabeledEdit
             Left = 304
             Top = 41
             Width = 121
@@ -435,7 +435,7 @@ object Form1: TForm1
             LabelSpacing = 3
             TabOrder = 2
           end
-          object CR_edit: TLabeledEdit
+          object CR_Edit: TLabeledEdit
             Left = 16
             Top = 41
             Width = 121
@@ -448,7 +448,7 @@ object Form1: TForm1
             TabOrder = 0
           end
         end
-        object ClearL_edit: TBitBtn
+        object ClearL_Button: TBitBtn
           Left = 312
           Top = 296
           Width = 121
@@ -456,7 +456,7 @@ object Form1: TForm1
           Caption = 'Clear'
           TabOrder = 3
         end
-        object addL_button: TBitBtn
+        object AddL_Button: TBitBtn
           Left = 168
           Top = 296
           Width = 121
@@ -469,7 +469,7 @@ object Form1: TForm1
     object TabSheet3: TTabSheet
       Caption = 'Camera'
       ImageIndex = 2
-      object ClearC_edit: TBitBtn
+      object ClearC_Button: TBitBtn
         Left = 328
         Top = 520
         Width = 121
@@ -477,70 +477,26 @@ object Form1: TForm1
         Caption = 'Clear'
         TabOrder = 5
       end
-      object WD_edit: TLabeledEdit
+      object WD_Edit: TLabeledEdit
         Left = 40
         Top = 352
         Width = 121
         Height = 24
-        EditLabel.Width = 102
+        EditLabel.Width = 104
         EditLabel.Height = 16
-        EditLabel.Caption = 'Window distance'
+        EditLabel.Caption = 'Window Distance'
         LabelPosition = lpAbove
         LabelSpacing = 3
         TabOrder = 3
       end
-      object GroupBox8: TGroupBox
+      object CP_GroupBox: TGroupBox
         Left = 16
         Top = 24
         Width = 457
         Height = 81
         Caption = 'Position'
         TabOrder = 0
-        object CY_edit: TLabeledEdit
-          Left = 168
-          Top = 41
-          Width = 121
-          Height = 24
-          EditLabel.Width = 60
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Position Y'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
-          TabOrder = 1
-        end
-        object CX_edit: TLabeledEdit
-          Left = 24
-          Top = 41
-          Width = 121
-          Height = 24
-          EditLabel.Width = 59
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Position X'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
-          TabOrder = 0
-        end
-        object CZ_edit: TLabeledEdit
-          Left = 312
-          Top = 41
-          Width = 121
-          Height = 24
-          EditLabel.Width = 59
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Position Z'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
-          TabOrder = 2
-        end
-      end
-      object GroupBox9: TGroupBox
-        Left = 16
-        Top = 128
-        Width = 457
-        Height = 81
-        Caption = 'Direction'
-        TabOrder = 1
-        object PY_edit: TLabeledEdit
+        object CY_Edit: TLabeledEdit
           Left = 168
           Top = 41
           Width = 121
@@ -552,7 +508,19 @@ object Form1: TForm1
           LabelSpacing = 3
           TabOrder = 1
         end
-        object PZ_edit: TLabeledEdit
+        object CX_Edit: TLabeledEdit
+          Left = 24
+          Top = 41
+          Width = 121
+          Height = 24
+          EditLabel.Width = 8
+          EditLabel.Height = 16
+          EditLabel.Caption = 'X'
+          LabelPosition = lpAbove
+          LabelSpacing = 3
+          TabOrder = 0
+        end
+        object CZ_Edit: TLabeledEdit
           Left = 312
           Top = 41
           Width = 121
@@ -564,7 +532,39 @@ object Form1: TForm1
           LabelSpacing = 3
           TabOrder = 2
         end
-        object PX_edit: TLabeledEdit
+      end
+      object CD_GroupBox: TGroupBox
+        Left = 16
+        Top = 128
+        Width = 457
+        Height = 81
+        Caption = 'Direction'
+        TabOrder = 1
+        object DY_Edit: TLabeledEdit
+          Left = 168
+          Top = 41
+          Width = 121
+          Height = 24
+          EditLabel.Width = 9
+          EditLabel.Height = 16
+          EditLabel.Caption = 'Y'
+          LabelPosition = lpAbove
+          LabelSpacing = 3
+          TabOrder = 1
+        end
+        object DZ_Edit: TLabeledEdit
+          Left = 312
+          Top = 41
+          Width = 121
+          Height = 24
+          EditLabel.Width = 8
+          EditLabel.Height = 16
+          EditLabel.Caption = 'Z'
+          LabelPosition = lpAbove
+          LabelSpacing = 3
+          TabOrder = 2
+        end
+        object DX_Edit: TLabeledEdit
           Left = 24
           Top = 41
           Width = 121
@@ -577,14 +577,14 @@ object Form1: TForm1
           TabOrder = 0
         end
       end
-      object GroupBox10: TGroupBox
+      object CT_GroupBox: TGroupBox
         Left = 16
         Top = 232
         Width = 457
         Height = 81
         Caption = 'Top'
         TabOrder = 2
-        object TY_edit: TLabeledEdit
+        object TY_Edit: TLabeledEdit
           Left = 168
           Top = 41
           Width = 121
@@ -596,7 +596,7 @@ object Form1: TForm1
           LabelSpacing = 3
           TabOrder = 1
         end
-        object TX_edit: TLabeledEdit
+        object TX_Edit: TLabeledEdit
           Left = 24
           Top = 41
           Width = 121
@@ -608,7 +608,7 @@ object Form1: TForm1
           LabelSpacing = 3
           TabOrder = 0
         end
-        object TZ_edit: TLabeledEdit
+        object TZ_Edit: TLabeledEdit
           Left = 312
           Top = 41
           Width = 121
