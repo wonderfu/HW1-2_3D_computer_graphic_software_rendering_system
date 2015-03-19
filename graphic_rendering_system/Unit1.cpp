@@ -8,12 +8,12 @@
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 
-TForm1 *Form1;
-
-int Tnum, *Tricolor;
-node **Tri = NULL;
-carema view;
-node m[WindowH][WindowW];
+TForm1 *Form1;				
+int Tnum;	// Triangle number
+int *Tricolor;
+TForm1::node **Tri = NULL;
+TForm1::camera view;
+TForm1::node m[WindowH][WindowW];
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -29,17 +29,16 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
 
     int i, j;
     char str[300];
-    float tmp;
     /*
     char input_object;
     float x;
     */
-    if(OpenDialog1->Execute())
+    if( OpenDialog1->Execute() )
     {
         fp = fopen(OpenDialog1->FileName.c_str(), "r");
         Msg_Memo->Clear();
 
-        if(Tri!=NULL)
+        if( Tri != NULL )
         {
             clean_mem();
         }
@@ -84,13 +83,13 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
         fscanf(fp,"%d",&Tnum);
         Tri = (node**) malloc( sizeof(node*)*Tnum);
         Tricolor = (int*) malloc( sizeof(int)*Tnum);
-        for(i=0; i<Tnum; ++i)
+        for( i=0; i<Tnum; ++i )
         {
             Tri[i] = (node*) malloc( sizeof(node)*3);
             strcpy(str,"Triangle ");
             strcat(str,IntToStr(i+1).c_str());
             Msg_Memo->Lines->Add(str);
-            for(j=0; j<3; ++j)
+            for( j=0; j<3; ++j )
             {
                 fscanf(fp,"%f%f%f",&Tri[i][j].x,&Tri[i][j].y,&Tri[i][j].z);
                 strcpy(str,"Node ");
@@ -108,9 +107,9 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
             Msg_Memo->Lines->Add("");
         }
         // get the pixels
-        for(i=0; i<WindowH; ++i)
+        for( i=0; i<WindowH; ++i )
         {
-            for(j=0; j<WindowW; ++j)
+            for( j=0; j<WindowW; ++j )
             {
                 draw_area->Canvas->Pixels[j][i] = make_pixel(i,j);
             }
@@ -123,19 +122,19 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
     }
 }
 
-float dabs( float x )
+float TForm1::dabs(float x)
 {
     return x < 0 ? -x : x ;
 }
 
-int dcmp( float x )
+int TForm1::dcmp(float x)
 {
     if( x < -EPS ) return -1; return x > EPS;
 }
 
-float triangleArea( node A, node B, node C)
+float TForm1::triangleArea(TForm1::node A, TForm1::node B, TForm1::node C)
 {
-    node  AB, AC, AP;
+    TForm1::node  AB, AC, AP;
     float m = 0.0;
     float area = 0.0;
 
@@ -156,7 +155,7 @@ float triangleArea( node A, node B, node C)
     return area;
 }
 
-float isInTriangle(node tA, node tB, node tC, node tP)
+float TForm1::isInTriangle(TForm1::node tA, TForm1::node tB, TForm1::node tC, TForm1::node tP)
 {
     float area1 = triangleArea(tA,tB,tC);
 
@@ -175,7 +174,7 @@ float isInTriangle(node tA, node tB, node tC, node tP)
     return false;
 }
 
-node getV(node p1,node p2,node p3)
+TForm1::node TForm1::getV(TForm1::node p1,TForm1::node p2,TForm1::node p3)
 {
     float a, b, c, d;
     a = ( (p2.y-p1.y)*(p3.z-p1.z)-(p2.z-p1.z)*(p3.y-p1.y) );
@@ -185,21 +184,21 @@ node getV(node p1,node p2,node p3)
     return node(a/d,b/d,c/d);
 }
 
-float twopointdis( node a , node b )
+float TForm1::twopointdis(node a , node b)
 {
-    node AB = a-b;
+    TForm1::node AB = a-b;
     return sqrt(AB*AB);
 }
 
-int make_pixel( int i, int j )
+int TForm1::make_pixel( int i, int j )
 {
     int k, color = 0xffffffff;
     float t, dis = 2147483647, tmpdis;
-    node cross, ck;
+    TForm1::node cross, ck;
     ck = m[i][j]-view.p;
     for ( k = 0 ; k < Tnum ; k ++ )
     {
-        node V = getV(Tri[k][0],Tri[k][1],Tri[k][2]);
+        TForm1::node V = getV(Tri[k][0],Tri[k][1],Tri[k][2]);
         if ( ck*V != 0 )
         {
             t = ( (Tri[k][0]-m[i][j])*V ) / (ck*V);
@@ -215,32 +214,32 @@ int make_pixel( int i, int j )
     return color;
 }
 
-node getunit( node n )
+TForm1::node TForm1::getunit(TForm1::node n)
 {
     float tmp = sqrt(n.x*n.x+n.y*n.y+n.z*n.z);
-    return node ( n.x/tmp, n.y/tmp, n.z/tmp) ;
+    return TForm1::node ( n.x/tmp, n.y/tmp, n.z/tmp) ;
 }
 
-void make_map()
+void TForm1::make_map()
 {
     int i, j;
     node mid = view.p + (view.w * view.d);
     node left = getunit(view.w ^ view.u);
     mid = mid + left*WindowW/2 + view.u*WindowH/2;
-    for(i=0; i<WindowH; ++i)
+    for( i=0; i<WindowH; ++i )
     {
-        for (j=0; j<WindowW; ++j)
+        for ( j=0; j<WindowW; ++j )
         {
             m[i][j] = mid - left*j - view.u*i;
         }
     }
 }
 
-void clean_mem(void)
+void TForm1::clean_mem(void)
 {
     free(Tricolor);
     Tricolor = NULL;
-    for(int i=0; i<Tnum; ++i)
+    for( int i=0; i<Tnum; ++i )
         free(Tri[i]);
     free(Tri);
     Tri = NULL;
@@ -250,9 +249,9 @@ void clean_mem(void)
 void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
 {
     Msg_Memo->Clear();
-    for(int i=0; i<WindowH; ++i)
+    for( int i=0; i<WindowH; ++i )
     {
-        for(int j=0; j<WindowW; ++j)
+        for( int j=0; j<WindowW; ++j )
         {
             draw_area->Canvas->Pixels[j][i] = 0;
         }
@@ -261,9 +260,9 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
 {
-    for(int i=0; i<WindowH; ++i)
+    for( int i=0; i<WindowH; ++i )
     {
-        for(int j=0; j<WindowW; ++j)
+        for( int j=0; j<WindowW; ++j )
         {
             draw_area->Canvas->Pixels[j][i] = make_pixel(i,j);
         }
