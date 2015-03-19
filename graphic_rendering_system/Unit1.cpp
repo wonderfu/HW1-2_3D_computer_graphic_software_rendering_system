@@ -8,15 +8,12 @@
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 
-#define MAXi 600
-#define MAXj 800
-
 TForm1 *Form1;
 
 int Tnum, *Tricolor;
 node **Tri = NULL;
 carema view;
-node m[MAXi][MAXj];
+node m[WindowH][WindowW];
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -111,9 +108,9 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
             Input_memo->Lines->Add("");
         }
         // get the pixels
-        for(i=0; i<MAXi; ++i)
+        for(i=0; i<WindowH; ++i)
         {
-            for(j=0; j<MAXj; ++j)
+            for(j=0; j<WindowW; ++j)
             {
                 draw_area->Canvas->Pixels[j][i] = make_pixel(i,j);
             }
@@ -229,10 +226,10 @@ void make_map()
     int i, j;
     node mid = view.p + (view.w * view.d);
     node left = getunit(view.w ^ view.u);
-    mid = mid + left*MAXj/2 + view.u*MAXi/2;
-    for(i=0; i<MAXi; ++i)
+    mid = mid + left*WindowW/2 + view.u*WindowH/2;
+    for(i=0; i<WindowH; ++i)
     {
-        for (j=0; j<MAXj; ++j)
+        for (j=0; j<WindowW; ++j)
         {
             m[i][j] = mid - left*j - view.u*i;
         }
@@ -250,23 +247,23 @@ void clean_mem(void)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Reset_buttonClick(TObject *Sender)
+void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
 {
     Input_memo->Clear();
-    for(int i=0; i<MAXi; ++i)
+    for(int i=0; i<WindowH; ++i)
     {
-        for(int j=0; j<MAXj; ++j)
+        for(int j=0; j<WindowW; ++j)
         {
             draw_area->Canvas->Pixels[j][i] = 0;
         }
     }
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Draw_buttonClick(TObject *Sender)
+void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
 {
-    for(int i=0; i<MAXi; ++i)
+    for(int i=0; i<WindowH; ++i)
     {
-        for(int j=0; j<MAXj; ++j)
+        for(int j=0; j<WindowW; ++j)
         {
             draw_area->Canvas->Pixels[j][i] = make_pixel(i,j);
         }

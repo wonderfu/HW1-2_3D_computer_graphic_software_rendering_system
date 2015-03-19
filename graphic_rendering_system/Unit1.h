@@ -19,12 +19,15 @@
 #include <cstring>
 #include <stdio.h>
 #include <math.h>
+
 #define EPS 1e-8
+#define WindowH 600
+#define WindowW 800 
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
-        TBitBtn *Draw_button;
+        TBitBtn *Draw_Button;
         TImage *draw_area;
         TMainMenu *MainMenu1;
         TMenuItem *F1;
@@ -39,57 +42,57 @@ __published:	// IDE-managed Components
         TLabeledEdit *KAR_Edit;
         TLabeledEdit *KAG_Edit;
         TLabeledEdit *KAB_Edit;
-        TMemo *Input_memo;
-        TBitBtn *addV_button;
-        TLabeledEdit *CX_edit;
-        TLabeledEdit *CY_edit;
-        TLabeledEdit *CZ_edit;
-        TLabeledEdit *PX_edit;
-        TLabeledEdit *PY_edit;
-        TLabeledEdit *PZ_edit;
-        TLabeledEdit *TX_edit;
-        TLabeledEdit *TY_edit;
-        TLabeledEdit *TZ_edit;
-        TLabeledEdit *WD_edit;
-        TLabeledEdit *LX_edit;
-        TLabeledEdit *LY_edit;
-        TLabeledEdit *LZ_edit;
-        TLabeledEdit *CR_edit;
-        TLabeledEdit *CG_edit;
-        TLabeledEdit *CB_edit;
-        TBitBtn *addL_button;
-        TBitBtn *Reset_button;
-        TBitBtn *ClearV_edit;
-        TBitBtn *ClearC_edit;
-        TBitBtn *ClearL_edit;
-        TPageControl *PageControl1;
+        TMemo *Msg_Memo;
+        TBitBtn *AddV_Button;
+        TLabeledEdit *CX_Edit;
+        TLabeledEdit *CY_Edit;
+        TLabeledEdit *CZ_Edit;
+        TLabeledEdit *DX_Edit;
+        TLabeledEdit *DY_Edit;
+        TLabeledEdit *DZ_Edit;
+        TLabeledEdit *TX_Edit;
+        TLabeledEdit *TY_Edit;
+        TLabeledEdit *TZ_Edit;
+        TLabeledEdit *WD_Edit;
+        TLabeledEdit *LX_Edit;
+        TLabeledEdit *LY_Edit;
+        TLabeledEdit *LZ_Edit;
+        TLabeledEdit *CR_Edit;
+        TLabeledEdit *CG_Edit;
+        TLabeledEdit *CB_Edit;
+        TBitBtn *AddL_Button;
+        TBitBtn *Reset_Button;
+        TBitBtn *ClearV_Button;
+        TBitBtn *ClearC_Button;
+        TBitBtn *ClearL_Button;
+        TPageControl *SetC_Button;
         TTabSheet *TabSheet1;
         TTabSheet *TabSheet2;
         TTabSheet *TabSheet3;
-        TGroupBox *GroupBox1;
-        TGroupBox *GroupBox2;
-        TGroupBox *GroupBox3;
+        TGroupBox *VPos_GroupBox;
+        TGroupBox *VN_GroupBox;
+        TGroupBox *VPro_GroupBox;
         TLabeledEdit *KSR_Edit;
         TLabeledEdit *KSG_Edit;
         TLabeledEdit *KSB_Edit;
         TLabeledEdit *KDR_Edit;
         TLabeledEdit *KDG_Edit;
         TLabeledEdit *KDB_Edit;
-        TStaticText *StaticText1;
-        TGroupBox *GroupBox4;
-        TEdit *Edit1;
+        TStaticText *V_StaticText;
+        TGroupBox *LA_GroupBox;
+        TEdit *LA_Edit;
         TBevel *Bevel1;
-        TBitBtn *BitBtn1;
-        TGroupBox *GroupBox5;
-        TGroupBox *GroupBox6;
-        TGroupBox *GroupBox7;
-        TGroupBox *GroupBox8;
-        TGroupBox *GroupBox9;
-        TGroupBox *GroupBox10;
+        TBitBtn *SetLA_Button;
+        TGroupBox *LS_GroupBox;
+        TGroupBox *LSP_GroupBox;
+        TGroupBox *LSC_GroupBox;
+        TGroupBox *CP_GroupBox;
+        TGroupBox *CD_GroupBox;
+        TGroupBox *CT_GroupBox;
         TBitBtn *BitBtn2;
         void __fastcall Open1Click(TObject *Sender);
-        void __fastcall Reset_buttonClick(TObject *Sender);
-        void __fastcall Draw_buttonClick(TObject *Sender);
+        void __fastcall Reset_ButtonClick(TObject *Sender);
+        void __fastcall Draw_ButtonClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);

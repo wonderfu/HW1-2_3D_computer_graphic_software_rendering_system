@@ -19,7 +19,10 @@
 #include <cstring>
 #include <stdio.h>
 #include <math.h>
+
 #define EPS 1e-8
+#define WindowH 600
+#define WindowW 800 
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
