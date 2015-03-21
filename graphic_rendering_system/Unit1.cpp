@@ -111,7 +111,7 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
         {
             for( j=0; j<WindowW; ++j )
             {
-                draw_area->Canvas->Pixels[j][i] = make_pixel(i,j);
+                Draw_Area->Canvas->Pixels[j][i] = make_pixel(i,j);
             }
         }
         fclose(fp);
@@ -192,7 +192,7 @@ float TForm1::twopointdis(node a , node b)
 
 int TForm1::make_pixel( int i, int j )
 {
-    int k, color = 0xffffffff;
+    int k, color = 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
     float t, dis = 2147483647, tmpdis;
     TForm1::node cross, ck;
     ck = m[i][j]-view.p;
@@ -253,7 +253,7 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
     {
         for( int j=0; j<WindowW; ++j )
         {
-            draw_area->Canvas->Pixels[j][i] = 0;
+            Draw_Area->Canvas->Pixels[j][i] = 0;
         }
     }
 }
@@ -264,11 +264,10 @@ void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
     {
         for( int j=0; j<WindowW; ++j )
         {
-            draw_area->Canvas->Pixels[j][i] = make_pixel(i,j);
+            Draw_Area->Canvas->Pixels[j][i] = make_pixel(i,j);
         }
     }
 }
 //---------------------------------------------------------------------------
-
 
 

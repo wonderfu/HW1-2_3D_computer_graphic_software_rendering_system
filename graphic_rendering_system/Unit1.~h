@@ -16,6 +16,8 @@
 #include <Menus.hpp>
 #include <Dialogs.hpp>
 #include <ComCtrls.hpp>
+
+// user include & define
 #include <cstring>
 #include <stdio.h>
 #include <math.h>
@@ -28,7 +30,7 @@ class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
         TBitBtn *Draw_Button;
-        TImage *draw_area;
+        TImage *Draw_Area;
         TMainMenu *MainMenu1;
         TMenuItem *F1;
         TMenuItem *Open1;
@@ -94,40 +96,42 @@ __published:	// IDE-managed Components
         void __fastcall Reset_ButtonClick(TObject *Sender);
         void __fastcall Draw_ButtonClick(TObject *Sender);
 private:	// User declarations
+		
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
-};
-struct position {
-        float x,y,z;
-};
-struct color {
-        int r,g,b;
-};
-struct node{
-        float x, y, z;
-        node ( float _x = 0, float _y = 0, float _z = 0 ): x(_x),y(_y),z(_z) {}
-        float operator* ( node op ) { return (x*op.x+y*op.y+z*op.z); }
-        node operator* ( float t ) { return node(x*t,y*t,z*t); }
-        node operator/ ( float t ) { return node(x/t,y/t,z/t); }
-        node operator+ ( node op ) { return node(x+op.x,y+op.y,z+op.z); }
-        node operator- ( node op ) { return node(x-op.x,y-op.y,z-op.z); }
-        node operator^ ( node op ) { return node(y*op.z-z*op.y,z*op.x-x*op.z,x*op.y-y*op.x); }
-        };
-struct carema{
-        node p, w, u;
-        float d;
-        };
 
-float dabs( float x );
-int dcmp( float x );
-float triangleArea( node A, node B, node C);
-float isInTriangle(node tA, node tB, node tC, node tP);
-node getV(node p1,node p2,node p3);
-float twopointdis( node a , node b );
-int make_pixel( int i, int j );
-node getunit( node n );
-void make_map();
-void clean_mem(void);
+		struct position {
+				float x,y,z;
+		};
+		struct color {
+				int r,g,b;
+		};
+		struct node{
+				float x, y, z;
+				node ( float _x = 0, float _y = 0, float _z = 0 ): x(_x),y(_y),z(_z) {}
+				float operator* ( node op ) { return (x*op.x+y*op.y+z*op.z); }
+				node operator* ( float t ) { return node(x*t,y*t,z*t); }
+				node operator/ ( float t ) { return node(x/t,y/t,z/t); }
+				node operator+ ( node op ) { return node(x+op.x,y+op.y,z+op.z); }
+				node operator- ( node op ) { return node(x-op.x,y-op.y,z-op.z); }
+				node operator^ ( node op ) { return node(y*op.z-z*op.y,z*op.x-x*op.z,x*op.y-y*op.x); }
+				};
+		struct camera{
+				node p, w, u;
+				float d;
+				};
+		
+		float dabs( float x );
+		int dcmp( float x );
+		float triangleArea( node A, node B, node C);
+		float isInTriangle(node tA, node tB, node tC, node tP);
+		node getV(node p1,node p2,node p3);
+		float twopointdis( node a , node b );
+		int make_pixel( int i, int j );
+		node getunit( node n );
+		void make_map();
+		void clean_mem(void);		
+};
 
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

@@ -30,7 +30,7 @@ class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
         TBitBtn *Draw_Button;
-        TImage *draw_area;
+        TImage *Draw_Area;
         TMainMenu *MainMenu1;
         TMenuItem *F1;
         TMenuItem *Open1;

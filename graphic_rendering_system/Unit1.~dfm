@@ -14,7 +14,7 @@ object Form1: TForm1
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
-  object draw_area: TImage
+  object Draw_Area: TImage
     Left = 600
     Top = 30
     Width = 600
@@ -76,14 +76,14 @@ object Form1: TForm1
     Top = 40
     Width = 500
     Height = 600
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Vertex'
@@ -357,7 +357,7 @@ object Form1: TForm1
         Left = 16
         Top = 128
         Width = 457
-        Height = 345
+        Height = 433
         Caption = 'Light Source'
         TabOrder = 1
         object LSP_GroupBox: TGroupBox
@@ -450,7 +450,7 @@ object Form1: TForm1
         end
         object ClearL_Button: TBitBtn
           Left = 312
-          Top = 296
+          Top = 392
           Width = 121
           Height = 25
           Caption = 'Clear'
@@ -458,7 +458,7 @@ object Form1: TForm1
         end
         object AddL_Button: TBitBtn
           Left = 168
-          Top = 296
+          Top = 392
           Width = 121
           Height = 25
           Caption = 'Add Light'
