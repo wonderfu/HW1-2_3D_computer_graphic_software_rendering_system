@@ -2,20 +2,14 @@
 
 #ifndef Unit1H
 #define Unit1H
-//---------------------------------------------------------------------------
-#include <Classes.hpp>
-#include <Controls.hpp>
-#include <StdCtrls.hpp>
-#include <Forms.hpp>
 #include <Buttons.hpp>
-#include <ActnCtrls.hpp>
-#include <ActnMan.hpp>
-#include <ActnMenus.hpp>
-#include <ExtCtrls.hpp>
-#include <ToolWin.hpp>
-#include <Menus.hpp>
-#include <Dialogs.hpp>
+#include <Classes.hpp>
 #include <ComCtrls.hpp>
+#include <Controls.hpp>
+#include <Dialogs.hpp>
+#include <ExtCtrls.hpp>
+#include <Menus.hpp>
+#include <StdCtrls.hpp>
 
 // user include & define
 #include <cstring>
@@ -104,11 +98,11 @@ public:		// User declarations
 				float x, y, z;
 				Vector ( float _x = 0, float _y = 0, float _z = 0 ): x(_x),y(_y),z(_z) {}
 				float operator* ( Vector op ) { return (x*op.x+y*op.y+z*op.z); } // Vector dot product
-				Vector operator* ( float t ) { return Vector(x*t,y*t,z*t); } 
-				Vector operator/ ( float t ) { return Vector(x/t,y/t,z/t); }
-				Vector operator+ ( Vector op ) { return Vector(x+op.x,y+op.y,z+op.z); } 
-				Vector operator- ( Vector op ) { return Vector(x-op.x,y-op.y,z-op.z); }
-				Vector operator^ ( Vector op ) { return Vector(y*op.z-z*op.y,z*op.x-x*op.z,x*op.y-y*op.x); } // Vector product
+				Vector operator* ( float t ) { return Vector(x*t, y*t, z*t); } 
+				Vector operator/ ( float t ) { return Vector(x/t, y/t, z/t); }
+				Vector operator+ ( Vector op ) { return Vector(x+op.x, y+op.y, z+op.z); } 
+				Vector operator- ( Vector op ) { return Vector(x-op.x, y-op.y, z-op.z); }
+				Vector operator^ ( Vector op ) { return Vector(y*op.z-z*op.y, z*op.x-x*op.z, x*op.y-y*op.x); } // Vector product
 		};
 		struct Camera {
 				Vector pos, dir, top;

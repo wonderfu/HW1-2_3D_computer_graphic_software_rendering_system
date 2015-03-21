@@ -256,6 +256,38 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
             Draw_Area->Canvas->Pixels[j][i] = 0;
         }
     }
+    VX_Edit->Text = "";
+    VY_Edit->Text = "";
+    VZ_Edit->Text = "";
+    NX_Edit->Text = "";
+    NY_Edit->Text = "";
+    NZ_Edit->Text = "";
+    KAR_Edit->Text = "";
+    KAG_Edit->Text = "";
+    KAB_Edit->Text = "";
+    KDR_Edit->Text = "";
+    KDG_Edit->Text = "";
+    KDB_Edit->Text = "";
+    KSR_Edit->Text = "";
+    KSG_Edit->Text = "";
+    KSB_Edit->Text = "";
+    LA_Edit->Text = "";
+    LX_Edit->Text = "";
+    LY_Edit->Text = "";
+    LZ_Edit->Text = "";
+    CR_Edit->Text = "";
+    CG_Edit->Text = "";
+    CB_Edit->Text = "";
+    CX_Edit->Text = "";
+    CY_Edit->Text = "";
+    CZ_Edit->Text = "";
+    DX_Edit->Text = "";
+    DY_Edit->Text = "";
+    DZ_Edit->Text = "";
+    TX_Edit->Text = "";
+    TY_Edit->Text = "";
+    TZ_Edit->Text = "";
+    WD_Edit->Text = "";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
@@ -269,5 +301,6 @@ void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+
 
 

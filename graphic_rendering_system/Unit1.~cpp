@@ -203,7 +203,7 @@ int TForm1::make_pixel( int i, int j )
         {
             t = ( (Tri[k][0]-m[i][j])*V ) / (ck*V);
             cross = ck*t + m[i][j];
-            tmpdis = twopointdis(cross,view.p);
+            tmpdis = twopointdis(cross,view.pos);
             if ( isInTriangle(Tri[k][0],Tri[k][1],Tri[k][2],cross) == true && dcmp(tmpdis-dis) < 0 )
             {
                 dis = tmpdis;
@@ -223,7 +223,7 @@ TForm1::Vector TForm1::getunit(TForm1::Vector n)
 void TForm1::make_map()
 {
     int i, j;
-    Vector mid = view.p + (view.dir * view.dis);
+    Vector mid = view.pos + (view.dir * view.dis);
     Vector left = getunit(view.dir ^ view.top);
     mid = mid + left*WindowW/2 + view.top*WindowH/2;
     for( i=0; i<WindowH; ++i )
@@ -256,6 +256,21 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
             Draw_Area->Canvas->Pixels[j][i] = 0;
         }
     }
+    VX_Edit->Text = "";
+    VY_Edit->Text = "";
+    VZ_Edit->Text = "";
+    NX_Edit->Text = "";
+    NY_Edit->Text = "";
+    NZ_Edit->Text = "";
+    KAR_Edit->Text = "";
+    KAG_Edit->Text = "";
+    KAB_Edit->Text = "";
+    KDR_Edit->Text = "";
+    KDG_Edit->Text = "";
+    KDB_Edit->Text = "";
+    KSR_Edit->Text = "";
+    KSG_Edit->Text = "";
+    KSB_Edit->Text = "";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
@@ -269,5 +284,6 @@ void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+
 
 
