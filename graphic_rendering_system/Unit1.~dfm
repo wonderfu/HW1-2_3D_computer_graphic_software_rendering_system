@@ -71,19 +71,19 @@ object Form1: TForm1
     TabOrder = 2
     OnClick = Reset_ButtonClick
   end
-  object SetC_Button: TPageControl
+  object PageControl1: TPageControl
     Left = 50
     Top = 40
     Width = 500
     Height = 600
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Vertex'
@@ -621,7 +621,7 @@ object Form1: TForm1
           TabOrder = 2
         end
       end
-      object BitBtn2: TBitBtn
+      object SetC_Button: TBitBtn
         Left = 184
         Top = 520
         Width = 121

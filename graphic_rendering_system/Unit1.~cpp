@@ -11,9 +11,9 @@
 TForm1 *Form1;				
 int Tnum;	// Triangle number
 int *Tricolor;
-TForm1::node **Tri = NULL;
-TForm1::camera view;
-TForm1::node m[WindowH][WindowW];
+TForm1::Vector **Tri = NULL;
+TForm1::Camera view;
+TForm1::Vector m[WindowH][WindowW];
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -70,29 +70,29 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
         }
         Input_memo->Lines->Add("EOF");
         */
-        fscanf(fp,"%f %f %f",&view.p.x,&view.p.y,&view.p.z);
-        fscanf(fp,"%f %f %f",&view.w.x,&view.w.y,&view.w.z);
-        fscanf(fp,"%f %f %f",&view.u.x,&view.u.y,&view.u.z);
-        fscanf(fp,"%f",&view.d);
-        view.w = getunit(view.w);
-        view.u = getunit(view.u);
+        fscanf(fp,"%f %f %f",&view.pos.x,&view.pos.y,&view.pos.z);
+        fscanf(fp,"%f %f %f",&view.dir.x,&view.dir.y,&view.dir.z);
+        fscanf(fp,"%f %f %f",&view.top.x,&view.top.y,&view.top.z);
+        fscanf(fp,"%f",&view.dis);
+        view.dir = getunit(view.dir);
+        view.top = getunit(view.top);
 
         // get the map's position
         make_map();
-        // get the node's info
+        // get the Vector's info
         fscanf(fp,"%d",&Tnum);
-        Tri = (node**) malloc( sizeof(node*)*Tnum);
+        Tri = (Vector**) malloc( sizeof(Vector*)*Tnum);
         Tricolor = (int*) malloc( sizeof(int)*Tnum);
         for( i=0; i<Tnum; ++i )
         {
-            Tri[i] = (node*) malloc( sizeof(node)*3);
+            Tri[i] = (Vector*) malloc( sizeof(Vector)*3);
             strcpy(str,"Triangle ");
             strcat(str,IntToStr(i+1).c_str());
             Msg_Memo->Lines->Add(str);
             for( j=0; j<3; ++j )
             {
                 fscanf(fp,"%f%f%f",&Tri[i][j].x,&Tri[i][j].y,&Tri[i][j].z);
-                strcpy(str,"Node ");
+                strcpy(str,"Vector ");
                 strcat(str,IntToStr(j+1).c_str());
                 strcat(str,": ( ");
                 strcat(str,FloatToStr(Tri[i][j].x).c_str());
@@ -132,9 +132,9 @@ int TForm1::dcmp(float x)
     if( x < -EPS ) return -1; return x > EPS;
 }
 
-float TForm1::triangleArea(TForm1::node A, TForm1::node B, TForm1::node C)
+float TForm1::triangleArea(TForm1::Vector A, TForm1::Vector B, TForm1::Vector C)
 {
-    TForm1::node  AB, AC, AP;
+    TForm1::Vector  AB, AC, AP;
     float m = 0.0;
     float area = 0.0;
 
@@ -155,7 +155,7 @@ float TForm1::triangleArea(TForm1::node A, TForm1::node B, TForm1::node C)
     return area;
 }
 
-float TForm1::isInTriangle(TForm1::node tA, TForm1::node tB, TForm1::node tC, TForm1::node tP)
+float TForm1::isInTriangle(TForm1::Vector tA, TForm1::Vector tB, TForm1::Vector tC, TForm1::Vector tP)
 {
     float area1 = triangleArea(tA,tB,tC);
 
@@ -174,31 +174,31 @@ float TForm1::isInTriangle(TForm1::node tA, TForm1::node tB, TForm1::node tC, TF
     return false;
 }
 
-TForm1::node TForm1::getV(TForm1::node p1,TForm1::node p2,TForm1::node p3)
+TForm1::Vector TForm1::getV(TForm1::Vector p1,TForm1::Vector p2,TForm1::Vector p3)
 {
     float a, b, c, d;
     a = ( (p2.y-p1.y)*(p3.z-p1.z)-(p2.z-p1.z)*(p3.y-p1.y) );
     b = ( (p2.z-p1.z)*(p3.x-p1.x)-(p2.x-p1.x)*(p3.z-p1.z) );
     c = ( (p2.x-p1.x)*(p3.y-p1.y)-(p2.y-p1.y)*(p3.x-p1.x) );
     d = sqrt(a*a+b*b+c*c);
-    return node(a/d,b/d,c/d);
+    return Vector(a/d,b/d,c/d);
 }
 
-float TForm1::twopointdis(node a , node b)
+float TForm1::twopointdis(Vector a , Vector b)
 {
-    TForm1::node AB = a-b;
+    TForm1::Vector AB = a-b;
     return sqrt(AB*AB);
 }
 
 int TForm1::make_pixel( int i, int j )
 {
-    int k, color = 0xffffff; // B G R || use RGB(R,G,B)
+    int k, color = 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
     float t, dis = 2147483647, tmpdis;
-    TForm1::node cross, ck;
-    ck = m[i][j]-view.p;
+    TForm1::Vector cross, ck;
+    ck = m[i][j]-view.pos;
     for ( k = 0 ; k < Tnum ; k ++ )
     {
-        TForm1::node V = getV(Tri[k][0],Tri[k][1],Tri[k][2]);
+        TForm1::Vector V = getV(Tri[k][0],Tri[k][1],Tri[k][2]);
         if ( ck*V != 0 )
         {
             t = ( (Tri[k][0]-m[i][j])*V ) / (ck*V);
@@ -214,23 +214,23 @@ int TForm1::make_pixel( int i, int j )
     return color;
 }
 
-TForm1::node TForm1::getunit(TForm1::node n)
+TForm1::Vector TForm1::getunit(TForm1::Vector n)
 {
     float tmp = sqrt(n.x*n.x+n.y*n.y+n.z*n.z);
-    return TForm1::node ( n.x/tmp, n.y/tmp, n.z/tmp) ;
+    return TForm1::Vector ( n.x/tmp, n.y/tmp, n.z/tmp) ;
 }
 
 void TForm1::make_map()
 {
     int i, j;
-    node mid = view.p + (view.w * view.d);
-    node left = getunit(view.w ^ view.u);
-    mid = mid + left*WindowW/2 + view.u*WindowH/2;
+    Vector mid = view.p + (view.dir * view.dis);
+    Vector left = getunit(view.dir ^ view.top);
+    mid = mid + left*WindowW/2 + view.top*WindowH/2;
     for( i=0; i<WindowH; ++i )
     {
         for ( j=0; j<WindowW; ++j )
         {
-            m[i][j] = mid - left*j - view.u*i;
+            m[i][j] = mid - left*j - view.top*i;
         }
     }
 }
