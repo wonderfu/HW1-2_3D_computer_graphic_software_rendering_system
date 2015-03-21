@@ -324,3 +324,29 @@ void __fastcall TForm1::ClearV_ButtonClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::ClearL_ButtonClick(TObject *Sender)
+{
+    LX_Edit->Text = "";
+    LY_Edit->Text = "";
+    LZ_Edit->Text = "";
+    CR_Edit->Text = "";
+    CG_Edit->Text = "";
+    CB_Edit->Text = "";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::ClearC_ButtonClick(TObject *Sender)
+{
+    CX_Edit->Text = "";
+    CY_Edit->Text = "";
+    CZ_Edit->Text = "";
+    DX_Edit->Text = "";
+    DY_Edit->Text = "";
+    DZ_Edit->Text = "";
+    TX_Edit->Text = "";
+    TY_Edit->Text = "";
+    TZ_Edit->Text = "";
+    WD_Edit->Text = "";
+}
+//---------------------------------------------------------------------------
+
