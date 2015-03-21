@@ -89,6 +89,9 @@ __published:	// IDE-managed Components
         void __fastcall Open1Click(TObject *Sender);
         void __fastcall Reset_ButtonClick(TObject *Sender);
         void __fastcall Draw_ButtonClick(TObject *Sender);
+        void __fastcall ClearV_ButtonClick(TObject *Sender);
+        void __fastcall ClearL_ButtonClick(TObject *Sender);
+        void __fastcall ClearC_ButtonClick(TObject *Sender);
 private:	// User declarations
 		
 public:		// User declarations

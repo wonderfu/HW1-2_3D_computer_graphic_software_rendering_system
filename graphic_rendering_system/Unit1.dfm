@@ -76,14 +76,14 @@ object Form1: TForm1
     Top = 40
     Width = 500
     Height = 600
-    ActivePage = TabSheet2
+    ActivePage = TabSheet3
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabIndex = 1
+    TabIndex = 2
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Vertex'
@@ -105,6 +105,7 @@ object Form1: TForm1
         Height = 25
         Caption = 'Clear'
         TabOrder = 4
+        OnClick = ClearV_ButtonClick
       end
       object VPos_GroupBox: TGroupBox
         Left = 16
@@ -455,6 +456,7 @@ object Form1: TForm1
           Height = 25
           Caption = 'Clear'
           TabOrder = 3
+          OnClick = ClearL_ButtonClick
         end
         object AddL_Button: TBitBtn
           Left = 168
@@ -476,6 +478,7 @@ object Form1: TForm1
         Height = 25
         Caption = 'Clear'
         TabOrder = 5
+        OnClick = ClearC_ButtonClick
       end
       object WD_Edit: TLabeledEdit
         Left = 40
