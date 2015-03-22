@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 220
-  Top = 120
+  Left = 221
+  Top = 139
   Width = 1305
   Height = 860
   Caption = '3D_computer_graphic_software_rendering_system'
@@ -76,14 +76,14 @@ object Form1: TForm1
     Top = 40
     Width = 500
     Height = 600
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Vertex'

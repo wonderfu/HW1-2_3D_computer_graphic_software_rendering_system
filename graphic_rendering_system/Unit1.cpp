@@ -11,9 +11,9 @@
 TForm1 *Form1;				
 int Tnum;	// Triangle number
 int *Tricolor;
-TForm1::Vector **Tri = NULL;
+TForm1::Node **Tri = NULL;
 TForm1::Camera camera;
-TForm1::Vector m[WindowH][WindowW];
+TForm1::Node m[WindowH][WindowW];
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -79,20 +79,20 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
 
         // get the map's position
         make_map();
-        // get the Vector's info
+        // get the Node's info
         fscanf(fp,"%d",&Tnum);
-        Tri = (Vector**) malloc( sizeof(Vector*)*Tnum);
+        Tri = (Node**) malloc( sizeof(Node*)*Tnum);
         Tricolor = (int*) malloc( sizeof(int)*Tnum);
         for( i=0; i<Tnum; ++i )
         {
-            Tri[i] = (Vector*) malloc( sizeof(Vector)*3);
+            Tri[i] = (Node*) malloc( sizeof(Node)*3);
             strcpy(str,"Triangle ");
             strcat(str,IntToStr(i+1).c_str());
             Msg_Memo->Lines->Add(str);
             for( j=0; j<3; ++j )
             {
                 fscanf(fp,"%f%f%f",&Tri[i][j].x,&Tri[i][j].y,&Tri[i][j].z);
-                strcpy(str,"Vector ");
+                strcpy(str,"Node ");
                 strcat(str,IntToStr(j+1).c_str());
                 strcat(str,": ( ");
                 strcat(str,FloatToStr(Tri[i][j].x).c_str());
@@ -132,9 +132,9 @@ int TForm1::dcmp(float x)
     if( x < -EPS ) return -1; return x > EPS;
 }
 
-float TForm1::triangleArea(TForm1::Vector A, TForm1::Vector B, TForm1::Vector C)
+float TForm1::triangleArea(TForm1::Node A, TForm1::Node B, TForm1::Node C)
 {
-    TForm1::Vector  AB, AC, AP;
+    TForm1::Node  AB, AC, AP;
     float m = 0.0;
     float area = 0.0;
 
@@ -155,7 +155,7 @@ float TForm1::triangleArea(TForm1::Vector A, TForm1::Vector B, TForm1::Vector C)
     return area;
 }
 
-float TForm1::isInTriangle(TForm1::Vector tA, TForm1::Vector tB, TForm1::Vector tC, TForm1::Vector tP)
+float TForm1::isInTriangle(TForm1::Node tA, TForm1::Node tB, TForm1::Node tC, TForm1::Node tP)
 {
     float area1 = triangleArea(tA,tB,tC);
 
@@ -174,19 +174,19 @@ float TForm1::isInTriangle(TForm1::Vector tA, TForm1::Vector tB, TForm1::Vector 
     return false;
 }
 
-TForm1::Vector TForm1::getV(TForm1::Vector p1,TForm1::Vector p2,TForm1::Vector p3)
+TForm1::Node TForm1::getV(TForm1::Node p1,TForm1::Node p2,TForm1::Node p3)
 {
     float a, b, c, d;
     a = ( (p2.y-p1.y)*(p3.z-p1.z)-(p2.z-p1.z)*(p3.y-p1.y) );
     b = ( (p2.z-p1.z)*(p3.x-p1.x)-(p2.x-p1.x)*(p3.z-p1.z) );
     c = ( (p2.x-p1.x)*(p3.y-p1.y)-(p2.y-p1.y)*(p3.x-p1.x) );
     d = sqrt(a*a+b*b+c*c);
-    return Vector(a/d,b/d,c/d);
+    return Node(a/d,b/d,c/d);
 }
 
-float TForm1::twopointdis(Vector a , Vector b)
+float TForm1::twopointdis(Node a , Node b)
 {
-    TForm1::Vector AB = a-b;
+    TForm1::Node AB = a-b;
     return sqrt(AB*AB);
 }
 
@@ -194,11 +194,11 @@ int TForm1::make_pixel( int i, int j )
 {
     int k, color = 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
     float t, dis = 2147483647, tmpdis;
-    TForm1::Vector cross, ck;
+    TForm1::Node cross, ck;
     ck = m[i][j]-camera.pos;
     for ( k = 0 ; k < Tnum ; k ++ )
     {
-        TForm1::Vector V = getV(Tri[k][0],Tri[k][1],Tri[k][2]);
+        TForm1::Node V = getV(Tri[k][0],Tri[k][1],Tri[k][2]);
         if ( ck*V != 0 )
         {
             t = ( (Tri[k][0]-m[i][j])*V ) / (ck*V);
@@ -214,17 +214,17 @@ int TForm1::make_pixel( int i, int j )
     return color;
 }
 
-TForm1::Vector TForm1::getunit(TForm1::Vector n)
+TForm1::Node TForm1::getunit(TForm1::Node n)
 {
     float tmp = sqrt(n.x*n.x+n.y*n.y+n.z*n.z);
-    return TForm1::Vector ( n.x/tmp, n.y/tmp, n.z/tmp) ;
+    return TForm1::Node ( n.x/tmp, n.y/tmp, n.z/tmp) ;
 }
 
 void TForm1::make_map()
 {
     int i, j;
-    Vector mid = camera.pos + (camera.dir * camera.dis);
-    Vector left = getunit(camera.dir ^ camera.top);
+    Node mid = camera.pos + (camera.dir * camera.dis);
+    Node left = getunit(camera.dir ^ camera.top);
     mid = mid + left*WindowW/2 + camera.top*WindowH/2;
     for( i=0; i<WindowH; ++i )
     {

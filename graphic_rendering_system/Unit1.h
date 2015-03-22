@@ -11,10 +11,12 @@
 #include <Menus.hpp>
 #include <StdCtrls.hpp>
 
+
 // user include & define
 #include <cstring>
 #include <stdio.h>
 #include <math.h>
+#include <vector>
 
 #define EPS 1e-8
 #define WindowH 600
@@ -97,38 +99,41 @@ private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
 
-		struct Vector {
+		struct Node {
 				float x, y, z;
-				Vector ( float _x = 0, float _y = 0, float _z = 0 ): x(_x),y(_y),z(_z) {}
-				float operator* ( Vector op ) { return (x*op.x+y*op.y+z*op.z); } // Vector dot product
-				Vector operator* ( float t ) { return Vector(x*t, y*t, z*t); } 
-				Vector operator/ ( float t ) { return Vector(x/t, y/t, z/t); }
-				Vector operator+ ( Vector op ) { return Vector(x+op.x, y+op.y, z+op.z); } 
-				Vector operator- ( Vector op ) { return Vector(x-op.x, y-op.y, z-op.z); }
-				Vector operator^ ( Vector op ) { return Vector(y*op.z-z*op.y, z*op.x-x*op.z, x*op.y-y*op.x); } // Vector product
+				Node ( float _x = 0, float _y = 0, float _z = 0 ): x(_x),y(_y),z(_z) {}
+				float operator* ( Node op ) { return (x*op.x+y*op.y+z*op.z); } // Node dot product
+				Node operator* ( float t ) { return Node(x*t, y*t, z*t); } 
+				Node operator/ ( float t ) { return Node(x/t, y/t, z/t); }
+				Node operator+ ( Node op ) { return Node(x+op.x, y+op.y, z+op.z); } 
+				Node operator- ( Node op ) { return Node(x-op.x, y-op.y, z-op.z); }
+				Node operator^ ( Node op ) { return Node(y*op.z-z*op.y, z*op.x-x*op.z, x*op.y-y*op.x); } // Node product
 		};
 		struct Camera {
-				Vector pos, dir, top;
+				Node pos, dir, top;
 				float dis;
 		};
 		struct Vertex {
-				Vector pos, nor;
+				Node pos, nor;
 				float ka[3],kd[3],ks[3];
 		};
 		struct Light {
 				float al;
-				Vector pos;
+				Node pos;
 				int color[3];
+		};
+		struct Triangle {
+				Vertex vertex[3];
 		};
 		
 		float dabs( float x );
 		int dcmp( float x );
-		float triangleArea( Vector A, Vector B, Vector C);
-		float isInTriangle(Vector tA, Vector tB, Vector tC, Vector tP);
-		Vector getV(Vector p1,Vector p2,Vector p3);
-		float twopointdis( Vector a , Vector b );
+		float triangleArea( Node A, Node B, Node C);
+		float isInTriangle(Node tA, Node tB, Node tC, Node tP);
+		Node getV(Node p1,Node p2,Node p3);
+		float twopointdis( Node a , Node b );
 		int make_pixel( int i, int j );
-		Vector getunit( Vector n );
+		Node getunit( Node n );
 		void make_map();
 		void clean_mem(void);		
 };
