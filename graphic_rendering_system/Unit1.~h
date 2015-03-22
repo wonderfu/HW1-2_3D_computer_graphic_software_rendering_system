@@ -16,6 +16,7 @@
 #include <cstring>
 #include <stdio.h>
 #include <math.h>
+#include <vector>
 
 #define EPS 1e-8
 #define WindowH 600
@@ -98,43 +99,44 @@ private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
 
-		struct Node {
-				float x, y, z;
-				Node ( float _x = 0, float _y = 0, float _z = 0 ): x(_x),y(_y),z(_z) {}
-				float operator* ( Node op ) { return (x*op.x+y*op.y+z*op.z); } // Node dot product
-				Node operator* ( float t ) { return Node(x*t, y*t, z*t); } 
-				Node operator/ ( float t ) { return Node(x/t, y/t, z/t); }
-				Node operator+ ( Node op ) { return Node(x+op.x, y+op.y, z+op.z); } 
-				Node operator- ( Node op ) { return Node(x-op.x, y-op.y, z-op.z); }
-				Node operator^ ( Node op ) { return Node(y*op.z-z*op.y, z*op.x-x*op.z, x*op.y-y*op.x); } // Node product
-		};
-		struct Camera {
-				Node pos, dir, top;
-				float dis;
-		};
-		struct Vertex {
-				Node pos, nor;
-				float ka[3],kd[3],ks[3];
-		};
-		struct Light {
-				float al;
-				Node pos;
-				int color[3];
-		};
-		struct Triangle {
-				Vertex vertex[3];
-		};
+        struct Node {
+                float x, y, z;
+                Node ( float _x = 0, float _y = 0, float _z = 0 ): x(_x),y(_y),z(_z) {}
+                float operator* ( Node op ) { return (x*op.x+y*op.y+z*op.z); } // Node dot product
+                Node operator* ( float t ) { return Node(x*t, y*t, z*t); }
+                Node operator/ ( float t ) { return Node(x/t, y/t, z/t); }
+                Node operator+ ( Node op ) { return Node(x+op.x, y+op.y, z+op.z); }
+                Node operator- ( Node op ) { return Node(x-op.x, y-op.y, z-op.z); }
+                Node operator^ ( Node op ) { return Node(y*op.z-z*op.y, z*op.x-x*op.z, x*op.y-y*op.x); } // Node product
+        };
+        struct Camera {
+                Node position, direction, top;
+                float distance;
+        };
+        struct Vertex {
+                Node position, normal;
+                float ka[3],kd[3],ks[3];
+        };
+        struct Light {
+                float ambient;
+                Node position;
+                int color[3];
+        };
+        struct Triangle {
+                Vertex vertex[3];
+                Node normal;
+        };
 		
-		float dabs( float x );
-		int dcmp( float x );
-		float triangleArea( Node A, Node B, Node C);
-		float isInTriangle(Node tA, Node tB, Node tC, Node tP);
-		Node getV(Node p1,Node p2,Node p3);
-		float twopointdis( Node a , Node b );
-		int make_pixel( int i, int j );
-		Node getunit( Node n );
-		void make_map();
-		void clean_mem(void);		
+        float dabs(float);
+        int dcmp(float);
+        float triangleArea(Node, Node, Node);
+        float isInTriangle(Node, Node, Node, Node);
+        Node getV(Node, Node, Node);
+        float twopointdis(Node, Node);
+        TColor make_pixel(int, int);
+        Node getunit(Node);
+        void make_map(void);
+        void clean_mem(void);		
 };
 
 //---------------------------------------------------------------------------

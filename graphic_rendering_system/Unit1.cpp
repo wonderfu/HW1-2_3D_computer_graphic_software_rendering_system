@@ -29,10 +29,10 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
 
     int i, j;
     char str[300];
-    /*
+
     char input_object;
     float x;
-    */
+
     if( OpenDialog1->Execute() )
     {
         fp = fopen(OpenDialog1->FileName.c_str(), "r");
@@ -42,17 +42,16 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
         {
             clean_mem();
         }
-        /*
+
         while( fscanf(fp,"%c",&input_object) == 1 )
         {
-            Input_memo->Lines->Add(input_object);
             switch(input_object)
             {
                 case 'v':
                 case 'V':
                     for(int i=0; i<3; ++i)
                     {
-                        fscanf(fp,);
+                        //fscanf(fp,);
                     }
                     break;
                 case 'l':
@@ -61,20 +60,24 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
                     break;
                 case 'c':
                 case 'C':
-
+                    Msg_Memo->Lines->Add("Camera:");
+                    fscanf(fp,"%f %f %f",&camera.position.x,&camera.position.y,&camera.position.z);
+                    fscanf(fp,"%f %f %f",&camera.direction.x,&camera.direction.y,&camera.direction.z);
+                    fscanf(fp,"%f %f %f",&camera.top.x,&camera.top.y,&camera.top.z);
+                    fscanf(fp,"%f",&camera.distance);
                     break;
                 default:
-                    Input_memo->Lines->Add("[!]Error : Undefined input.");
+                    Msg_Memo->Lines->Add("[!]Error : Undefined input.");
                     break;
             }
         }
-        Input_memo->Lines->Add("EOF");
-        */
-        fscanf(fp,"%f %f %f",&camera.pos.x,&camera.pos.y,&camera.pos.z);
-        fscanf(fp,"%f %f %f",&camera.dir.x,&camera.dir.y,&camera.dir.z);
+        Msg_Memo->Lines->Add("EOF");
+
+        fscanf(fp,"%f %f %f",&camera.position.x,&camera.position.y,&camera.position.z);
+        fscanf(fp,"%f %f %f",&camera.direction.x,&camera.direction.y,&camera.direction.z);
         fscanf(fp,"%f %f %f",&camera.top.x,&camera.top.y,&camera.top.z);
-        fscanf(fp,"%f",&camera.dis);
-        camera.dir = getunit(camera.dir);
+        fscanf(fp,"%f",&camera.distance);
+        camera.direction = getunit(camera.direction);
         camera.top = getunit(camera.top);
 
         // get the map's position
@@ -190,12 +193,13 @@ float TForm1::twopointdis(Node a , Node b)
     return sqrt(AB*AB);
 }
 
-int TForm1::make_pixel( int i, int j )
+TColor TForm1::make_pixel( int i, int j )
 {
-    int k, color = 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
-    float t, dis = 2147483647, tmpdis;
+    int k;
+    TColor color = 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
+    float t, distance = 2147483647, tmpdis;
     TForm1::Node cross, ck;
-    ck = m[i][j]-camera.pos;
+    ck = m[i][j]-camera.position;
     for ( k = 0 ; k < Tnum ; k ++ )
     {
         TForm1::Node V = getV(Tri[k][0],Tri[k][1],Tri[k][2]);
@@ -203,10 +207,10 @@ int TForm1::make_pixel( int i, int j )
         {
             t = ( (Tri[k][0]-m[i][j])*V ) / (ck*V);
             cross = ck*t + m[i][j];
-            tmpdis = twopointdis(cross,camera.pos);
-            if ( isInTriangle(Tri[k][0],Tri[k][1],Tri[k][2],cross) == true && dcmp(tmpdis-dis) < 0 )
+            tmpdis = twopointdis(cross,camera.position);
+            if ( isInTriangle(Tri[k][0],Tri[k][1],Tri[k][2],cross) == true && dcmp(tmpdis-distance) < 0 )
             {
-                dis = tmpdis;
+                distance = tmpdis;
                 color = Tricolor[k];
             }
         }
@@ -223,8 +227,8 @@ TForm1::Node TForm1::getunit(TForm1::Node n)
 void TForm1::make_map()
 {
     int i, j;
-    Node mid = camera.pos + (camera.dir * camera.dis);
-    Node left = getunit(camera.dir ^ camera.top);
+    Node mid = camera.position + (camera.direction * camera.distance);
+    Node left = getunit(camera.direction ^ camera.top);
     mid = mid + left*WindowW/2 + camera.top*WindowH/2;
     for( i=0; i<WindowH; ++i )
     {
@@ -253,7 +257,7 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
     {
         for( int j=0; j<WindowW; ++j )
         {
-            Draw_Area->Canvas->Pixels[j][i] = 0;
+            Draw_Area->Canvas->Pixels[j][i] = (TColor)0;
         }
     }
     VX_Edit->Text = "";
