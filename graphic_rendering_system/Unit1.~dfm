@@ -15,7 +15,7 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 13
   object Draw_Area: TImage
-    Left = 600
+    Left = 656
     Top = 30
     Width = 600
     Height = 400
@@ -23,14 +23,14 @@ object Form1: TForm1
     ShowHint = False
   end
   object Bevel1: TBevel
-    Left = 600
+    Left = 656
     Top = 30
     Width = 600
     Height = 400
   end
   object Draw_Button: TBitBtn
-    Left = 384
-    Top = 704
+    Left = 496
+    Top = 712
     Width = 121
     Height = 36
     Caption = 'Draw'
@@ -44,21 +44,24 @@ object Form1: TForm1
     OnClick = Draw_ButtonClick
   end
   object Msg_Memo: TMemo
-    Left = 600
+    Left = 656
     Top = 450
     Width = 600
     Height = 300
+    TabStop = False
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
+    ReadOnly = True
+    ScrollBars = ssBoth
     TabOrder = 3
   end
   object Reset_Button: TBitBtn
-    Left = 240
-    Top = 704
+    Left = 352
+    Top = 712
     Width = 121
     Height = 36
     Caption = 'Reset'
@@ -72,50 +75,39 @@ object Form1: TForm1
     OnClick = Reset_ButtonClick
   end
   object PageControl1: TPageControl
-    Left = 50
-    Top = 40
-    Width = 500
-    Height = 600
-    ActivePage = TabSheet2
+    Left = 18
+    Top = 32
+    Width = 615
+    Height = 657
+    ActivePage = TabSheet1
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Vertex'
-      object AddV_Button: TBitBtn
-        Left = 184
-        Top = 520
-        Width = 121
-        Height = 25
-        Hint = 'Enter the three vertices of a triangle.'
-        Caption = 'Add Vertex'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 3
-      end
       object ClearV_Button: TBitBtn
-        Left = 328
-        Top = 520
+        Left = 448
+        Top = 584
         Width = 121
         Height = 25
         Caption = 'Clear'
-        TabOrder = 4
+        TabOrder = 3
         OnClick = ClearV_ButtonClick
       end
       object VPos_GroupBox: TGroupBox
         Left = 16
-        Top = 24
-        Width = 457
+        Top = 8
+        Width = 577
         Height = 81
         Caption = 'Position'
         TabOrder = 0
         object VY_Edit: TLabeledEdit
-          Left = 168
+          Left = 160
           Top = 41
           Width = 121
           Height = 24
@@ -127,7 +119,7 @@ object Form1: TForm1
           TabOrder = 1
         end
         object VZ_Edit: TLabeledEdit
-          Left = 312
+          Left = 296
           Top = 41
           Width = 121
           Height = 24
@@ -152,16 +144,27 @@ object Form1: TForm1
           LabelSpacing = 3
           TabOrder = 0
         end
+        object AddVP_Button: TBitBtn
+          Left = 432
+          Top = 40
+          Width = 121
+          Height = 25
+          Hint = 'Enter the three vertices of a triangle.'
+          Caption = 'Add'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+        end
       end
       object VN_GroupBox: TGroupBox
         Left = 16
-        Top = 128
-        Width = 457
+        Top = 96
+        Width = 577
         Height = 81
         Caption = 'Normal'
         TabOrder = 1
         object NY_Edit: TLabeledEdit
-          Left = 168
+          Left = 160
           Top = 41
           Width = 121
           Height = 24
@@ -185,7 +188,7 @@ object Form1: TForm1
           TabOrder = 0
         end
         object NZ_Edit: TLabeledEdit
-          Left = 312
+          Left = 296
           Top = 41
           Width = 121
           Height = 24
@@ -196,136 +199,234 @@ object Form1: TForm1
           LabelSpacing = 3
           TabOrder = 2
         end
+        object AddVN_Button: TBitBtn
+          Left = 432
+          Top = 40
+          Width = 121
+          Height = 25
+          Hint = 'Enter the three vertices of a triangle.'
+          Caption = 'Add'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+        end
       end
       object VPro_GroupBox: TGroupBox
         Left = 16
-        Top = 232
-        Width = 457
-        Height = 193
+        Top = 184
+        Width = 577
+        Height = 385
         Caption = 'Property'
+        Enabled = False
         TabOrder = 2
-        object KAG_Edit: TLabeledEdit
-          Left = 168
-          Top = 41
-          Width = 121
-          Height = 24
-          EditLabel.Width = 89
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Ambient Green'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
-          TabOrder = 1
-        end
-        object KAR_Edit: TLabeledEdit
-          Left = 24
-          Top = 41
-          Width = 121
-          Height = 24
-          EditLabel.Width = 78
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Ambient Red'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
+        object VT_GroupBox: TGroupBox
+          Left = 8
+          Top = 24
+          Width = 561
+          Height = 81
+          Caption = 'Texture'
           TabOrder = 0
+          object TU_Edit: TLabeledEdit
+            Left = 16
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 10
+            EditLabel.Height = 16
+            EditLabel.Caption = 'U'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 0
+          end
+          object TV_LabeledEdit: TLabeledEdit
+            Left = 152
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 9
+            EditLabel.Height = 16
+            EditLabel.Caption = 'V'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 1
+          end
+          object AddVT_Button: TBitBtn
+            Left = 424
+            Top = 40
+            Width = 121
+            Height = 25
+            Hint = 'Enter the three vertices of a triangle.'
+            Caption = 'Add'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+          end
         end
-        object KAB_Edit: TLabeledEdit
-          Left = 312
-          Top = 41
-          Width = 121
-          Height = 24
-          EditLabel.Width = 79
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Ambient Blue'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
+        object VPA_GroupBox: TGroupBox
+          Left = 8
+          Top = 112
+          Width = 561
+          Height = 81
+          Caption = 'Ambient'
+          TabOrder = 1
+          object KAR_Edit: TLabeledEdit
+            Left = 16
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 26
+            EditLabel.Height = 16
+            EditLabel.Caption = 'Red'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 0
+          end
+          object KAG_Edit: TLabeledEdit
+            Left = 152
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 37
+            EditLabel.Height = 16
+            EditLabel.Caption = 'Green'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 1
+          end
+          object KAB_Edit: TLabeledEdit
+            Left = 288
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 27
+            EditLabel.Height = 16
+            EditLabel.Caption = 'Blue'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 2
+          end
+          object AddKA_Button: TBitBtn
+            Left = 424
+            Top = 40
+            Width = 121
+            Height = 25
+            Hint = 'Enter the three vertices of a triangle.'
+            Caption = 'Add'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+          end
+        end
+        object VPD_GroupBox: TGroupBox
+          Left = 8
+          Top = 200
+          Width = 561
+          Height = 81
+          Caption = 'Diffuse'
           TabOrder = 2
+          object KDR_Edit: TLabeledEdit
+            Left = 16
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 26
+            EditLabel.Height = 16
+            EditLabel.Caption = 'Red'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 0
+          end
+          object KDG_Edit: TLabeledEdit
+            Left = 152
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 37
+            EditLabel.Height = 16
+            EditLabel.Caption = 'Green'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 1
+          end
+          object KDB_Edit: TLabeledEdit
+            Left = 288
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 27
+            EditLabel.Height = 16
+            EditLabel.Caption = 'Blue'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 2
+          end
+          object AddKD_Button: TBitBtn
+            Left = 424
+            Top = 40
+            Width = 121
+            Height = 25
+            Hint = 'Enter the three vertices of a triangle.'
+            Caption = 'Add'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+          end
         end
-        object KDG_Edit: TLabeledEdit
-          Left = 168
-          Top = 97
-          Width = 121
-          Height = 24
-          EditLabel.Width = 81
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Diffuse Green'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
-          TabOrder = 4
-        end
-        object KDB_Edit: TLabeledEdit
-          Left = 312
-          Top = 97
-          Width = 121
-          Height = 24
-          EditLabel.Width = 71
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Diffuse Blue'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
-          TabOrder = 5
-        end
-        object KDR_Edit: TLabeledEdit
-          Left = 24
-          Top = 97
-          Width = 121
-          Height = 24
-          EditLabel.Width = 70
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Diffuse Red'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
+        object VPS_GroupBox: TGroupBox
+          Left = 8
+          Top = 288
+          Width = 561
+          Height = 81
+          Caption = 'Specular'
           TabOrder = 3
+          object KSR_Edit: TLabeledEdit
+            Left = 16
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 26
+            EditLabel.Height = 16
+            EditLabel.Caption = 'Red'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 0
+          end
+          object KSG_Edit: TLabeledEdit
+            Left = 152
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 37
+            EditLabel.Height = 16
+            EditLabel.Caption = 'Green'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 1
+          end
+          object KSB_Edit: TLabeledEdit
+            Left = 288
+            Top = 41
+            Width = 121
+            Height = 24
+            EditLabel.Width = 27
+            EditLabel.Height = 16
+            EditLabel.Caption = 'Blue'
+            LabelPosition = lpAbove
+            LabelSpacing = 3
+            TabOrder = 2
+          end
+          object AddKS_Button: TBitBtn
+            Left = 424
+            Top = 40
+            Width = 121
+            Height = 25
+            Hint = 'Enter the three vertices of a triangle.'
+            Caption = 'Add'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+          end
         end
-        object KSB_Edit: TLabeledEdit
-          Left = 312
-          Top = 153
-          Width = 121
-          Height = 24
-          EditLabel.Width = 84
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Specular Blue'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
-          TabOrder = 8
-        end
-        object KSG_Edit: TLabeledEdit
-          Left = 168
-          Top = 153
-          Width = 121
-          Height = 24
-          EditLabel.Width = 94
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Specular Green'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
-          TabOrder = 7
-        end
-        object KSR_Edit: TLabeledEdit
-          Left = 24
-          Top = 153
-          Width = 121
-          Height = 24
-          EditLabel.Width = 83
-          EditLabel.Height = 16
-          EditLabel.Caption = 'Specular Red'
-          LabelPosition = lpAbove
-          LabelSpacing = 3
-          TabOrder = 6
-        end
-      end
-      object V_StaticText: TStaticText
-        Left = 40
-        Top = 448
-        Width = 350
-        Height = 20
-        Caption = 'In this page you must enter the three vertices of the triangle.'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clRed
-        Font.Height = -13
-        Font.Name = 'MS Sans Serif'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 5
       end
     end
     object TabSheet2: TTabSheet
@@ -333,8 +434,8 @@ object Form1: TForm1
       ImageIndex = 1
       object LA_GroupBox: TGroupBox
         Left = 16
-        Top = 24
-        Width = 457
+        Top = 8
+        Width = 577
         Height = 81
         Caption = 'Ambient Light'
         TabOrder = 0
@@ -346,7 +447,7 @@ object Form1: TForm1
           TabOrder = 0
         end
         object SetLA_Button: TBitBtn
-          Left = 168
+          Left = 432
           Top = 40
           Width = 121
           Height = 25
@@ -356,15 +457,15 @@ object Form1: TForm1
       end
       object LS_GroupBox: TGroupBox
         Left = 16
-        Top = 128
-        Width = 457
-        Height = 433
+        Top = 104
+        Width = 577
+        Height = 225
         Caption = 'Light Source'
         TabOrder = 1
         object LSP_GroupBox: TGroupBox
           Left = 8
-          Top = 40
-          Width = 441
+          Top = 32
+          Width = 561
           Height = 81
           Caption = 'Position'
           TabOrder = 0
@@ -381,7 +482,7 @@ object Form1: TForm1
             TabOrder = 0
           end
           object LY_Edit: TLabeledEdit
-            Left = 160
+            Left = 152
             Top = 41
             Width = 121
             Height = 24
@@ -393,7 +494,7 @@ object Form1: TForm1
             TabOrder = 1
           end
           object LZ_Edit: TLabeledEdit
-            Left = 304
+            Left = 288
             Top = 41
             Width = 121
             Height = 24
@@ -404,16 +505,27 @@ object Form1: TForm1
             LabelSpacing = 3
             TabOrder = 2
           end
+          object AddLP_Button: TBitBtn
+            Left = 424
+            Top = 40
+            Width = 121
+            Height = 25
+            Hint = 'Enter the three vertices of a triangle.'
+            Caption = 'Add'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+          end
         end
         object LSC_GroupBox: TGroupBox
           Left = 8
-          Top = 136
-          Width = 441
+          Top = 128
+          Width = 561
           Height = 81
           Caption = 'Color'
           TabOrder = 1
           object CG_Edit: TLabeledEdit
-            Left = 160
+            Left = 152
             Top = 41
             Width = 121
             Height = 24
@@ -425,7 +537,7 @@ object Form1: TForm1
             TabOrder = 1
           end
           object CB_Edit: TLabeledEdit
-            Left = 304
+            Left = 288
             Top = 41
             Width = 121
             Height = 24
@@ -448,23 +560,74 @@ object Form1: TForm1
             LabelSpacing = 3
             TabOrder = 0
           end
+          object AddLC_Button: TBitBtn
+            Left = 424
+            Top = 40
+            Width = 121
+            Height = 25
+            Hint = 'Enter the three vertices of a triangle.'
+            Caption = 'Add'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+          end
         end
-        object ClearL_Button: TBitBtn
-          Left = 312
-          Top = 392
-          Width = 121
-          Height = 25
-          Caption = 'Clear'
+      end
+      object ClearL_Button: TBitBtn
+        Left = 448
+        Top = 584
+        Width = 121
+        Height = 25
+        Caption = 'Clear'
+        TabOrder = 3
+        OnClick = ClearL_ButtonClick
+      end
+      object Lit_GroupBox: TGroupBox
+        Left = 16
+        Top = 344
+        Width = 577
+        Height = 89
+        Caption = 'Lit'
+        TabOrder = 2
+        object LitP_ComboBox: TComboBox
+          Left = 24
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 0
+        end
+        object AddLP_StaticText: TStaticText
+          Left = 24
+          Top = 21
+          Width = 52
+          Height = 20
+          Caption = 'Position'
+          TabOrder = 1
+        end
+        object LitC_ComboBox: TComboBox
+          Left = 184
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 2
+        end
+        object AddLC_StaticText: TStaticText
+          Left = 184
+          Top = 21
+          Width = 36
+          Height = 20
+          Caption = 'Color'
           TabOrder = 3
-          OnClick = ClearL_ButtonClick
         end
         object AddL_Button: TBitBtn
-          Left = 168
-          Top = 392
+          Left = 432
+          Top = 48
           Width = 121
           Height = 25
-          Caption = 'Add Light'
-          TabOrder = 2
+          Caption = 'Add'
+          TabOrder = 4
         end
       end
     end
@@ -472,8 +635,8 @@ object Form1: TForm1
       Caption = 'Camera'
       ImageIndex = 2
       object ClearC_Button: TBitBtn
-        Left = 328
-        Top = 520
+        Left = 448
+        Top = 584
         Width = 121
         Height = 25
         Caption = 'Clear'
@@ -482,7 +645,7 @@ object Form1: TForm1
       end
       object WD_Edit: TLabeledEdit
         Left = 40
-        Top = 352
+        Top = 320
         Width = 121
         Height = 24
         EditLabel.Width = 104
@@ -494,13 +657,13 @@ object Form1: TForm1
       end
       object CP_GroupBox: TGroupBox
         Left = 16
-        Top = 24
-        Width = 457
+        Top = 8
+        Width = 577
         Height = 81
         Caption = 'Position'
         TabOrder = 0
         object CY_Edit: TLabeledEdit
-          Left = 168
+          Left = 160
           Top = 41
           Width = 121
           Height = 24
@@ -524,7 +687,7 @@ object Form1: TForm1
           TabOrder = 0
         end
         object CZ_Edit: TLabeledEdit
-          Left = 312
+          Left = 296
           Top = 41
           Width = 121
           Height = 24
@@ -538,13 +701,13 @@ object Form1: TForm1
       end
       object CD_GroupBox: TGroupBox
         Left = 16
-        Top = 128
-        Width = 457
+        Top = 104
+        Width = 577
         Height = 81
         Caption = 'Direction'
         TabOrder = 1
         object DY_Edit: TLabeledEdit
-          Left = 168
+          Left = 160
           Top = 41
           Width = 121
           Height = 24
@@ -556,7 +719,7 @@ object Form1: TForm1
           TabOrder = 1
         end
         object DZ_Edit: TLabeledEdit
-          Left = 312
+          Left = 296
           Top = 41
           Width = 121
           Height = 24
@@ -582,13 +745,13 @@ object Form1: TForm1
       end
       object CT_GroupBox: TGroupBox
         Left = 16
-        Top = 232
-        Width = 457
+        Top = 200
+        Width = 577
         Height = 81
         Caption = 'Top'
         TabOrder = 2
         object TY_Edit: TLabeledEdit
-          Left = 168
+          Left = 160
           Top = 41
           Width = 121
           Height = 24
@@ -612,7 +775,7 @@ object Form1: TForm1
           TabOrder = 0
         end
         object TZ_Edit: TLabeledEdit
-          Left = 312
+          Left = 296
           Top = 41
           Width = 121
           Height = 24
@@ -625,12 +788,195 @@ object Form1: TForm1
         end
       end
       object SetC_Button: TBitBtn
-        Left = 184
-        Top = 520
+        Left = 304
+        Top = 584
         Width = 121
         Height = 25
         Caption = 'Set'
         TabOrder = 4
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'Triangle'
+      ImageIndex = 3
+      object AddT_Button: TBitBtn
+        Left = 448
+        Top = 584
+        Width = 121
+        Height = 25
+        Hint = 'Enter the three vertices of a triangle.'
+        Caption = 'Add'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 3
+      end
+      object V1_GroupBox: TGroupBox
+        Left = 16
+        Top = 8
+        Width = 577
+        Height = 89
+        Caption = 'Vertex 1'
+        TabOrder = 0
+        object V1P_ComboBox: TComboBox
+          Left = 24
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 0
+        end
+        object V1N_ComboBox: TComboBox
+          Left = 184
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 2
+        end
+        object V1T_ComboBox: TComboBox
+          Left = 344
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 4
+        end
+        object V1P_StaticText: TStaticText
+          Left = 24
+          Top = 24
+          Width = 52
+          Height = 20
+          Caption = 'Position'
+          TabOrder = 1
+        end
+        object V1N_StaticText: TStaticText
+          Left = 184
+          Top = 24
+          Width = 48
+          Height = 20
+          Caption = 'Normal'
+          TabOrder = 3
+        end
+        object V1T_StaticText: TStaticText
+          Left = 344
+          Top = 24
+          Width = 49
+          Height = 20
+          Caption = 'Texture'
+          TabOrder = 5
+        end
+      end
+      object V2_GroupBox: TGroupBox
+        Left = 16
+        Top = 112
+        Width = 577
+        Height = 89
+        Caption = 'Vertex 2'
+        TabOrder = 1
+        object V2P_ComboBox: TComboBox
+          Left = 24
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 0
+        end
+        object V2N_ComboBox: TComboBox
+          Left = 184
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 2
+        end
+        object V2T_ComboBox: TComboBox
+          Left = 344
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 4
+        end
+        object V2P_StaticText: TStaticText
+          Left = 24
+          Top = 24
+          Width = 52
+          Height = 20
+          Caption = 'Position'
+          TabOrder = 1
+        end
+        object V2N_StaticText: TStaticText
+          Left = 184
+          Top = 24
+          Width = 48
+          Height = 20
+          Caption = 'Normal'
+          TabOrder = 3
+        end
+        object V2T_StaticText: TStaticText
+          Left = 344
+          Top = 24
+          Width = 49
+          Height = 20
+          Caption = 'Texture'
+          TabOrder = 5
+        end
+      end
+      object V3_GroupBox: TGroupBox
+        Left = 14
+        Top = 216
+        Width = 577
+        Height = 89
+        Caption = 'Vertex 3'
+        TabOrder = 2
+        object V3P_ComboBox: TComboBox
+          Left = 24
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 0
+        end
+        object V3N_ComboBox: TComboBox
+          Left = 184
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 2
+        end
+        object V3T_ComboBox: TComboBox
+          Left = 344
+          Top = 49
+          Width = 145
+          Height = 24
+          ItemHeight = 16
+          TabOrder = 4
+        end
+        object V3P_StaticText: TStaticText
+          Left = 24
+          Top = 24
+          Width = 52
+          Height = 20
+          Caption = 'Position'
+          TabOrder = 1
+        end
+        object V3N_StaticText: TStaticText
+          Left = 184
+          Top = 24
+          Width = 48
+          Height = 20
+          Caption = 'Normal'
+          TabOrder = 3
+        end
+        object V3T_StaticText: TStaticText
+          Left = 344
+          Top = 24
+          Width = 49
+          Height = 20
+          Caption = 'Texture'
+          TabOrder = 5
+        end
       end
     end
   end

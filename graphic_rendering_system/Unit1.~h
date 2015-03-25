@@ -10,6 +10,8 @@
 #include <ExtCtrls.hpp>
 #include <Menus.hpp>
 #include <StdCtrls.hpp>
+#include <Grids.hpp>
+#include <ValEdit.hpp>
 
 
 // user include & define
@@ -45,17 +47,6 @@ __published:	// IDE-managed Components
         TLabeledEdit *NY_Edit;
         TLabeledEdit *NZ_Edit;
         TGroupBox *VPro_GroupBox;
-        TLabeledEdit *KAR_Edit;
-        TLabeledEdit *KAG_Edit;
-        TLabeledEdit *KAB_Edit;
-        TLabeledEdit *KSR_Edit;
-        TLabeledEdit *KSG_Edit;
-        TLabeledEdit *KSB_Edit;
-        TLabeledEdit *KDR_Edit;
-        TLabeledEdit *KDG_Edit;
-        TLabeledEdit *KDB_Edit;
-        TStaticText *V_StaticText;
-        TBitBtn *AddV_Button;
         TBitBtn *ClearV_Button;
         TTabSheet *TabSheet2;
         TGroupBox *LA_GroupBox;
@@ -70,8 +61,6 @@ __published:	// IDE-managed Components
         TLabeledEdit *CR_Edit;
         TLabeledEdit *CG_Edit;
         TLabeledEdit *CB_Edit;
-        TBitBtn *AddL_Button;
-        TBitBtn *ClearL_Button;
         TTabSheet *TabSheet3;
         TGroupBox *CP_GroupBox;
         TLabeledEdit *CX_Edit;
@@ -88,6 +77,59 @@ __published:	// IDE-managed Components
         TLabeledEdit *WD_Edit;
         TBitBtn *ClearC_Button;
         TBitBtn *SetC_Button;
+        TTabSheet *TabSheet4;
+        TGroupBox *VT_GroupBox;
+        TLabeledEdit *TU_Edit;
+        TLabeledEdit *TV_LabeledEdit;
+        TBitBtn *AddVP_Button;
+        TBitBtn *AddVN_Button;
+        TBitBtn *AddVT_Button;
+        TGroupBox *VPA_GroupBox;
+        TLabeledEdit *KAR_Edit;
+        TLabeledEdit *KAG_Edit;
+        TLabeledEdit *KAB_Edit;
+        TGroupBox *VPD_GroupBox;
+        TLabeledEdit *KDR_Edit;
+        TLabeledEdit *KDG_Edit;
+        TLabeledEdit *KDB_Edit;
+        TGroupBox *VPS_GroupBox;
+        TLabeledEdit *KSR_Edit;
+        TLabeledEdit *KSG_Edit;
+        TLabeledEdit *KSB_Edit;
+        TBitBtn *AddKA_Button;
+        TBitBtn *AddKD_Button;
+        TBitBtn *AddKS_Button;
+        TBitBtn *AddLP_Button;
+        TBitBtn *AddLC_Button;
+        TBitBtn *AddT_Button;
+        TGroupBox *V1_GroupBox;
+        TComboBox *V1P_ComboBox;
+        TComboBox *V1N_ComboBox;
+        TComboBox *V1T_ComboBox;
+        TGroupBox *V2_GroupBox;
+        TComboBox *V2P_ComboBox;
+        TComboBox *V2N_ComboBox;
+        TComboBox *V2T_ComboBox;
+        TGroupBox *V3_GroupBox;
+        TComboBox *V3P_ComboBox;
+        TComboBox *V3N_ComboBox;
+        TComboBox *V3T_ComboBox;
+        TStaticText *V1P_StaticText;
+        TStaticText *V1N_StaticText;
+        TStaticText *V2P_StaticText;
+        TStaticText *V3P_StaticText;
+        TStaticText *V1T_StaticText;
+        TStaticText *V2N_StaticText;
+        TStaticText *V3N_StaticText;
+        TStaticText *V2T_StaticText;
+        TStaticText *V3T_StaticText;
+        TBitBtn *ClearL_Button;
+        TGroupBox *Lit_GroupBox;
+        TComboBox *LitP_ComboBox;
+        TStaticText *AddLP_StaticText;
+        TComboBox *LitC_ComboBox;
+        TStaticText *AddLC_StaticText;
+        TBitBtn *AddL_Button;
         void __fastcall Open1Click(TObject *Sender);
         void __fastcall Reset_ButtonClick(TObject *Sender);
         void __fastcall Draw_ButtonClick(TObject *Sender);

@@ -195,8 +195,8 @@ float TForm1::twopointdis(Node a , Node b)
 
 TColor TForm1::make_pixel( int i, int j )
 {
-    int k
-    Tcolor color = 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
+    int k;
+    TColor color = 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
     float t, distance = 2147483647, tmpdis;
     TForm1::Node cross, ck;
     ck = m[i][j]-camera.position;
@@ -353,6 +353,9 @@ void __fastcall TForm1::ClearC_ButtonClick(TObject *Sender)
     WD_Edit->Text = "";
 }
 //---------------------------------------------------------------------------
+
+
+
 
 
 
