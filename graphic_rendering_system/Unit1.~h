@@ -12,10 +12,12 @@
 #include <StdCtrls.hpp>
 #include <Grids.hpp>
 #include <ValEdit.hpp>
+#include <ExtDlgs.hpp>
 
 
 // user include & define
-#include <cstring>
+#include <iostream>
+#include <string>
 #include <stdio.h>
 #include <math.h>
 #include <vector>
@@ -28,7 +30,7 @@ class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
         TMainMenu *MainMenu1;
-        TMenuItem *Open1;
+        TMenuItem *OpenInput;
         TMenuItem *F1;
         TOpenDialog *OpenDialog1;
         TBevel *Bevel1;
@@ -130,7 +132,9 @@ __published:	// IDE-managed Components
         TComboBox *LitC_ComboBox;
         TStaticText *AddLC_StaticText;
         TBitBtn *AddL_Button;
-        void __fastcall Open1Click(TObject *Sender);
+        TOpenPictureDialog *OpenPictureDialog1;
+        TMenuItem *OpenTexture;
+        void __fastcall OpenInputClick(TObject *Sender);
         void __fastcall Reset_ButtonClick(TObject *Sender);
         void __fastcall Draw_ButtonClick(TObject *Sender);
         void __fastcall ClearV_ButtonClick(TObject *Sender);

@@ -23,14 +23,13 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 //---------------------------------------------------------------------------
 
 
-void __fastcall TForm1::Open1Click(TObject *Sender)
+void __fastcall TForm1::OpenInputClick(TObject *Sender)
 {
     FILE *fp;
 
     int i, j;
-    char str[300];
+    char str[64];
 
-    char input_object;
     float x;
 
     if( OpenDialog1->Execute() )
@@ -42,7 +41,7 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
         {
             clean_mem();
         }
-
+        /*
         while( fscanf(fp,"%c",&input_object) == 1 )
         {
             switch(input_object)
@@ -71,8 +70,7 @@ void __fastcall TForm1::Open1Click(TObject *Sender)
                     break;
             }
         }
-        Msg_Memo->Lines->Add("EOF");
-
+        */
         fscanf(fp,"%f %f %f",&camera.position.x,&camera.position.y,&camera.position.z);
         fscanf(fp,"%f %f %f",&camera.direction.x,&camera.direction.y,&camera.direction.z);
         fscanf(fp,"%f %f %f",&camera.top.x,&camera.top.y,&camera.top.z);
@@ -316,6 +314,8 @@ void __fastcall TForm1::ClearV_ButtonClick(TObject *Sender)
     NX_Edit->Text = "";
     NY_Edit->Text = "";
     NZ_Edit->Text = "";
+    TU_Edit->Text = "";
+    TV_Edit->Text = "";
     KAR_Edit->Text = "";
     KAG_Edit->Text = "";
     KAB_Edit->Text = "";
@@ -353,6 +353,7 @@ void __fastcall TForm1::ClearC_ButtonClick(TObject *Sender)
     WD_Edit->Text = "";
 }
 //---------------------------------------------------------------------------
+
 
 
 

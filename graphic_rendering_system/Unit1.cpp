@@ -28,9 +28,8 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     FILE *fp;
 
     int i, j;
-    char str[300];
+    char str[64];
 
-    char input_object;
     float x;
 
     if( OpenDialog1->Execute() )
@@ -42,7 +41,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         {
             clean_mem();
         }
-
+        /*
         while( fscanf(fp,"%c",&input_object) == 1 )
         {
             switch(input_object)
@@ -71,8 +70,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                     break;
             }
         }
-        Msg_Memo->Lines->Add("EOF");
-
+        */
         fscanf(fp,"%f %f %f",&camera.position.x,&camera.position.y,&camera.position.z);
         fscanf(fp,"%f %f %f",&camera.direction.x,&camera.direction.y,&camera.direction.z);
         fscanf(fp,"%f %f %f",&camera.top.x,&camera.top.y,&camera.top.z);

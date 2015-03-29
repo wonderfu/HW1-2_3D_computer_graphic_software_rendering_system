@@ -16,7 +16,8 @@
 
 
 // user include & define
-#include <cstring>
+#include <iostream>
+#include <string>
 #include <stdio.h>
 #include <math.h>
 #include <vector>
