@@ -23,7 +23,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 //---------------------------------------------------------------------------
 
 
-void __fastcall TForm1::Open1Click(TObject *Sender)
+void __fastcall TForm1::OpenInputClick(TObject *Sender)
 {
     FILE *fp;
 
@@ -316,6 +316,8 @@ void __fastcall TForm1::ClearV_ButtonClick(TObject *Sender)
     NX_Edit->Text = "";
     NY_Edit->Text = "";
     NZ_Edit->Text = "";
+    TU_Edit->Text = "";
+    TV_Edit->Text = "";
     KAR_Edit->Text = "";
     KAG_Edit->Text = "";
     KAB_Edit->Text = "";
@@ -353,6 +355,7 @@ void __fastcall TForm1::ClearC_ButtonClick(TObject *Sender)
     WD_Edit->Text = "";
 }
 //---------------------------------------------------------------------------
+
 
 
 

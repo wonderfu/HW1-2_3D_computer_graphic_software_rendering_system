@@ -80,7 +80,7 @@ __published:	// IDE-managed Components
         TTabSheet *TabSheet4;
         TGroupBox *VT_GroupBox;
         TLabeledEdit *TU_Edit;
-        TLabeledEdit *TV_LabeledEdit;
+        TLabeledEdit *TV_Edit;
         TBitBtn *AddVP_Button;
         TBitBtn *AddVN_Button;
         TBitBtn *AddVT_Button;

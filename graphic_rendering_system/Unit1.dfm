@@ -982,15 +982,22 @@ object Form1: TForm1
   object MainMenu1: TMainMenu
     object F1: TMenuItem
       Caption = 'FILE'
-      object Open1: TMenuItem
+      object OpenInput: TMenuItem
         Caption = 'Open'
         ShortCut = 16463
-        OnClick = Open1Click
+        OnClick = OpenInputClick
+      end
+      object OpenTexture: TMenuItem
+        Caption = 'Texture'
+        ShortCut = 16468
       end
     end
   end
   object OpenDialog1: TOpenDialog
     Filter = '.txt|*.txt'
     Left = 32
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    Left = 64
   end
 end
