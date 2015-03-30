@@ -28,7 +28,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     FILE *fp;
 
     int i, j;
-    char str[64];
+    char str[Strsize];
 
     float x;
 
@@ -79,7 +79,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         camera.top = getunit(camera.top);
 
         // get the map's position
-        make_map();
+        create_view();
         // get the Node's info
         fscanf(fp,"%d",&Tnum);
         Tri = (Node**) malloc( sizeof(Node*)*Tnum);
@@ -112,7 +112,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         {
             for( j=0; j<WindowW; ++j )
             {
-                Draw_Area->Canvas->Pixels[j][i] = make_pixel(i,j);
+                Draw_Area->Canvas->Pixels[j][i] = draw_view(i,j);
             }
         }
         fclose(fp);
@@ -191,7 +191,7 @@ float TForm1::twopointdis(Node a , Node b)
     return sqrt(AB*AB);
 }
 
-TColor TForm1::make_pixel( int i, int j )
+TColor TForm1::draw_view( int i, int j )
 {
     int k;
     TColor color = 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
@@ -222,7 +222,7 @@ TForm1::Node TForm1::getunit(TForm1::Node n)
     return TForm1::Node ( n.x/tmp, n.y/tmp, n.z/tmp) ;
 }
 
-void TForm1::make_map()
+void TForm1::create_view()
 {
     int i, j;
     Node mid = camera.position + (camera.direction * camera.distance);
@@ -298,7 +298,7 @@ void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
     {
         for( int j=0; j<WindowW; ++j )
         {
-            Draw_Area->Canvas->Pixels[j][i] = make_pixel(i,j);
+            Draw_Area->Canvas->Pixels[j][i] = draw_view(i,j);
         }
     }
 }

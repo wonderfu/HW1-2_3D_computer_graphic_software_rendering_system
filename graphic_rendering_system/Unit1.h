@@ -18,13 +18,17 @@
 // user include & define
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <stdio.h>
 #include <math.h>
 #include <vector>
 
 #define EPS 1e-8
 #define WindowH 600
-#define WindowW 800 
+#define WindowW 800
+#define Strsize 64
+
+using namespace std;
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -159,8 +163,12 @@ public:		// User declarations
                 Node position, direction, top;
                 float distance;
         };
+		struct Texture {
+				float u,v;
+		};
         struct Vertex {
                 Node position, normal;
+				Texture texture;
                 float ka[3],kd[3],ks[3];
         };
         struct Light {
@@ -179,9 +187,9 @@ public:		// User declarations
         float isInTriangle(Node, Node, Node, Node);
         Node getV(Node, Node, Node);
         float twopointdis(Node, Node);
-        TColor make_pixel(int, int);
+        TColor draw_view(int, int);
         Node getunit(Node);
-        void make_map(void);
+        void create_view(void);
         void clean_mem(void);		
 };
 
