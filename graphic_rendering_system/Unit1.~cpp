@@ -14,6 +14,8 @@ int *Tricolor;
 TForm1::Node **Tri = NULL;
 TForm1::Camera camera;
 TForm1::Node m[WindowH][WindowW];
+vector <TForm1::Node> V,VN;
+vector <TForm1::Texture> VT;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
