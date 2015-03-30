@@ -138,41 +138,43 @@ __published:	// IDE-managed Components
         TBitBtn *AddL_Button;
         TOpenPictureDialog *OpenPictureDialog1;
         TMenuItem *OpenTexture;
+        TStaticText *Err_Text;
         void __fastcall OpenInputClick(TObject *Sender);
         void __fastcall Reset_ButtonClick(TObject *Sender);
         void __fastcall Draw_ButtonClick(TObject *Sender);
         void __fastcall ClearV_ButtonClick(TObject *Sender);
         void __fastcall ClearL_ButtonClick(TObject *Sender);
         void __fastcall ClearC_ButtonClick(TObject *Sender);
+        void __fastcall SetC_ButtonClick(TObject *Sender);
 private:	// User declarations
 		
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
 
         struct Node {
-                float x, y, z;
-                Node ( float _x = 0, float _y = 0, float _z = 0 ): x(_x),y(_y),z(_z) {}
-                float operator* ( Node op ) { return (x*op.x+y*op.y+z*op.z); } // Node dot product
-                Node operator* ( float t ) { return Node(x*t, y*t, z*t); }
-                Node operator/ ( float t ) { return Node(x/t, y/t, z/t); }
+                double x, y, z;
+                Node ( double _x = 0, double _y = 0, double _z = 0 ): x(_x),y(_y),z(_z) {}
+                double operator* ( Node op ) { return (x*op.x+y*op.y+z*op.z); } // Node dot product
+                Node operator* ( double t ) { return Node(x*t, y*t, z*t); }
+                Node operator/ ( double t ) { return Node(x/t, y/t, z/t); }
                 Node operator+ ( Node op ) { return Node(x+op.x, y+op.y, z+op.z); }
                 Node operator- ( Node op ) { return Node(x-op.x, y-op.y, z-op.z); }
                 Node operator^ ( Node op ) { return Node(y*op.z-z*op.y, z*op.x-x*op.z, x*op.y-y*op.x); } // Node product
         };
         struct Camera {
                 Node position, direction, top;
-                float distance;
+                double distance;
         };
 		struct Texture {
-				float u,v;
+				double u,v;
 		};
         struct Vertex {
                 Node position, normal;
 				Texture texture;
-                float ka[3],kd[3],ks[3];
+                double ka[3],kd[3],ks[3];
         };
         struct Light {
-                float ambient;
+                double ambient;
                 Node position;
                 int color[3];
         };
@@ -181,16 +183,16 @@ public:		// User declarations
                 Node normal;
         };
 		
-        float dabs(float);
-        int dcmp(float);
-        float triangleArea(Node, Node, Node);
-        float isInTriangle(Node, Node, Node, Node);
+        double dabs(double);
+        int dcmp(double);
+        double TriangleArea(Node, Node, Node);
+        double isInTriangle(Node, Node, Node, Node);
         Node getV(Node, Node, Node);
-        float twopointdis(Node, Node);
-        TColor draw_view(int, int);
-        Node getunit(Node);
-        void create_view(void);
-        void clean_mem(void);		
+        double TwoPointDis(Node, Node);
+        TColor DrawView(int, int);
+        Node UnitVector(Node);
+        void CreateView(void);
+        void CleanMem(void);		
 };
 
 //---------------------------------------------------------------------------

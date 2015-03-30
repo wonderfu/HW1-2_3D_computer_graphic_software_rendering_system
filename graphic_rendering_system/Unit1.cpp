@@ -16,6 +16,7 @@ TForm1::Camera camera;
 TForm1::Node m[WindowH][WindowW];
 vector <TForm1::Node> V,VN;
 vector <TForm1::Texture> VT;
+vector <TForm1::Triangle> T;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -32,7 +33,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     int i, j;
     char str[Strsize];
 
-    float x;
+    double x;
 
     if( OpenDialog1->Execute() )
     {
@@ -41,7 +42,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
 
         if( Tri != NULL )
         {
-            clean_mem();
+            CleanMem();
         }
         /*
         while( fscanf(fp,"%c",&input_object) == 1 )
@@ -73,15 +74,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
             }
         }
         */
-        fscanf(fp,"%f %f %f",&camera.position.x,&camera.position.y,&camera.position.z);
-        fscanf(fp,"%f %f %f",&camera.direction.x,&camera.direction.y,&camera.direction.z);
-        fscanf(fp,"%f %f %f",&camera.top.x,&camera.top.y,&camera.top.z);
-        fscanf(fp,"%f",&camera.distance);
-        camera.direction = getunit(camera.direction);
-        camera.top = getunit(camera.top);
 
-        // get the map's position
-        create_view();
         // get the Node's info
         fscanf(fp,"%d",&Tnum);
         Tri = (Node**) malloc( sizeof(Node*)*Tnum);
@@ -109,14 +102,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
             fscanf(fp,"%d",&Tricolor[i]);
             Msg_Memo->Lines->Add("");
         }
-        // get the pixels
-        for( i=0; i<WindowH; ++i )
-        {
-            for( j=0; j<WindowW; ++j )
-            {
-                Draw_Area->Canvas->Pixels[j][i] = draw_view(i,j);
-            }
-        }
+
         fclose(fp);
     }
     else
@@ -125,21 +111,21 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     }
 }
 
-float TForm1::dabs(float x)
+double TForm1::dabs(double x)
 {
     return x < 0 ? -x : x ;
 }
 
-int TForm1::dcmp(float x)
+int TForm1::dcmp(double x)
 {
     if( x < -EPS ) return -1; return x > EPS;
 }
 
-float TForm1::triangleArea(TForm1::Node A, TForm1::Node B, TForm1::Node C)
+double TForm1::TriangleArea(TForm1::Node A, TForm1::Node B, TForm1::Node C)
 {
     TForm1::Node  AB, AC, AP;
-    float m = 0.0;
-    float area = 0.0;
+    double m = 0.0;
+    double area = 0.0;
 
     AB.x =  B.x -  A.x;
     AB.y =  B.y -  A.y;
@@ -158,17 +144,17 @@ float TForm1::triangleArea(TForm1::Node A, TForm1::Node B, TForm1::Node C)
     return area;
 }
 
-float TForm1::isInTriangle(TForm1::Node tA, TForm1::Node tB, TForm1::Node tC, TForm1::Node tP)
+double TForm1::isInTriangle(TForm1::Node tA, TForm1::Node tB, TForm1::Node tC, TForm1::Node tP)
 {
-    float area1 = triangleArea(tA,tB,tC);
+    double area1 = TriangleArea(tA,tB,tC);
 
-    float area2 = triangleArea(tP,tB,tC);
+    double area2 = TriangleArea(tP,tB,tC);
 
-    float area3 = triangleArea(tA,tP,tC);
+    double area3 = TriangleArea(tA,tP,tC);
 
-    float area4 = triangleArea(tA,tB,tP);
+    double area4 = TriangleArea(tA,tB,tP);
 
-    float areaAll = area2 + area3 + area4;
+    double areaAll = area2 + area3 + area4;
 
     if( dcmp(areaAll - area1 - 1) <= 0 )
     {
@@ -179,7 +165,7 @@ float TForm1::isInTriangle(TForm1::Node tA, TForm1::Node tB, TForm1::Node tC, TF
 
 TForm1::Node TForm1::getV(TForm1::Node p1,TForm1::Node p2,TForm1::Node p3)
 {
-    float a, b, c, d;
+    double a, b, c, d;
     a = ( (p2.y-p1.y)*(p3.z-p1.z)-(p2.z-p1.z)*(p3.y-p1.y) );
     b = ( (p2.z-p1.z)*(p3.x-p1.x)-(p2.x-p1.x)*(p3.z-p1.z) );
     c = ( (p2.x-p1.x)*(p3.y-p1.y)-(p2.y-p1.y)*(p3.x-p1.x) );
@@ -187,17 +173,17 @@ TForm1::Node TForm1::getV(TForm1::Node p1,TForm1::Node p2,TForm1::Node p3)
     return Node(a/d,b/d,c/d);
 }
 
-float TForm1::twopointdis(Node a , Node b)
+double TForm1::TwoPointDis(Node a , Node b)
 {
     TForm1::Node AB = a-b;
     return sqrt(AB*AB);
 }
 
-TColor TForm1::draw_view( int i, int j )
+TColor TForm1::DrawView( int i, int j )
 {
     int k;
-    TColor color = 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
-    float t, distance = 2147483647, tmpdis;
+    TColor color = (TColor) 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
+    double t, distance = 2147483647, tmpdis;
     TForm1::Node cross, ck;
     ck = m[i][j]-camera.position;
     for ( k = 0 ; k < Tnum ; k ++ )
@@ -207,28 +193,28 @@ TColor TForm1::draw_view( int i, int j )
         {
             t = ( (Tri[k][0]-m[i][j])*V ) / (ck*V);
             cross = ck*t + m[i][j];
-            tmpdis = twopointdis(cross,camera.position);
+            tmpdis = TwoPointDis(cross,camera.position);
             if ( isInTriangle(Tri[k][0],Tri[k][1],Tri[k][2],cross) == true && dcmp(tmpdis-distance) < 0 )
             {
                 distance = tmpdis;
-                color = Tricolor[k];
+                color = (TColor) Tricolor[k];
             }
         }
     }
     return color;
 }
 
-TForm1::Node TForm1::getunit(TForm1::Node n)
+TForm1::Node TForm1::UnitVector(TForm1::Node n)
 {
-    float tmp = sqrt(n.x*n.x+n.y*n.y+n.z*n.z);
+    double tmp = sqrt(n.x*n.x+n.y*n.y+n.z*n.z);
     return TForm1::Node ( n.x/tmp, n.y/tmp, n.z/tmp) ;
 }
 
-void TForm1::create_view()
+void TForm1::CreateView()
 {
     int i, j;
     Node mid = camera.position + (camera.direction * camera.distance);
-    Node left = getunit(camera.direction ^ camera.top);
+    Node left = UnitVector(camera.direction ^ camera.top);
     mid = mid + left*WindowW/2 + camera.top*WindowH/2;
     for( i=0; i<WindowH; ++i )
     {
@@ -239,7 +225,7 @@ void TForm1::create_view()
     }
 }
 
-void TForm1::clean_mem(void)
+void TForm1::CleanMem(void)
 {
     free(Tricolor);
     Tricolor = NULL;
@@ -300,7 +286,7 @@ void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
     {
         for( int j=0; j<WindowW; ++j )
         {
-            Draw_Area->Canvas->Pixels[j][i] = draw_view(i,j);
+            Draw_Area->Canvas->Pixels[j][i] = DrawView(i,j);
         }
     }
 }
@@ -360,5 +346,33 @@ void __fastcall TForm1::ClearC_ButtonClick(TObject *Sender)
 
 
 
+
+
+void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
+{
+    if(CX_Edit->Text == "" || CY_Edit->Text == "" || CZ_Edit->Text == "" ||
+       DX_Edit->Text == "" || DY_Edit->Text == "" || DZ_Edit->Text == "" ||
+       TX_Edit->Text == "" || TY_Edit->Text == "" || TZ_Edit->Text == "" ||
+       WD_Edit->Text == "" ){
+        Err_Text->Caption = "相機欄位不得空白";
+    }
+    else{
+        camera.position.x = StrToFloat(CX_Edit->Text);
+        camera.position.y = StrToFloat(CY_Edit->Text);
+        camera.position.z = StrToFloat(CZ_Edit->Text);
+        camera.direction.x = StrToFloat(DX_Edit->Text);
+        camera.direction.y = StrToFloat(DY_Edit->Text);
+        camera.direction.z = StrToFloat(DZ_Edit->Text);
+        camera.top.x = StrToFloat(TX_Edit->Text);
+        camera.top.y = StrToFloat(TY_Edit->Text);
+        camera.top.z = StrToFloat(TZ_Edit->Text);
+        camera.distance = StrToFloat(WD_Edit->Text);
+        camera.direction = UnitVector(camera.direction);
+        camera.top = UnitVector(camera.top);
+        // get the map's position
+        CreateView();
+    }
+}
+//---------------------------------------------------------------------------
 
 

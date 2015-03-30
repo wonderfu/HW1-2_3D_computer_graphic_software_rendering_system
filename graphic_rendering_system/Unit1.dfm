@@ -793,6 +793,7 @@ object Form1: TForm1
         Height = 25
         Caption = 'Set'
         TabOrder = 4
+        OnClick = SetC_ButtonClick
       end
     end
     object TabSheet4: TTabSheet
@@ -978,6 +979,21 @@ object Form1: TForm1
         end
       end
     end
+  end
+  object Err_Text: TStaticText
+    Left = 18
+    Top = 712
+    Width = 4
+    Height = 4
+    Color = clBtnFace
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 4
   end
   object MainMenu1: TMainMenu
     object F1: TMenuItem
