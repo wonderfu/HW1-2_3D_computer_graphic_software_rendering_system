@@ -26,7 +26,7 @@
 #define EPS 1e-8
 #define WindowH 600
 #define WindowW 800
-#define Strsize 64
+#define StrSize 64
 
 using namespace std;
 //---------------------------------------------------------------------------
@@ -165,12 +165,12 @@ public:		// User declarations
                 Node position, direction, top;
                 double distance;
         };
-		struct Texture {
-				double u,v;
-		};
+        struct Texture {
+                double u,v;
+        };
         struct Vertex {
                 Node position, normal;
-				Texture texture;
+                Texture texture;
                 double ka[3],kd[3],ks[3];
         };
         struct Light {

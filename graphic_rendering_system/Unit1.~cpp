@@ -31,7 +31,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     FILE *fp;
 
     int i, j;
-    char str[Strsize];
+    char str[StrSize];
 
     double x;
 
@@ -44,6 +44,10 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         {
             CleanMem();
         }
+        while(){
+
+        }
+
         /*
         while( fscanf(fp,"%c",&input_object) == 1 )
         {
@@ -73,7 +77,6 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                     break;
             }
         }
-        */
 
         // get the Node's info
         fscanf(fp,"%d",&Tnum);
@@ -101,7 +104,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
             }
             fscanf(fp,"%d",&Tricolor[i]);
             Msg_Memo->Lines->Add("");
-        }
+        }*/
 
         fclose(fp);
     }
@@ -278,6 +281,7 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
     TY_Edit->Text = "";
     TZ_Edit->Text = "";
     WD_Edit->Text = "";
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
@@ -313,6 +317,7 @@ void __fastcall TForm1::ClearV_ButtonClick(TObject *Sender)
     KSR_Edit->Text = "";
     KSG_Edit->Text = "";
     KSB_Edit->Text = "";
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
@@ -324,6 +329,7 @@ void __fastcall TForm1::ClearL_ButtonClick(TObject *Sender)
     CR_Edit->Text = "";
     CG_Edit->Text = "";
     CB_Edit->Text = "";
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
@@ -339,6 +345,7 @@ void __fastcall TForm1::ClearC_ButtonClick(TObject *Sender)
     TY_Edit->Text = "";
     TZ_Edit->Text = "";
     WD_Edit->Text = "";
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
@@ -374,4 +381,5 @@ void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+
 
