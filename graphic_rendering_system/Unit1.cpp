@@ -32,8 +32,10 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
 
     int i, j;
     char str[StrSize];
-
     double x;
+    Node input_node;
+    Texture input_texture;
+    int selectV, selectVN, selectVT;
 
     if( OpenDialog1->Execute() )
     {
@@ -44,8 +46,25 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         {
             CleanMem();
         }
-        while(){
-
+        while( fscanf(fp," %s ",str) ){
+            if( !strcmp(str,"v") ){
+                fscanf(fp,"%lf %lf %lf", &input_node.x, &input_node.y, &input_node.z);
+                VList.push_back(input_node);
+            }
+            else if( !strcmp(str,"vn") ){
+                fscanf(fp,"%lf %lf %lf", &input_node.x, &input_node.y, &input_node.z);
+                VNList.push_back(input_node);
+            }
+            else if( !strcmp(str,"vt") ){
+                fscanf(fp,"%lf %lf", &input_texture.u, &input_texture.v);
+                VTList.push_back(input_texture);
+            }
+            else if( !strcmp(str,"f") ){
+                
+            }
+            else{
+                Err_Text->Caption = "[!] Undefind input_node.";
+            }
         }
 
         /*
@@ -73,7 +92,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                     fscanf(fp,"%f",&camera.distance);
                     break;
                 default:
-                    Msg_Memo->Lines->Add("[!]Error : Undefined input.");
+                    Msg_Memo->Lines->Add("[!]Error : Undefined input_node.");
                     break;
             }
         }
@@ -110,7 +129,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     }
     else
     {
-        Msg_Memo->Lines->Add("[!]Open failed.");
+        Err_Text->Caption = "[!] Open failed.";
     }
 }
 
@@ -282,6 +301,7 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
     TZ_Edit->Text = "";
     WD_Edit->Text = "";
     Err_Text->Caption = "";
+    //CleanMem();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
