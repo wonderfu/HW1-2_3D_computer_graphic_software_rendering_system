@@ -35,6 +35,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     double x;
     Node input_node;
     Texture input_texture;
+    int selectV, selectVN, selectVT;
 
     if( OpenDialog1->Execute() )
     {
@@ -59,7 +60,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                 VTList.push_back(input_texture);
             }
             else if( !strcmp(str,"f") ){
-                
+
             }
             else{
                 Err_Text->Caption = "[!] Undefind input_node.";

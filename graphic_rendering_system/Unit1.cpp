@@ -60,7 +60,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                 VTList.push_back(input_texture);
             }
             else if( !strcmp(str,"f") ){
-                
+
             }
             else{
                 Err_Text->Caption = "[!] Undefind input_node.";
