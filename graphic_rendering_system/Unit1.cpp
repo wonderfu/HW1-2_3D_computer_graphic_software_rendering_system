@@ -13,7 +13,7 @@ int Tnum;	// Triangle number
 int *Tricolor;
 TForm1::Node **Tri = NULL;
 TForm1::Camera camera;
-TForm1::Node m[WindowH][WindowW];
+TForm1::Node pixel_pos[WindowH][WindowW];
 vector <TForm1::Node> VList,VNList;
 vector <TForm1::Texture> VTList;
 vector <TForm1::Triangle> TriList;
@@ -41,46 +41,46 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         Msg_Memo->Clear();
 
         if( Tri != NULL )
-		{
+        {
             CleanMem();
         }
         while( fscanf(fp," %s ",str) == 1 )
-		{
-            if( !strcmp(str,"v") )
-			{
+        {
+            if( !strcmp(str,"v") ) // vertex
+            {
                 fscanf(fp,"%lf %lf %lf", &input_node.x, &input_node.y, &input_node.z);
                 VList.push_back(input_node);
             }
-            else if( !strcmp(str,"vn") )
-			{
+            else if( !strcmp(str,"vn") ) // vertex normal
+            {
                 fscanf(fp,"%lf %lf %lf", &input_node.x, &input_node.y, &input_node.z);
                 VNList.push_back(input_node);
             }
-            else if( !strcmp(str,"vt") )
-			{
+            else if( !strcmp(str,"vt") ) // vertex texture
+            {
                 fscanf(fp,"%lf %lf", &input_texture.u, &input_texture.v);
                 VTList.push_back(input_texture);
             }
-            else if( !strcmp(str,"f") )
-			{
+            else if( !strcmp(str,"f") ) // triangle 
+            {
                 int readitem;
                 for(int i=0; i<3; ++i)
-				{
-                    if( (readitem = fscanf(fp,"%d/%d/%d", &selectV, &selectVT, &selectVN)) == 3 )
-					{
+                {
+                    if( (readitem = fscanf(fp,"%d/%d/%d", &selectV, &selectVT, &selectVN)) == 3 ) // vertex number / texture number / normal number  for one vertex
+                    {
                         input_triangle.vertex[i].position = VList[selectV - 1];
                         input_triangle.vertex[i].texture.enable = true;
                         input_triangle.vertex[i].texture = VTList[selectVT - 1];
                         input_triangle.vertex[i].normal = VNList[selectVN - 1];
                     }
                     else if( readitem == 2 )
-					{
+                    {
                         input_triangle.vertex[i].position = VList[selectV - 1];
                         input_triangle.vertex[i].texture.enable = false;
                         input_triangle.vertex[i].normal = VNList[selectVT - 1]; // if no vertex selectVT will be the position of selectVN
                     }
                     else 
-					{
+                    {
                         Err_Text->Caption = "[!] 三角形輸入發生錯誤";
                         continue;
                     }
@@ -88,40 +88,10 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                 }
             }
             else
-			{
+            {
                 Err_Text->Caption = "[!] 未定義的輸入格式";
             }
         }
-
-        /*
-        // get the Node's info
-        fscanf(fp,"%d",&Tnum);
-        Tri = (Node**) malloc( sizeof(Node*)*Tnum);
-        Tricolor = (int*) malloc( sizeof(int)*Tnum);
-        for( i=0; i<Tnum; ++i )
-        {
-            Tri[i] = (Node*) malloc( sizeof(Node)*3);
-            strcpy(str,"Triangle ");
-            strcat(str,IntToStr(i+1).c_str());
-            Msg_Memo->Lines->Add(str);
-            for( j=0; j<3; ++j )
-            {
-                fscanf(fp,"%f%f%f",&Tri[i][j].x,&Tri[i][j].y,&Tri[i][j].z);
-                strcpy(str,"Node ");
-                strcat(str,IntToStr(j+1).c_str());
-                strcat(str,": ( ");
-                strcat(str,FloatToStr(Tri[i][j].x).c_str());
-                strcat(str," , ");
-                strcat(str,FloatToStr(Tri[i][j].y).c_str());
-                strcat(str," , ");
-                strcat(str,FloatToStr(Tri[i][j].z).c_str());
-                strcat(str," )");
-                Msg_Memo->Lines->Add(str);
-            }
-            fscanf(fp,"%d",&Tricolor[i]);
-            Msg_Memo->Lines->Add("");
-        }*/
-
         fclose(fp);
     }
     else
@@ -143,7 +113,7 @@ int TForm1::dcmp(double x)
 double TForm1::TriangleArea(TForm1::Node A, TForm1::Node B, TForm1::Node C)
 {
     TForm1::Node  AB, AC, AP;
-    double m = 0.0;
+    double pixel_pos = 0.0;
     double area = 0.0;
 
     AB.x =  B.x -  A.x;
@@ -157,8 +127,8 @@ double TForm1::TriangleArea(TForm1::Node A, TForm1::Node B, TForm1::Node C)
     AP.x = AB.y*AC.z - AC.y*AB.z;
     AP.y = AC.x*AB.z - AB.x*AC.z;
     AP.z = AB.x*AC.y - AC.x*AB.y;
-    m = sqrt(AP.x*AP.x + AP.y*AP.y + AP.z*AP.z);
-    area = dabs(m/2);
+    pixel_pos = sqrt(AP.x*AP.x + AP.y*AP.y + AP.z*AP.z);
+    area = dabs(pixel_pos/2);
 
     return area;
 }
@@ -182,41 +152,41 @@ double TForm1::isInTriangle(TForm1::Node tA, TForm1::Node tB, TForm1::Node tC, T
     return false;
 }
 
-TForm1::Node TForm1::getV(TForm1::Node p1,TForm1::Node p2,TForm1::Node p3)
+TForm1::Node TForm1::getV(TForm1::Node V1, TForm1::Node V2, TForm1::Node V3)
 {
     double a, b, c, d;
-    a = ( (p2.y-p1.y)*(p3.z-p1.z)-(p2.z-p1.z)*(p3.y-p1.y) );
-    b = ( (p2.z-p1.z)*(p3.x-p1.x)-(p2.x-p1.x)*(p3.z-p1.z) );
-    c = ( (p2.x-p1.x)*(p3.y-p1.y)-(p2.y-p1.y)*(p3.x-p1.x) );
+    a = ( (V2.y-V1.y)*(V3.z-V1.z) - (V2.z-V1.z)*(V3.y-V1.y) );
+    b = ( (V2.z-V1.z)*(V3.x-V1.x) - (V2.x-V1.x)*(V3.z-V1.z) );
+    c = ( (V2.x-V1.x)*(V3.y-V1.y) - (V2.y-V1.y)*(V3.x-V1.x) );
     d = sqrt(a*a+b*b+c*c);
     return Node(a/d,b/d,c/d);
 }
 
-double TForm1::TwoPointDis(Node a , Node b)
+double TForm1::TwoPointDis(Node a, Node b)
 {
     TForm1::Node AB = a-b;
     return sqrt(AB*AB);
 }
 
-TColor TForm1::DrawView( int i, int j )
+TColor TForm1::DrawPixel(int i, int j)
 {
-    int k;
-    TColor color = (TColor) 0xffffff; // 0xBBGGRR || RGB(R,G,B) [0~255]
+    TColor color = WHITE; // 0xBBGGRR || RGB(R,G,B) [0~255]
     double t, distance = 2147483647, tmpdis;
-    TForm1::Node cross, ck;
-    ck = m[i][j]-camera.position;
-    for ( k = 0 ; k < Tnum ; k ++ )
+    TForm1::Node cross, ray_vector;
+	
+    ray_vector = pixel_pos[i][j]-camera.position;
+    for( vector<TForm1::Triangle>::iterator it = TriList.begin(); it != TriList.end(); ++it )
     {
-        TForm1::Node V = getV(Tri[k][0],Tri[k][1],Tri[k][2]);
-        if ( ck*V != 0 )
+        TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
+        if ( ray_vector*V != 0 )
         {
-            t = ( (Tri[k][0]-m[i][j])*V ) / (ck*V);
-            cross = ck*t + m[i][j];
+            t = ( (it->vertex[0].position - pixel_pos[i][j])*V ) / (ray_vector*V);
+            cross = ray_vector*t + pixel_pos[i][j];
             tmpdis = TwoPointDis(cross,camera.position);
-            if ( isInTriangle(Tri[k][0],Tri[k][1],Tri[k][2],cross) == true && dcmp(tmpdis-distance) < 0 )
+            if ( isInTriangle( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, cross ) == true && dcmp(tmpdis-distance) < 0 )
             {
                 distance = tmpdis;
-                color = (TColor) Tricolor[k];
+//                color = (TColor) Tricolor[k];
             }
         }
     }
@@ -229,16 +199,16 @@ TForm1::Node TForm1::UnitVector(TForm1::Node input_node)
     return TForm1::Node ( input_node.x/Vdis, input_node.y/Vdis, input_node.z/Vdis) ;
 }
 
-void TForm1::CreateView()
+void TForm1::PixelPositionCalculate()
 {
     Node mid_point = camera.position + (camera.direction * camera.distance);
     Node move_vector = UnitVector(camera.direction ^ camera.top);
     Node start_point = mid_point + move_vector*WindowW/2 + camera.top*WindowH/2;
     for( int i=0; i<WindowH; ++i )
-	{
+    {
         for ( int j=0; j<WindowW; ++j )
-		{
-            m[i][j] = start_point - move_vector*j - camera.top*i;
+        {
+            pixel_pos[i][j] = start_point - move_vector*j - camera.top*i;
         }
     }
 }
@@ -258,10 +228,10 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
 {
     Msg_Memo->Clear();
     for( int i=0; i<WindowH; ++i )
-	{
+    {
         for( int j=0; j<WindowW; ++j )
-		{
-            Draw_Area->Canvas->Pixels[j][i] = (TColor)0;
+        {
+            Draw_Area->Canvas->Pixels[j][i] = BLACK;
         }
     }
     VX_Edit->Text = "";
@@ -310,7 +280,7 @@ void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
     {
         for( int j=0; j<WindowW; ++j )
         {
-            Draw_Area->Canvas->Pixels[j][i] = DrawView(i,j);
+            Draw_Area->Canvas->Pixels[j][i] = DrawPixel(i,j);
         }
     }
 }
@@ -381,11 +351,11 @@ void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
        DX_Edit->Text == "" || DY_Edit->Text == "" || DZ_Edit->Text == "" ||
        TX_Edit->Text == "" || TY_Edit->Text == "" || TZ_Edit->Text == "" ||
        WD_Edit->Text == "" )
-	{
+    {
         Err_Text->Caption = "相機欄位不得空白";
     }
     else
-	{
+    {
         camera.position.x = StrToFloat(CX_Edit->Text);
         camera.position.y = StrToFloat(CY_Edit->Text);
         camera.position.z = StrToFloat(CZ_Edit->Text);
@@ -399,7 +369,7 @@ void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
         camera.direction = UnitVector(camera.direction);
         camera.top = UnitVector(camera.top);
         // get the map's position
-        CreateView();
+        PixelPositionCalculate();
     }
 }
 //---------------------------------------------------------------------------
