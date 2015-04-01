@@ -212,12 +212,12 @@ TColor TForm1::DrawPixel(int i, int j)
 // u(out), v(out): barycentric coordinate of intersection 
 // O+D*t = (1-u-v)*V1 + u*V2 + v*V3
 
-bool IntersectTriangle(TForm1::Node orig, TForm1::Node dir, TForm1::Node V1, TForm1::Node V2, TForm1::Node V3, double* t, double* u, double* v)
+bool TForm1::IntersectTriangle(TForm1::Node orig, TForm1::Node dir, TForm1::Node V1, TForm1::Node V2, TForm1::Node V3, double* t, double* u, double* v)
 {
     TForm1::Node E1 = V2 - V1;
     TForm1::Node E2 = V3 - V1;
     TForm1::Node P = dir^E2; 
-    double det = E1*P; // determinant 
+    double det = E1*P; // determinant
  
     // keep det > 0, modify T accordingly 
     TForm1::Node T;
@@ -259,7 +259,7 @@ bool IntersectTriangle(TForm1::Node orig, TForm1::Node dir, TForm1::Node V1, TFo
 
 TForm1::Node TForm1::UnitVector(TForm1::Node input_node)
 {
-    double Vdis = sqrt( input_node.x*input_node.x + input_node.y*input_node.y + input_node.z*input_node.z );
+    double Vdis = sqrt( input_node*input_node );
     return TForm1::Node ( input_node.x/Vdis, input_node.y/Vdis, input_node.z/Vdis) ;
 }
 

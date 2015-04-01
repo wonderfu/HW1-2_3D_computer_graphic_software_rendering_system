@@ -259,8 +259,8 @@ bool TForm1::IntersectTriangle(TForm1::Node orig, TForm1::Node dir, TForm1::Node
 
 TForm1::Node TForm1::UnitVector(TForm1::Node input_node)
 {
-    double Vdis = sqrt( input_node.x*input_node.x + input_node.y*input_node.y + input_node.z*input_node.z );
-    return TForm1::Node ( input_node.x/Vdis, input_node.y/Vdis, input_node.z/Vdis) ;
+    double Vdis = sqrt( input_node*input_node );
+    return input_node/Vdis ;
 }
 
 void TForm1::PixelPositionCalculate()
