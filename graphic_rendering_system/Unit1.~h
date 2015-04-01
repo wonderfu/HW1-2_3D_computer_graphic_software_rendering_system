@@ -27,6 +27,8 @@
 #define WindowH 600
 #define WindowW 800
 #define StrSize 64
+#define BLACK (TColor)0x000000
+#define WHITE (TColor)0xffffff
 
 using namespace std;
 //---------------------------------------------------------------------------
@@ -190,9 +192,9 @@ public:		// User declarations
         double isInTriangle(Node, Node, Node, Node);
         Node getV(Node, Node, Node);
         double TwoPointDis(Node, Node);
-        TColor DrawView(int, int);
+        TColor DrawPixel(int, int);
         Node UnitVector(Node);
-        void CreateView(void);
+        void PixelPositionCalculate(void);
         void CleanMem(void);		
 };
 
