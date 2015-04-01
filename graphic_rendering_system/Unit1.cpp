@@ -35,6 +35,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     double x;
     Node input_node;
     Texture input_texture;
+    Triangle input_triangle;
     int selectV, selectVN, selectVT;
 
     if( OpenDialog1->Execute() )
@@ -60,10 +61,26 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                 VTList.push_back(input_texture);
             }
             else if( !strcmp(str,"f") ){
-
+                int readitem;
+                for(int i=0; i<3; ++i){
+                    if( (readitem = fscanf(fp,"%d/%d/%d", &selectV, &selectVT, &selectVN)) == 3 ){
+                        input_triangle.vertex[i].position = VList[selectV - 1];
+                        input_triangle.vertex[i].texture.enable = true;
+                        input_triangle.vertex[i].texture = VTList[selectVT - 1];
+                        input_triangle.vertex[i].normal = VNList[selectVN - 1];
+                    }
+                    else if( readitem == 2 ){
+                        input_triangle.vertex[i].position = VList[selectV - 1];
+                        input_triangle.vertex[i].texture.enable = false;
+                        input_triangle.vertex[i].normal = VNList[selectVT - 1]; // if no vertex selectVT will be the position of selectVN
+                    }
+                    else {
+                        Err_Text->Caption = "[!] 三角形輸入發生錯誤";
+                    }
+                }
             }
             else{
-                Err_Text->Caption = "[!] Undefind input_node.";
+                Err_Text->Caption = "[!] 未定義的輸入格式";
             }
         }
 
@@ -301,6 +318,10 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
     TZ_Edit->Text = "";
     WD_Edit->Text = "";
     Err_Text->Caption = "";
+    VList.clear();
+    VNList.clear();
+    VTList.clear();
+    TList.clear();
     //CleanMem();
 }
 //---------------------------------------------------------------------------

@@ -167,6 +167,7 @@ public:		// User declarations
         };
         struct Texture {
                 double u,v;
+                bool enable;
         };
         struct Vertex {
                 Node position, normal;
