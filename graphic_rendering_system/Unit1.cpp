@@ -181,13 +181,13 @@ TColor TForm1::DrawPixel(int i, int j)
         {
             cross_point = camera.position + ray_vector*t;
             point_dis = TwoPointDis(cross_point,camera.position);
-            if( dcmp(point_dis-select_dis) < 0 )
+            if( point_dis<select_dis )
             {
                 select_dis = point_dis;
                 color = (TColor)0x00ff00;
             }
         }		
-		/*TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
+	/*TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
         if ( ray_vector*V != 0 )
         {
             t = ( (it->vertex[0].position - pixel_pos[i][j])*V ) / (ray_vector*V);

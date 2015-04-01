@@ -187,7 +187,7 @@ TColor TForm1::DrawPixel(int i, int j)
                 color = (TColor)0x00ff00;
             }
         }		
-		/*TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
+	/*TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
         if ( ray_vector*V != 0 )
         {
             t = ( (it->vertex[0].position - pixel_pos[i][j])*V ) / (ray_vector*V);
@@ -260,7 +260,7 @@ bool TForm1::IntersectTriangle(TForm1::Node orig, TForm1::Node dir, TForm1::Node
 TForm1::Node TForm1::UnitVector(TForm1::Node input_node)
 {
     double Vdis = sqrt( input_node*input_node );
-    return TForm1::Node ( input_node.x/Vdis, input_node.y/Vdis, input_node.z/Vdis) ;
+    return input_node/Vdis ;
 }
 
 void TForm1::PixelPositionCalculate()
