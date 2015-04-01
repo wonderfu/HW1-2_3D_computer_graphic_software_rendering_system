@@ -9,12 +9,12 @@
 #pragma resource "*.dfm"
 
 TForm1 *Form1;				
-int Tnum;	// Triangle number
-int *Tricolor;
-TForm1::Node **Tri = NULL;
+//int Tnum;	// Triangle number
+//int *Tricolor;
+//TForm1::Vector **Tri = NULL;
 TForm1::Camera camera;
-TForm1::Node pixel_pos[WindowH][WindowW];
-vector <TForm1::Node> VList,VNList;
+TForm1::Vector pixel_pos[WindowH][WindowW];
+vector <TForm1::Vector> VList,VNList;
 vector <TForm1::Texture> VTList;
 vector <TForm1::Triangle> TriList;
 
@@ -30,7 +30,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
 {
     FILE *fp;
     char str[StrSize];
-    Node input_node;
+    Vector input_node;
     Texture input_texture;
     Triangle input_triangle;
     int selectV, selectVN, selectVT;
@@ -40,10 +40,10 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         fp = fopen(OpenDialog1->FileName.c_str(), "r");
         Msg_Memo->Clear();
 
-        if( Tri != NULL )
+        /*if( Tri != NULL )
         {
             CleanMem();
-        }
+        }*/
         while( fscanf(fp," %s ",str) == 1 )
         {
             if( !strcmp(str,"v") ) // vertex
@@ -110,9 +110,9 @@ int TForm1::dcmp(double x)
     if( x < -EPS ) return -1; return x > EPS;
 }
 
-double TForm1::TriangleArea(TForm1::Node A, TForm1::Node B, TForm1::Node C)
+double TForm1::TriangleArea(TForm1::Vector A, TForm1::Vector B, TForm1::Vector C)
 {
-    TForm1::Node  AB, AC, AP;
+    TForm1::Vector  AB, AC, AP;
     double pixel_pos = 0.0;
     double area = 0.0;
 
@@ -133,7 +133,7 @@ double TForm1::TriangleArea(TForm1::Node A, TForm1::Node B, TForm1::Node C)
     return area;
 }
 
-double TForm1::isInTriangle(TForm1::Node tA, TForm1::Node tB, TForm1::Node tC, TForm1::Node tP)
+double TForm1::isInTriangle(TForm1::Vector tA, TForm1::Vector tB, TForm1::Vector tC, TForm1::Vector tP)
 {
     double area1 = TriangleArea(tA,tB,tC);
 
@@ -152,58 +152,122 @@ double TForm1::isInTriangle(TForm1::Node tA, TForm1::Node tB, TForm1::Node tC, T
     return false;
 }
 
-TForm1::Node TForm1::getV(TForm1::Node V1, TForm1::Node V2, TForm1::Node V3)
+TForm1::Vector TForm1::getV(TForm1::Vector V1, TForm1::Vector V2, TForm1::Vector V3)
 {
     double a, b, c, d;
     a = ( (V2.y-V1.y)*(V3.z-V1.z) - (V2.z-V1.z)*(V3.y-V1.y) );
     b = ( (V2.z-V1.z)*(V3.x-V1.x) - (V2.x-V1.x)*(V3.z-V1.z) );
     c = ( (V2.x-V1.x)*(V3.y-V1.y) - (V2.y-V1.y)*(V3.x-V1.x) );
     d = sqrt(a*a+b*b+c*c);
-    return Node(a/d,b/d,c/d);
+    return Vector(a/d,b/d,c/d);
 }
 
-double TForm1::TwoPointDis(Node a, Node b)
+double TForm1::TwoPointDis(Vector V1, Vector V2)
 {
-    TForm1::Node AB = a-b;
-    return sqrt(AB*AB);
+    TForm1::Vector dis = V1-V2;
+    return sqrt(dis*dis);
 }
 
 TColor TForm1::DrawPixel(int i, int j)
 {
     TColor color = WHITE; // 0xBBGGRR || RGB(R,G,B) [0~255]
-    double t, distance = 2147483647, tmpdis;
-    TForm1::Node cross, ray_vector;
+    double t, u, v, select_dis = 2147483647, point_dis;
+    TForm1::Vector cross_point, ray_vector;
 	
     ray_vector = pixel_pos[i][j]-camera.position;
     for( vector<TForm1::Triangle>::iterator it = TriList.begin(); it != TriList.end(); ++it )
     {
-        TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
+        if( IntersectTriangle(camera.position, ray_vector, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
+        {
+            cross_point = camera.position + ray_vector*t;
+            point_dis = TwoPointDis(cross_point,camera.position);
+            if( dcmp(point_dis-select_dis) < 0 )
+            {
+                select_dis = point_dis;
+                color = (TColor)0x00ff00;
+            }
+        }		
+		/*TForm1::Vector V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
         if ( ray_vector*V != 0 )
         {
             t = ( (it->vertex[0].position - pixel_pos[i][j])*V ) / (ray_vector*V);
-            cross = ray_vector*t + pixel_pos[i][j];
-            tmpdis = TwoPointDis(cross,camera.position);
-            if ( isInTriangle( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, cross ) == true && dcmp(tmpdis-distance) < 0 )
+            cross_point = ray_vector*t + pixel_pos[i][j];
+            point_dis = TwoPointDis(cross_point,camera.position);
+            if ( isInTriangle( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, cross_point ) == true && dcmp(point_dis-select_dis) < 0 )
             {
-                distance = tmpdis;
+                select_dis = point_dis;
 //                color = (TColor) Tricolor[k];
             }
-        }
+        }*/
     }
     return color;
 }
 
-TForm1::Node TForm1::UnitVector(TForm1::Node input_node)
+// Determine whether a ray intersect with a triangle
+// Parameters
+// orig: origin of the ray
+// dir: direction of the ray
+// V1, V2, V3: vertices of triangle
+// t( out): weight of the intersection for the ray
+// u(out), v(out): barycentric coordinate of intersection 
+// O+D*t = (1-u-v)*V1 + u*V2 + v*V3
+
+bool IntersectTriangle(const Vector orig,const Vector dir, Vector V1, Vector V2, Vector V3, double* t, double* u, double* v)
+{
+    Vector E1 = V2 - V1;
+    Vector E2 = V3 - V1;
+    Vector P = dir^E2; 
+    double det = E1*P; // determinant 
+ 
+    // keep det > 0, modify T accordingly 
+    Vector T;
+    if ( det > 0 )
+    {
+        T = orig - V1;
+    }
+    else 
+    {
+        T = V1 - orig;
+        det = - det;
+    }
+    // If determinant is near zero, ray lies in plane of triangle 
+    if ( det < EPS )
+        return false ;
+
+    // Calculate u and make sure u <= 1 
+    *u = T*P;
+    if ( *u < 0.0f || *u > det )
+        return false ;
+ 
+    Vector Q = T^E1; 
+ 
+    // Calculate v and make sure u + v <= 1 
+    *v = dir*Q;
+    if ( *v < 0.0f || *u + *v > det )
+        return false ;
+ 
+    // Calculate t, scale parameters, ray intersects triangle 
+    *t = E2*Q;
+ 
+    double fInvDet = 1.0f / det;
+    *t *= fInvDet ;
+    *u *= fInvDet;
+    *v *= fInvDet;
+ 
+    return true ;
+}
+
+TForm1::Vector TForm1::UnitVector(TForm1::Vector input_node)
 {
     double Vdis = sqrt( input_node.x*input_node.x + input_node.y*input_node.y + input_node.z*input_node.z );
-    return TForm1::Node ( input_node.x/Vdis, input_node.y/Vdis, input_node.z/Vdis) ;
+    return TForm1::Vector ( input_node.x/Vdis, input_node.y/Vdis, input_node.z/Vdis) ;
 }
 
 void TForm1::PixelPositionCalculate()
 {
-    Node mid_point = camera.position + (camera.direction * camera.distance);
-    Node move_vector = UnitVector(camera.direction ^ camera.top);
-    Node start_point = mid_point + move_vector*WindowW/2 + camera.top*WindowH/2;
+    Vector mid_point = camera.position + (camera.direction * camera.distance);
+    Vector move_vector = UnitVector(camera.direction ^ camera.top);
+    Vector start_point = mid_point + move_vector*WindowW/2 + camera.top*WindowH/2;
     for( int i=0; i<WindowH; ++i )
     {
         for ( int j=0; j<WindowW; ++j )
@@ -231,7 +295,7 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
     {
         for( int j=0; j<WindowW; ++j )
         {
-            Draw_Area->Canvas->Pixels[j][i] = (TColor)0;
+            Draw_Area->Canvas->Pixels[j][i] = BLACK;
         }
     }
     VX_Edit->Text = "";

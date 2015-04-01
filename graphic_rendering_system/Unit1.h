@@ -153,18 +153,18 @@ private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
 
-        struct Node {
+        struct Vector {
                 double x, y, z;
-                Node ( double _x = 0, double _y = 0, double _z = 0 ): x(_x),y(_y),z(_z) {}
-                double operator* ( Node op ) { return (x*op.x+y*op.y+z*op.z); } // Node dot product
-                Node operator* ( double t ) { return Node(x*t, y*t, z*t); }
-                Node operator/ ( double t ) { return Node(x/t, y/t, z/t); }
-                Node operator+ ( Node op ) { return Node(x+op.x, y+op.y, z+op.z); }
-                Node operator- ( Node op ) { return Node(x-op.x, y-op.y, z-op.z); }
-                Node operator^ ( Node op ) { return Node(y*op.z-z*op.y, z*op.x-x*op.z, x*op.y-y*op.x); } // Node product
+                Vector ( double _x = 0, double _y = 0, double _z = 0 ): x(_x),y(_y),z(_z) {}
+                double operator* ( Vector op ) { return (x*op.x+y*op.y+z*op.z); } // Vector dot product
+                Vector operator* ( double t ) { return Vector(x*t, y*t, z*t); }
+                Vector operator/ ( double t ) { return Vector(x/t, y/t, z/t); }
+                Vector operator+ ( Vector op ) { return Vector(x+op.x, y+op.y, z+op.z); }
+                Vector operator- ( Vector op ) { return Vector(x-op.x, y-op.y, z-op.z); }
+                Vector operator^ ( Vector op ) { return Vector(y*op.z-z*op.y, z*op.x-x*op.z, x*op.y-y*op.x); } // Vector product
         };
         struct Camera {
-                Node position, direction, top;
+                Vector position, direction, top;
                 double distance;
         };
         struct Texture {
@@ -172,30 +172,32 @@ public:		// User declarations
                 bool enable;
         };
         struct Vertex {
-                Node position, normal;
+                Vector position, normal;
                 Texture texture;
                 double ka[3],kd[3],ks[3];
         };
         struct Light {
                 double ambient;
-                Node position;
+                Vector position;
                 int color[3];
         };
         struct Triangle {
                 Vertex vertex[3];
-                Node normal;
+                Vector normal;
         };
 		
         double dabs(double);
         int dcmp(double);
-        double TriangleArea(Node, Node, Node);
-        double isInTriangle(Node, Node, Node, Node);
-        Node getV(Node, Node, Node);
-        double TwoPointDis(Node, Node);
+        double TriangleArea(Vector, Vector, Vector);
+        double isInTriangle(Vector, Vector, Vector, Vector);
+        Vector getV(Vector, Vector, Vector);
+        double TwoPointDis(Vector, Vector);
         TColor DrawPixel(int, int);
-        Node UnitVector(Node);
+        Vector UnitVector(Vector);
         void PixelPositionCalculate(void);
-        void CleanMem(void);		
+        void CleanMem(void);
+        bool IntersectTriangle(const Vector, const Vector, Vector, Vector, Vector, double*, double*, double*);
+
 };
 
 //---------------------------------------------------------------------------
