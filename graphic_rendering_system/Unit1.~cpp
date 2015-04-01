@@ -29,10 +29,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 void __fastcall TForm1::OpenInputClick(TObject *Sender)
 {
     FILE *fp;
-
-    int i, j;
     char str[StrSize];
-    double x;
     Node input_node;
     Texture input_texture;
     Triangle input_triangle;
@@ -47,7 +44,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         {
             CleanMem();
         }
-        while( fscanf(fp," %s ",str) ){
+        while( fscanf(fp," %s ",str) == 1 ){
             if( !strcmp(str,"v") ){
                 fscanf(fp,"%lf %lf %lf", &input_node.x, &input_node.y, &input_node.z);
                 VList.push_back(input_node);
@@ -76,7 +73,9 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                     }
                     else {
                         Err_Text->Caption = "[!] 三角形輸入發生錯誤";
+                        continue;
                     }
+                    TriList.push_back(input_triangle);
                 }
             }
             else{

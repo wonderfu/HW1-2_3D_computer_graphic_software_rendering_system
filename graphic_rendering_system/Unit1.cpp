@@ -29,10 +29,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 void __fastcall TForm1::OpenInputClick(TObject *Sender)
 {
     FILE *fp;
-
-    int i, j;
     char str[StrSize];
-    double x;
     Node input_node;
     Texture input_texture;
     Triangle input_triangle;
@@ -47,7 +44,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         {
             CleanMem();
         }
-        while( fscanf(fp," %s ",str) ){
+        while( fscanf(fp," %s ",str) == 1 ){
             if( !strcmp(str,"v") ){
                 fscanf(fp,"%lf %lf %lf", &input_node.x, &input_node.y, &input_node.z);
                 VList.push_back(input_node);
@@ -87,35 +84,6 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         }
 
         /*
-        while( fscanf(fp,"%c",&input_object) == 1 )
-        {
-            switch(input_object)
-            {
-                case 'v':
-                case 'V':
-                    for(int i=0; i<3; ++i)
-                    {
-                        //fscanf(fp,);
-                    }
-                    break;
-                case 'l':
-                case 'L':
-
-                    break;
-                case 'c':
-                case 'C':
-                    Msg_Memo->Lines->Add("Camera:");
-                    fscanf(fp,"%f %f %f",&camera.position.x,&camera.position.y,&camera.position.z);
-                    fscanf(fp,"%f %f %f",&camera.direction.x,&camera.direction.y,&camera.direction.z);
-                    fscanf(fp,"%f %f %f",&camera.top.x,&camera.top.y,&camera.top.z);
-                    fscanf(fp,"%f",&camera.distance);
-                    break;
-                default:
-                    Msg_Memo->Lines->Add("[!]Error : Undefined input_node.");
-                    break;
-            }
-        }
-
         // get the Node's info
         fscanf(fp,"%d",&Tnum);
         Tri = (Node**) malloc( sizeof(Node*)*Tnum);
