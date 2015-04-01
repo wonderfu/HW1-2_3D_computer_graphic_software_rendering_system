@@ -16,7 +16,7 @@ TForm1::Camera camera;
 TForm1::Node m[WindowH][WindowW];
 vector <TForm1::Node> VList,VNList;
 vector <TForm1::Texture> VTList;
-vector <TForm1::Triangle> TList;
+vector <TForm1::Triangle> TriList;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -76,7 +76,9 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                     }
                     else {
                         Err_Text->Caption = "[!] 三角形輸入發生錯誤";
+                        continue;
                     }
+                    TriList.push_back(input_triangle);
                 }
             }
             else{
@@ -321,7 +323,7 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
     VList.clear();
     VNList.clear();
     VTList.clear();
-    TList.clear();
+    TriList.clear();
     //CleanMem();
 }
 //---------------------------------------------------------------------------

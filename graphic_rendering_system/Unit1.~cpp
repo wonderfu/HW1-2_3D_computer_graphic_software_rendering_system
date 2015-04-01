@@ -16,7 +16,7 @@ TForm1::Camera camera;
 TForm1::Node m[WindowH][WindowW];
 vector <TForm1::Node> VList,VNList;
 vector <TForm1::Texture> VTList;
-vector <TForm1::Triangle> TList;
+vector <TForm1::Triangle> TriList;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -75,12 +75,12 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                         input_triangle.vertex[i].normal = VNList[selectVT - 1]; // if no vertex selectVT will be the position of selectVN
                     }
                     else {
-                        Err_Text->Caption = "[!] ";
+                        Err_Text->Caption = "[!] 三角形輸入發生錯誤";
                     }
                 }
             }
             else{
-                Err_Text->Caption = "[!] Undefind input_node.";
+                Err_Text->Caption = "[!] 未定義的輸入格式";
             }
         }
 
@@ -321,7 +321,7 @@ void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
     VList.clear();
     VNList.clear();
     VTList.clear();
-    TList.clear();
+    TriList.clear();
     //CleanMem();
 }
 //---------------------------------------------------------------------------
