@@ -8,15 +8,23 @@
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 
-TForm1 *Form1;				
+// window
+TForm1 *Form1;
+TForm1::Node pixel_pos[WindowH][WindowW];
+// camera
+TForm1::Camera camera;
+// light
+//double ambient_light;
+TForm1::Light light0;
+// vertex
+vector <TForm1::Node> VList, VNList, LList;
+vector <TForm1::Texture> VTList;
+// triangle
+vector <TForm1::Triangle> TriList;
+
 //int Tnum;	// Triangle number
 //int *Tricolor;
 //TForm1::Node **Tri = NULL;
-TForm1::Camera camera;
-TForm1::Node pixel_pos[WindowH][WindowW];
-vector <TForm1::Node> VList,VNList;
-vector <TForm1::Texture> VTList;
-vector <TForm1::Triangle> TriList;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -61,7 +69,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                 fscanf(fp,"%lf %lf", &input_texture.u, &input_texture.v);
                 VTList.push_back(input_texture);
             }
-            else if( !strcmp(str,"f") ) // triangle 
+            else if( !strcmp(str,"f") ) // triangle
             {
                 int readitem;
                 for(int i=0; i<3; ++i)
@@ -79,13 +87,16 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                         input_triangle.vertex[i].texture.enable = false;
                         input_triangle.vertex[i].normal = VNList[selectVT - 1]; // if no vertex selectVT will be the position of selectVN
                     }
-                    else 
+                    else
                     {
                         Err_Text->Caption = "[!] 三角形輸入發生錯誤";
                         continue;
                     }
-                    TriList.push_back(input_triangle);
+                    input_triangle.vertex[i].ka[0] = input_triangle.vertex[i].ka[1] = input_triangle.vertex[i].ka[2] = 1.0;
+                    input_triangle.vertex[i].kd[0] = input_triangle.vertex[i].kd[1] = input_triangle.vertex[i].kd[2] = 1.0;
+                    input_triangle.vertex[i].ks[0] = input_triangle.vertex[i].ks[1] = input_triangle.vertex[i].ks[2] = 1.0;
                 }
+                TriList.push_back(input_triangle);
             }
             else
             {
@@ -219,41 +230,41 @@ bool TForm1::IntersectTriangle(TForm1::Node orig, TForm1::Node dir, TForm1::Node
     TForm1::Node P = dir^E2; 
     double det = E1*P; // determinant
  
-    // keep det > 0, modify T accordingly 
+    // keep det > 0, modify T accordingly
     TForm1::Node T;
     if ( det > 0 )
     {
         T = orig - V1;
     }
-    else 
+    else
     {
         T = V1 - orig;
         det = - det;
     }
-    // If determinant is near zero, ray lies in plane of triangle 
+    // If determinant is near zero, ray lies in plane of triangle
     if ( det < EPS )
         return false ;
 
-    // Calculate u and make sure u <= 1 
+    // Calculate u and make sure u <= 1
     *u = T*P;
     if ( *u < 0.0f || *u > det )
         return false ;
- 
-    TForm1::Node Q = T^E1; 
- 
-    // Calculate v and make sure u + v <= 1 
+
+    TForm1::Node Q = T^E1;
+
+    // Calculate v and make sure u + v <= 1
     *v = dir*Q;
     if ( *v < 0.0f || *u + *v > det )
         return false ;
- 
-    // Calculate t, scale parameters, ray intersects triangle 
+
+    // Calculate t, scale parameters, ray intersects triangle
     *t = E2*Q;
- 
+
     double fInvDet = 1.0f / det;
     *t *= fInvDet ;
     *u *= fInvDet;
     *v *= fInvDet;
- 
+
     return true ;
 }
 
@@ -438,4 +449,93 @@ void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
+
+
+void __fastcall TForm1::AddVP_ButtonClick(TObject *Sender)
+{
+    if(VX_Edit->Text == "" || VY_Edit->Text == "" || VZ_Edit->Text == ""){
+        Err_Text->Caption = "座標不得空白";
+    }
+    else{
+        Node input_node(StrToFloat(VX_Edit->Text), StrToFloat(VY_Edit->Text), StrToFloat(VZ_Edit->Text));
+        VList.push_back(input_node);
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AddVN_ButtonClick(TObject *Sender)
+{
+    if(NX_Edit->Text == "" || NY_Edit->Text == "" || NZ_Edit->Text == ""){
+        Err_Text->Caption = "向量不得空白";
+    }
+    else{
+        Node input_node(StrToFloat(NX_Edit->Text), StrToFloat(NY_Edit->Text), StrToFloat(NZ_Edit->Text));
+        VNList.push_back(input_node);
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AddVT_ButtonClick(TObject *Sender)
+{
+    if(TU_Edit->Text == "" || TV_Edit->Text == ""){
+        Err_Text->Caption = "貼圖座標不得空白";
+    }
+    else{
+        Texture input_texture(StrToFloat(TU_Edit->Text), StrToFloat(TV_Edit->Text));
+        VTList.push_back(input_texture);
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::SetLA_ButtonClick(TObject *Sender)
+{
+    if( LA_Edit == "" ){
+        //ambient_light = 0.0;
+        light0.ambient = 0.0;
+        LA_Edit->Text = "0";
+    }
+    else{
+        //ambient_light = StrToFloat(LA_Edit->Text);
+        light0.ambient = StrToFloat(LA_Edit->Text);
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AddLP_ButtonClick(TObject *Sender)
+{
+    if(LX_Edit->Text == "" || LY_Edit->Text == "" || LZ_Edit->Text == ""){
+        Err_Text->Caption = "座標不得空白";
+    }
+    else{
+        /*
+        Node input_node(StrToFloat(LX_Edit->Text), StrToFloat(LY_Edit->Text), StrToFloat(LZ_Edit->Text));
+        LList.push_back(input_node);
+        */
+        light0.position = Node(StrToFloat(LX_Edit->Text), StrToFloat(LY_Edit->Text), StrToFloat(LZ_Edit->Text));
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
+{
+    int input_color[3];
+    if(CR_Edit->Text == "" || CG_Edit->Text == "" || CB_Edit->Text == ""){
+        Err_Text->Caption = "顏色不得空白";
+    }
+    input_color[0] = StrToFloat(CR_Edit->Text);
+    input_color[1] = StrToFloat(CG_Edit->Text);
+    input_color[2] = StrToFloat(CB_Edit->Text);
+    if(input_color[0] < 0 || input_color[0] > 255 ||
+       input_color[1] < 0 || input_color[1] > 255 ||
+       input_color[2] < 0 || input_color[2] > 255){
+        Err_Text->Caption = "顏色範圍需介於0~255";
+    }
+    else{
+        light0.color[0] = input_color[0];
+        light0.color[1] = input_color[1];
+        light0.color[2] = input_color[2];
+    }
+}
+//---------------------------------------------------------------------------
 

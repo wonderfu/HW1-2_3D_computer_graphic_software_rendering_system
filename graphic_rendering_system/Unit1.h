@@ -148,6 +148,12 @@ __published:	// IDE-managed Components
         void __fastcall ClearL_ButtonClick(TObject *Sender);
         void __fastcall ClearC_ButtonClick(TObject *Sender);
         void __fastcall SetC_ButtonClick(TObject *Sender);
+        void __fastcall AddVP_ButtonClick(TObject *Sender);
+        void __fastcall AddVN_ButtonClick(TObject *Sender);
+        void __fastcall AddVT_ButtonClick(TObject *Sender);
+        void __fastcall SetLA_ButtonClick(TObject *Sender);
+        void __fastcall AddLP_ButtonClick(TObject *Sender);
+        void __fastcall AddLC_ButtonClick(TObject *Sender);
 private:	// User declarations
 		
 public:		// User declarations
@@ -170,6 +176,7 @@ public:		// User declarations
         struct Texture {
                 double u,v;
                 bool enable;
+                Texture ( double _u = 0, double _v = 0 ): u(_u),v(_v) {}
         };
         struct Vertex {
                 Node position, normal;
