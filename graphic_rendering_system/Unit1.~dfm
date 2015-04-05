@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 200
   Top = 150
   Width = 1300
-  Height = 784
+  Height = 850
   Caption = '3D_computer_graphic_software_rendering_system'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
