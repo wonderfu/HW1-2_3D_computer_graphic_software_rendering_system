@@ -206,7 +206,7 @@ TColor TForm1::DrawPixel(int i, int j)
         {
             cross_point = camera.position + ray_vector*t;
             point_dis = TwoPointDis(cross_point,camera.position);
-            if( point_dis<select_dis )
+            if( point_dis < select_dis )
             {
                 select_dis = point_dis;
                 color = GREEN;

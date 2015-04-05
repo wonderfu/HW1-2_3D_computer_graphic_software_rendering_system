@@ -166,11 +166,11 @@ public:		// User declarations
                 double x, y, z;
                 Node ( double _x = 0, double _y = 0, double _z = 0 ): x(_x),y(_y),z(_z) {}
                 double operator* ( Node op ) { return (x*op.x+y*op.y+z*op.z); } // Node dot product
+                Node operator^ ( Node op ) { return Node(y*op.z-z*op.y, z*op.x-x*op.z, x*op.y-y*op.x); } // Node product
                 Node operator* ( double t ) { return Node(x*t, y*t, z*t); }
                 Node operator/ ( double t ) { return Node(x/t, y/t, z/t); }
                 Node operator+ ( Node op ) { return Node(x+op.x, y+op.y, z+op.z); }
                 Node operator- ( Node op ) { return Node(x-op.x, y-op.y, z-op.z); }
-                Node operator^ ( Node op ) { return Node(y*op.z-z*op.y, z*op.x-x*op.z, x*op.y-y*op.x); } // Node product
         };
         struct Camera {
                 Node position, direction, top;
