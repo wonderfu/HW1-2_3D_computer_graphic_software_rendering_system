@@ -74,7 +74,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                 int readitem;
                 for(int i=0; i<3; ++i)
                 {
-                    if( (readitem = fscanf(fp,"%d/%d/%d", &selectV, &selectVT, &selectVN)) == 3 ) // vertex number / texture number / normal number  for one vertex
+                    if( (readitem = fscanf(fp," %d/%d/%d ", &selectV, &selectVT, &selectVN)) == 3 ) // vertex number / texture number / normal number  for one vertex
                     {
                         input_triangle.vertex[i].position = VList[selectV - 1];
                         input_triangle.vertex[i].texture.enable = true;
