@@ -225,35 +225,35 @@ bool TForm1::IntersectTriangle(TForm1::Node orig, TForm1::Node dir, TForm1::Node
     {
         T = orig - V1;
     }
-    else 
+    else
     {
         T = V1 - orig;
         det = - det;
     }
-    // If determinant is near zero, ray lies in plane of triangle 
+    // If determinant is near zero, ray lies in plane of triangle
     if ( det < EPS )
         return false ;
 
-    // Calculate u and make sure u <= 1 
+    // Calculate u and make sure u <= 1
     *u = T*P;
     if ( *u < 0.0f || *u > det )
         return false ;
- 
-    TForm1::Node Q = T^E1; 
- 
-    // Calculate v and make sure u + v <= 1 
+
+    TForm1::Node Q = T^E1;
+
+    // Calculate v and make sure u + v <= 1
     *v = dir*Q;
     if ( *v < 0.0f || *u + *v > det )
         return false ;
- 
-    // Calculate t, scale parameters, ray intersects triangle 
+
+    // Calculate t, scale parameters, ray intersects triangle
     *t = E2*Q;
- 
+
     double fInvDet = 1.0f / det;
     *t *= fInvDet ;
     *u *= fInvDet;
     *v *= fInvDet;
- 
+
     return true ;
 }
 
@@ -437,5 +437,6 @@ void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+
 
 
