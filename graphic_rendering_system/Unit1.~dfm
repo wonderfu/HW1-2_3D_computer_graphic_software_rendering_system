@@ -1016,7 +1016,7 @@ object Form1: TForm1
     end
   end
   object OpenDialog1: TOpenDialog
-    Filter = '.txt|*.txt|.obj|*.obj'
+    Filter = '.obj|*.obj|.txt|*.txt'
     Left = 32
   end
   object OpenPictureDialog1: TOpenPictureDialog

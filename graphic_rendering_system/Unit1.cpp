@@ -103,6 +103,19 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                 Err_Text->Caption = "[!] 未定義的輸入格式";
             }
         }
+        /* for test
+		int a=1;
+        for(vector <TForm1::Triangle>::iterator it=TriList.begin(); it!=TriList.end(); ++it)
+        {
+            Msg_Memo->Lines->Add("T"+FloatToStr(a));
+            char out[512];
+            for(int j=1; j<=3; ++j)
+            {
+                Msg_Memo->Lines->Add(IntToStr(j)+":"+FloatToStr(it->vertex[j].position.x)+","+FloatToStr(it->vertex[j].position.y)+","+FloatToStr(it->vertex[j].position.z));
+            }
+            ++a;
+        }
+		*/
         fclose(fp);
         Err_Text->Caption = "";
     }
@@ -186,7 +199,7 @@ TColor TForm1::DrawPixel(int i, int j)
     double t, u, v, select_dis = 2147483647, point_dis;
     TForm1::Node cross_point, ray_vector;
 	
-    ray_vector = pixel_pos[i][j]-camera.position;
+    ray_vector = UnitVector(pixel_pos[i][j]-camera.position);
     for( vector<TForm1::Triangle>::iterator it = TriList.begin(); it != TriList.end(); ++it )
     {
         if( IntersectTriangle(camera.position, ray_vector, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
@@ -196,7 +209,7 @@ TColor TForm1::DrawPixel(int i, int j)
             if( point_dis<select_dis )
             {
                 select_dis = point_dis;
-                color = (TColor)0x00ff00;
+                color = GREEN;
             }
         }		
 	/*TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
@@ -454,7 +467,8 @@ void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
 
 void __fastcall TForm1::AddVP_ButtonClick(TObject *Sender)
 {
-    if(VX_Edit->Text == "" || VY_Edit->Text == "" || VZ_Edit->Text == ""){
+    if(VX_Edit->Text == "" || VY_Edit->Text == "" || VZ_Edit->Text == "")
+	{
         Err_Text->Caption = "座標不得空白";
         return ;
     }
@@ -466,7 +480,8 @@ void __fastcall TForm1::AddVP_ButtonClick(TObject *Sender)
 
 void __fastcall TForm1::AddVN_ButtonClick(TObject *Sender)
 {
-    if(NX_Edit->Text == "" || NY_Edit->Text == "" || NZ_Edit->Text == ""){
+    if(NX_Edit->Text == "" || NY_Edit->Text == "" || NZ_Edit->Text == "")
+	{
         Err_Text->Caption = "向量不得空白";
         return ;
     }
@@ -478,7 +493,8 @@ void __fastcall TForm1::AddVN_ButtonClick(TObject *Sender)
 
 void __fastcall TForm1::AddVT_ButtonClick(TObject *Sender)
 {
-    if(TU_Edit->Text == "" || TV_Edit->Text == ""){
+    if(TU_Edit->Text == "" || TV_Edit->Text == "")
+	{
         Err_Text->Caption = "貼圖座標不得空白";
         return ;
     }
@@ -490,12 +506,14 @@ void __fastcall TForm1::AddVT_ButtonClick(TObject *Sender)
 
 void __fastcall TForm1::SetLA_ButtonClick(TObject *Sender)
 {
-    if( LA_Edit->Text == "" ){
+    if( LA_Edit->Text == "" )
+	{
         //ambient_light = 0.0;
         light0.ambient = 0;
         LA_Edit->Text = "0";
     }
-    else{
+    else
+	{
         //ambient_light = StrToFloat(LA_Edit->Text);
         light0.ambient = StrToFloat(LA_Edit->Text);
     }
@@ -505,7 +523,8 @@ void __fastcall TForm1::SetLA_ButtonClick(TObject *Sender)
 
 void __fastcall TForm1::AddLP_ButtonClick(TObject *Sender)
 {
-    if(LX_Edit->Text == "" || LY_Edit->Text == "" || LZ_Edit->Text == ""){
+    if(LX_Edit->Text == "" || LY_Edit->Text == "" || LZ_Edit->Text == "")
+	{
         Err_Text->Caption = "座標不得空白";
         return ;
     }
@@ -521,7 +540,8 @@ void __fastcall TForm1::AddLP_ButtonClick(TObject *Sender)
 void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
 {
     int input_color[3];
-    if(CR_Edit->Text == "" || CG_Edit->Text == "" || CB_Edit->Text == ""){
+    if(CR_Edit->Text == "" || CG_Edit->Text == "" || CB_Edit->Text == "")
+	{
         Err_Text->Caption = "顏色不得空白";
         return ;
     }
@@ -530,7 +550,8 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     input_color[2] = StrToFloat(CB_Edit->Text);
     if(input_color[0] < 0 || input_color[0] > 255 ||
        input_color[1] < 0 || input_color[1] > 255 ||
-       input_color[2] < 0 || input_color[2] > 255){
+       input_color[2] < 0 || input_color[2] > 255)
+    {
         Err_Text->Caption = "顏色範圍需介於0~255";
         return ;
     }
