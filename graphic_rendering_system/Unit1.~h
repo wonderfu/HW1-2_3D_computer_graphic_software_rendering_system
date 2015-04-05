@@ -29,6 +29,9 @@
 #define StrSize 64
 #define BLACK (TColor)0x000000
 #define WHITE (TColor)0xffffff
+#define RED (TColor)0xff0000
+#define GREEN (TColor)0x00ff00
+#define BLUE (TColor)0x0000ff
 
 using namespace std;
 //---------------------------------------------------------------------------

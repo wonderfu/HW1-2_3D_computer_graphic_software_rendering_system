@@ -104,6 +104,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
             }
         }
         fclose(fp);
+        Err_Text->Caption = "";
     }
     else
     {
@@ -428,24 +429,23 @@ void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
        WD_Edit->Text == "" )
     {
         Err_Text->Caption = "相機欄位不得空白";
+        return ;
     }
-    else
-    {
-        camera.position.x = StrToFloat(CX_Edit->Text);
-        camera.position.y = StrToFloat(CY_Edit->Text);
-        camera.position.z = StrToFloat(CZ_Edit->Text);
-        camera.direction.x = StrToFloat(DX_Edit->Text);
-        camera.direction.y = StrToFloat(DY_Edit->Text);
-        camera.direction.z = StrToFloat(DZ_Edit->Text);
-        camera.top.x = StrToFloat(TX_Edit->Text);
-        camera.top.y = StrToFloat(TY_Edit->Text);
-        camera.top.z = StrToFloat(TZ_Edit->Text);
-        camera.distance = StrToFloat(WD_Edit->Text);
-        camera.direction = UnitVector(camera.direction);
-        camera.top = UnitVector(camera.top);
-        // get the map's position
-        PixelPositionCalculate();
-    }
+    camera.position.x = StrToFloat(CX_Edit->Text);
+    camera.position.y = StrToFloat(CY_Edit->Text);
+    camera.position.z = StrToFloat(CZ_Edit->Text);
+    camera.direction.x = StrToFloat(DX_Edit->Text);
+    camera.direction.y = StrToFloat(DY_Edit->Text);
+    camera.direction.z = StrToFloat(DZ_Edit->Text);
+    camera.top.x = StrToFloat(TX_Edit->Text);
+    camera.top.y = StrToFloat(TY_Edit->Text);
+    camera.top.z = StrToFloat(TZ_Edit->Text);
+    camera.distance = StrToFloat(WD_Edit->Text);
+    camera.direction = UnitVector(camera.direction);
+    camera.top = UnitVector(camera.top);
+    // get the map's position
+    PixelPositionCalculate();
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
@@ -456,11 +456,11 @@ void __fastcall TForm1::AddVP_ButtonClick(TObject *Sender)
 {
     if(VX_Edit->Text == "" || VY_Edit->Text == "" || VZ_Edit->Text == ""){
         Err_Text->Caption = "座標不得空白";
+        return ;
     }
-    else{
-        Node input_node(StrToFloat(VX_Edit->Text), StrToFloat(VY_Edit->Text), StrToFloat(VZ_Edit->Text));
-        VList.push_back(input_node);
-    }
+    Node input_node(StrToFloat(VX_Edit->Text), StrToFloat(VY_Edit->Text), StrToFloat(VZ_Edit->Text));
+    VList.push_back(input_node);
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
@@ -468,11 +468,11 @@ void __fastcall TForm1::AddVN_ButtonClick(TObject *Sender)
 {
     if(NX_Edit->Text == "" || NY_Edit->Text == "" || NZ_Edit->Text == ""){
         Err_Text->Caption = "向量不得空白";
+        return ;
     }
-    else{
-        Node input_node(StrToFloat(NX_Edit->Text), StrToFloat(NY_Edit->Text), StrToFloat(NZ_Edit->Text));
-        VNList.push_back(input_node);
-    }
+    Node input_node(StrToFloat(NX_Edit->Text), StrToFloat(NY_Edit->Text), StrToFloat(NZ_Edit->Text));
+    VNList.push_back(input_node);
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
@@ -480,25 +480,26 @@ void __fastcall TForm1::AddVT_ButtonClick(TObject *Sender)
 {
     if(TU_Edit->Text == "" || TV_Edit->Text == ""){
         Err_Text->Caption = "貼圖座標不得空白";
+        return ;
     }
-    else{
-        Texture input_texture(StrToFloat(TU_Edit->Text), StrToFloat(TV_Edit->Text));
-        VTList.push_back(input_texture);
-    }
+    Texture input_texture(StrToFloat(TU_Edit->Text), StrToFloat(TV_Edit->Text));
+    VTList.push_back(input_texture);
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::SetLA_ButtonClick(TObject *Sender)
 {
-    if( LA_Edit == "" ){
+    if( LA_Edit->Text == "" ){
         //ambient_light = 0.0;
-        light0.ambient = 0.0;
+        light0.ambient = 0;
         LA_Edit->Text = "0";
     }
     else{
         //ambient_light = StrToFloat(LA_Edit->Text);
         light0.ambient = StrToFloat(LA_Edit->Text);
     }
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
@@ -506,14 +507,14 @@ void __fastcall TForm1::AddLP_ButtonClick(TObject *Sender)
 {
     if(LX_Edit->Text == "" || LY_Edit->Text == "" || LZ_Edit->Text == ""){
         Err_Text->Caption = "座標不得空白";
+        return ;
     }
-    else{
-        /*
-        Node input_node(StrToFloat(LX_Edit->Text), StrToFloat(LY_Edit->Text), StrToFloat(LZ_Edit->Text));
-        LList.push_back(input_node);
-        */
-        light0.position = Node(StrToFloat(LX_Edit->Text), StrToFloat(LY_Edit->Text), StrToFloat(LZ_Edit->Text));
-    }
+    /*
+    Node input_node(StrToFloat(LX_Edit->Text), StrToFloat(LY_Edit->Text), StrToFloat(LZ_Edit->Text));
+    LList.push_back(input_node);
+    */
+    light0.position = Node(StrToFloat(LX_Edit->Text), StrToFloat(LY_Edit->Text), StrToFloat(LZ_Edit->Text));
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
@@ -522,6 +523,7 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     int input_color[3];
     if(CR_Edit->Text == "" || CG_Edit->Text == "" || CB_Edit->Text == ""){
         Err_Text->Caption = "顏色不得空白";
+        return ;
     }
     input_color[0] = StrToFloat(CR_Edit->Text);
     input_color[1] = StrToFloat(CG_Edit->Text);
@@ -530,12 +532,12 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
        input_color[1] < 0 || input_color[1] > 255 ||
        input_color[2] < 0 || input_color[2] > 255){
         Err_Text->Caption = "顏色範圍需介於0~255";
+        return ;
     }
-    else{
-        light0.color[0] = input_color[0];
-        light0.color[1] = input_color[1];
-        light0.color[2] = input_color[2];
-    }
+    light0.color[0] = input_color[0];
+    light0.color[1] = input_color[1];
+    light0.color[2] = input_color[2];
+    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
