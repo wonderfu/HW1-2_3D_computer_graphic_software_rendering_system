@@ -47,7 +47,10 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     {
         fp = fopen(OpenDialog1->FileName.c_str(), "r");
         Msg_Memo->Clear();
-
+        VList.clear();
+        VTList.clear();
+        VNList.clear();
+        TriList.clear();
         /*if( Tri != NULL )
         {
             CleanMem();
@@ -232,7 +235,8 @@ TColor TForm1::DrawPixel(int i, int j)
                 color = GREEN;
             }
         }		
-	/*TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
+	/*
+        TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
         if ( ray_vector*V != 0 )
         {
             t = ( (it->vertex[0].position - pixel_pos[i][j])*V ) / (ray_vector*V);
@@ -241,9 +245,10 @@ TColor TForm1::DrawPixel(int i, int j)
             if ( isInTriangle( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, cross_point ) == true && dcmp(point_dis-select_dis) < 0 )
             {
                 select_dis = point_dis;
-//                color = (TColor) Tricolor[k];
+                color = (TColor) Tricolor[k];
             }
-        }*/
+        }
+        */
     }
     return color;
 }
