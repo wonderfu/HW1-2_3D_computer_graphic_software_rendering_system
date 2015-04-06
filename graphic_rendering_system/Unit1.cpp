@@ -43,6 +43,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     Triangle input_triangle;
     int selectV, selectVN, selectVT;
 
+    srand(time(NULL));
     if( OpenDialog1->Execute() )
     {
         fp = fopen(OpenDialog1->FileName.c_str(), "r");
@@ -95,15 +96,15 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                         Err_Text->Caption = "[!] 三角形輸入發生錯誤";
                         continue;
                     }
-                    input_triangle.vertex[i].ka[0] = rand()%100/100;
-                    input_triangle.vertex[i].ka[1] = rand()%100/100;
-                    input_triangle.vertex[i].ka[2] = rand()%100/100;
-                    input_triangle.vertex[i].kd[0] = rand()%100/100;
-                    input_triangle.vertex[i].kd[1] = rand()%100/100;
-                    input_triangle.vertex[i].kd[2] = rand()%100/100;
-                    input_triangle.vertex[i].ks[0] = rand()%100/100;
-                    input_triangle.vertex[i].ks[1] = rand()%100/100;
-                    input_triangle.vertex[i].ks[2] = rand()%100/100;
+                    input_triangle.vertex[i].ka[0] = rand()%101/100.0;
+                    input_triangle.vertex[i].ka[1] = rand()%101/100.0;
+                    input_triangle.vertex[i].ka[2] = rand()%101/100.0;
+                    input_triangle.vertex[i].kd[0] = rand()%101/100.0;
+                    input_triangle.vertex[i].kd[1] = rand()%101/100.0;
+                    input_triangle.vertex[i].kd[2] = rand()%101/100.0;
+                    input_triangle.vertex[i].ks[0] = rand()%101/100.0;
+                    input_triangle.vertex[i].ks[1] = rand()%101/100.0;
+                    input_triangle.vertex[i].ks[2] = rand()%101/100.0;
                 }
                 TriList.push_back(input_triangle);
             }
@@ -233,7 +234,7 @@ TColor TForm1::DrawPixel(int i, int j)
             if( point_dis < select_dis )
             {
                 select_dis = point_dis;
-                color = GREEN;
+                color = (TColor)RGB(it->vertex[0].ka[0]*255 ,it->vertex[0].ka[1]*255, it->vertex[0].ka[2]*255);
             }
         }		
 	/*
@@ -587,6 +588,7 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
+
 
 
 
