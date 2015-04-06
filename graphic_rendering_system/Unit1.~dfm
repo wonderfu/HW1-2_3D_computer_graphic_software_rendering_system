@@ -599,7 +599,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 0
         end
         object AddLP_StaticText: TStaticText
@@ -615,7 +615,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 2
         end
         object AddLC_StaticText: TStaticText
@@ -828,7 +828,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 0
         end
         object V1N_ComboBox: TComboBox
@@ -836,7 +836,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 2
         end
         object V1T_ComboBox: TComboBox
@@ -844,7 +844,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 4
         end
         object V1P_StaticText: TStaticText
@@ -884,7 +884,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 0
         end
         object V2N_ComboBox: TComboBox
@@ -892,7 +892,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 2
         end
         object V2T_ComboBox: TComboBox
@@ -900,7 +900,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 4
         end
         object V2P_StaticText: TStaticText
@@ -940,7 +940,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 0
         end
         object V3N_ComboBox: TComboBox
@@ -948,7 +948,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 2
         end
         object V3T_ComboBox: TComboBox
@@ -956,7 +956,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 4
         end
         object V3P_StaticText: TStaticText

@@ -77,8 +77,8 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                     if( (readitem = fscanf(fp," %d/%d/%d ", &selectV, &selectVT, &selectVN)) == 3 ) // vertex number / texture number / normal number  for one vertex
                     {
                         input_triangle.vertex[i].position = VList[selectV - 1];
-                        input_triangle.vertex[i].texture.enable = true;
                         input_triangle.vertex[i].texture = VTList[selectVT - 1];
+                        input_triangle.vertex[i].texture.enable = true;
                         input_triangle.vertex[i].normal = VNList[selectVN - 1];
                     }
                     else if( readitem == 2 )
@@ -109,18 +109,32 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                 Err_Text->Caption = "[!] 未定義的輸入格式";
             }
         }
-        /*// for test input data
+        // for test input data
         int a=1;
         for(vector <TForm1::Triangle>::iterator it=TriList.begin(); it!=TriList.end(); ++it)
         {
             Msg_Memo->Lines->Add("T"+FloatToStr(a));
-            char out[512];
+            Msg_Memo->Lines->Add("position:");
+            for(int j=0; j<3; ++j)
+            {
+                Msg_Memo->Lines->Add(IntToStr(j)+":"+FloatToStr(it->vertex[j].position.x)+","+FloatToStr(it->vertex[j].position.y)+","+FloatToStr(it->vertex[j].position.z));
+            }
+            Msg_Memo->Lines->Add("normal:");
             for(int j=0; j<3; ++j)
             {
                 Msg_Memo->Lines->Add(IntToStr(j)+":"+FloatToStr(it->vertex[j].normal.x)+","+FloatToStr(it->vertex[j].normal.y)+","+FloatToStr(it->vertex[j].normal.z));
             }
+            if( it->vertex[0].texture.enable == true )
+            {
+                Msg_Memo->Lines->Add("texture:");
+                for(int j=0; j<3; ++j)
+                {
+                    Msg_Memo->Lines->Add(IntToStr(j)+":"+FloatToStr(it->vertex[j].texture.u)+","+FloatToStr(it->vertex[j].texture.v));
+                }
+            }
             ++a;
-        }*/
+            Msg_Memo->Lines->Add("");
+        }
 
         fclose(fp);
         Err_Text->Caption = "";
