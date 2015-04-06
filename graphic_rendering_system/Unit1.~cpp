@@ -92,9 +92,15 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                         Err_Text->Caption = "[!] 三角形輸入發生錯誤";
                         continue;
                     }
-                    input_triangle.vertex[i].ka[0] = input_triangle.vertex[i].ka[1] = input_triangle.vertex[i].ka[2] = 1.0;
-                    input_triangle.vertex[i].kd[0] = input_triangle.vertex[i].kd[1] = input_triangle.vertex[i].kd[2] = 1.0;
-                    input_triangle.vertex[i].ks[0] = input_triangle.vertex[i].ks[1] = input_triangle.vertex[i].ks[2] = 1.0;
+                    input_triangle.vertex[i].ka[0] = rand()%100/100;
+                    input_triangle.vertex[i].ka[1] = rand()%100/100;
+                    input_triangle.vertex[i].ka[2] = rand()%100/100;
+                    input_triangle.vertex[i].kd[0] = rand()%100/100;
+                    input_triangle.vertex[i].kd[1] = rand()%100/100;
+                    input_triangle.vertex[i].kd[2] = rand()%100/100;
+                    input_triangle.vertex[i].ks[0] = rand()%100/100;
+                    input_triangle.vertex[i].ks[1] = rand()%100/100;
+                    input_triangle.vertex[i].ks[2] = rand()%100/100;
                 }
                 TriList.push_back(input_triangle);
             }
@@ -103,17 +109,19 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                 Err_Text->Caption = "[!] 未定義的輸入格式";
             }
         }
-        int i=1;
+        // for test input data
+		int a=1;
         for(vector <TForm1::Triangle>::iterator it=TriList.begin(); it!=TriList.end(); ++it)
         {
-            Msg_Memo->Lines->Add("T"+FloatToStr(i));
+            Msg_Memo->Lines->Add("T"+FloatToStr(a));
             char out[512];
-            for(int j=1; j<=3; ++j)
+            for(int j=0; j<3; ++j)
             {
-                Msg_Memo->Lines->Add(IntToStr(j)+":"+FloatToStr(it->vertex[j].position.x)+","+FloatToStr(it->vertex[j].position.y)+","+FloatToStr(it->vertex[j].position.z));
+                Msg_Memo->Lines->Add(IntToStr(j)+":"+FloatToStr(it->vertex[j].normal.x)+","+FloatToStr(it->vertex[j].normal.y)+","+FloatToStr(it->vertex[j].normal.z));
             }
-            ++i;
+            ++a;
         }
+
         fclose(fp);
         Err_Text->Caption = "";
     }
@@ -197,14 +205,14 @@ TColor TForm1::DrawPixel(int i, int j)
     double t, u, v, select_dis = 2147483647, point_dis;
     TForm1::Node cross_point, ray_vector;
 	
-    ray_vector = pixel_pos[i][j]-camera.position;
+    ray_vector = UnitVector(pixel_pos[i][j]-camera.position);
     for( vector<TForm1::Triangle>::iterator it = TriList.begin(); it != TriList.end(); ++it )
     {
         if( IntersectTriangle(camera.position, ray_vector, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
         {
             cross_point = camera.position + ray_vector*t;
             point_dis = TwoPointDis(cross_point,camera.position);
-            if( point_dis<select_dis )
+            if( point_dis < select_dis )
             {
                 select_dis = point_dis;
                 color = GREEN;
@@ -559,4 +567,5 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
+
 

@@ -92,9 +92,15 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                         Err_Text->Caption = "[!] 三角形輸入發生錯誤";
                         continue;
                     }
-                    input_triangle.vertex[i].ka[0] = input_triangle.vertex[i].ka[1] = input_triangle.vertex[i].ka[2] = 1.0;
-                    input_triangle.vertex[i].kd[0] = input_triangle.vertex[i].kd[1] = input_triangle.vertex[i].kd[2] = 1.0;
-                    input_triangle.vertex[i].ks[0] = input_triangle.vertex[i].ks[1] = input_triangle.vertex[i].ks[2] = 1.0;
+                    input_triangle.vertex[i].ka[0] = rand()%100/100;
+                    input_triangle.vertex[i].ka[1] = rand()%100/100;
+                    input_triangle.vertex[i].ka[2] = rand()%100/100;
+                    input_triangle.vertex[i].kd[0] = rand()%100/100;
+                    input_triangle.vertex[i].kd[1] = rand()%100/100;
+                    input_triangle.vertex[i].kd[2] = rand()%100/100;
+                    input_triangle.vertex[i].ks[0] = rand()%100/100;
+                    input_triangle.vertex[i].ks[1] = rand()%100/100;
+                    input_triangle.vertex[i].ks[2] = rand()%100/100;
                 }
                 TriList.push_back(input_triangle);
             }
@@ -103,19 +109,19 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                 Err_Text->Caption = "[!] 未定義的輸入格式";
             }
         }
-        /* for test
-		int a=1;
+        /*// for test input data
+        int a=1;
         for(vector <TForm1::Triangle>::iterator it=TriList.begin(); it!=TriList.end(); ++it)
         {
             Msg_Memo->Lines->Add("T"+FloatToStr(a));
             char out[512];
-            for(int j=1; j<=3; ++j)
+            for(int j=0; j<3; ++j)
             {
-                Msg_Memo->Lines->Add(IntToStr(j)+":"+FloatToStr(it->vertex[j].position.x)+","+FloatToStr(it->vertex[j].position.y)+","+FloatToStr(it->vertex[j].position.z));
+                Msg_Memo->Lines->Add(IntToStr(j)+":"+FloatToStr(it->vertex[j].normal.x)+","+FloatToStr(it->vertex[j].normal.y)+","+FloatToStr(it->vertex[j].normal.z));
             }
             ++a;
-        }
-		*/
+        }*/
+
         fclose(fp);
         Err_Text->Caption = "";
     }
@@ -561,4 +567,5 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
+
 
