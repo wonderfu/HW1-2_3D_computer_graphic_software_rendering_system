@@ -200,7 +200,7 @@ double TForm1::isInTriangle(TForm1::Node tA, TForm1::Node tB, TForm1::Node tC, T
     }
     return false;
 }
-
+// triangle normal
 TForm1::Node TForm1::getV(TForm1::Node V1, TForm1::Node V2, TForm1::Node V3)
 {
     double a, b, c, d;
@@ -229,6 +229,7 @@ TColor TForm1::DrawPixel(int i, int j)
     {
         if( IntersectTriangle(camera.position, ray_dir, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
         {
+	    Msg_Memo->Lines->Add("t:"+FloatToStr(t)+" u:"+FloatToStr(u)+" v:"+FloatToStr(v));
             cross_point = camera.position + (ray_dir*t);
             point_dis = TwoPointDis(cross_point,camera.position);
             if( point_dis < select_dis && point_dis > camera.distance )
@@ -237,7 +238,7 @@ TColor TForm1::DrawPixel(int i, int j)
                 color = (TColor)RGB(it->vertex[0].ka[0]*255 ,it->vertex[0].ka[1]*255, it->vertex[0].ka[2]*255);
             }
         }		
-	/*
+        /*
         TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
         if ( ray_dir*V != 0 )
         {
@@ -282,7 +283,7 @@ bool TForm1::IntersectTriangle(TForm1::Node O, TForm1::Node D, TForm1::Node V1, 
     det = E1*P;
     //NOT CULLING
     if(det > -EPS && det < EPS)
-	return false;
+        return false;
 
     inv_det = 1.f/det;
 
@@ -305,7 +306,7 @@ bool TForm1::IntersectTriangle(TForm1::Node O, TForm1::Node D, TForm1::Node V1, 
       	return false;
 
     *t = (E2*Q)*inv_det;
-
+    
     if(*t > EPS) //ray intersection
       	return true;
     // No hit, no win
@@ -486,9 +487,15 @@ void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
     camera.distance = StrToFloat(WD_Edit->Text);
     camera.direction = UnitVector(camera.direction);
     camera.top = UnitVector(camera.top);
+    Err_Text->Caption = "";
+    Msg_Memo->Lines->Add("");
+    Msg_Memo->Lines->Add("Camera:");
+    Msg_Memo->Lines->Add("pos: "+FloatToStr(camera.position.x)+","+FloatToStr(camera.position.y)+","+FloatToStr(camera.position.z));
+    Msg_Memo->Lines->Add("dir: "+FloatToStr(camera.direction.x)+","+FloatToStr(camera.direction.y)+","+FloatToStr(camera.direction.z));
+    Msg_Memo->Lines->Add("top: "+FloatToStr(camera.top.x)+","+FloatToStr(camera.top.y)+","+FloatToStr(camera.top.z));
+    Msg_Memo->Lines->Add("window dis: "+FloatToStr(camera.distance));
     // get the map's position
     PixelPositionCalculate();
-    Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
 
