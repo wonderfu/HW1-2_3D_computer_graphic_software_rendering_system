@@ -271,45 +271,45 @@ TColor TForm1::DrawPixel(int i, int j)
 bool TForm1::IntersectTriangle(TForm1::Node O, TForm1::Node D, TForm1::Node V1, TForm1::Node V2, TForm1::Node V3, double* t, double* u, double* v)
 {
     TForm1::Node E1, E2, P, Q, T;
-	double det, inv_det;
-	
-	//Find vectors for two edges sharing V1
-	E1 = V2-V1;
-	E2 = V3-V1;
-	//Begin calculating determinant - also used to calculate u parameter
-	P = D^E2;
-	//if determinant is near zero, ray lies in plane of triangle
-	det = E1*P;
-	//NOT CULLING
-	if(det > -EPS && det < EPS) 
-		return false;
-	
-	inv_det = 1.f/det;
-	
-	//calculate distance from V1 to ray origin
-	T = O-V1;
-	
-	//Calculate u parameter and test bound
-	*u = (T*P)*inv_det;
-	//The intersection lies outside of the triangle
-	if(*u < 0.f || *u > 1.f) 
-		return false;
-	
-	//Prepare to test v parameter
-	Q = T^E1;
-	
-	//Calculate V parameter and test bound
-	*v = (D*Q)*inv_det;
-	//The intersection lies outside of the triangle
-	if(*v < 0.f || *u + *v  > 1.f) 
-		return false;
-	
-	*t = (E2*Q)*inv_det;
-	
-	if(*t > EPS) //ray intersection
-		return true; 
-  // No hit, no win
-  return false;
+    double det, inv_det;
+
+    //Find vectors for two edges sharing V1
+    E1 = V2-V1;
+    E2 = V3-V1;
+    //Begin calculating determinant - also used to calculate u parameter
+    P = D^E2;
+    //if determinant is near zero, ray lies in plane of triangle
+    det = E1*P;
+    //NOT CULLING
+    if(det > -EPS && det < EPS)
+        return false;
+
+    inv_det = 1.f/det;
+
+    //calculate distance from V1 to ray origin
+    T = O-V1;
+
+    //Calculate u parameter and test bound
+    *u = (T*P)*inv_det;
+    //The intersection lies outside of the triangle
+    if(*u < 0.f || *u > 1.f)
+    	return false;
+
+    //Prepare to test v parameter
+    Q = T^E1;
+
+    //Calculate V parameter and test bound
+    *v = (D*Q)*inv_det;
+    //The intersection lies outside of the triangle
+    if(*v < 0.f || *u + *v  > 1.f)
+      	return false;
+
+    *t = (E2*Q)*inv_det;
+
+    if(*t > EPS) //ray intersection
+      	return true;
+    // No hit, no win
+    return false;
 }
 
 TForm1::Node TForm1::UnitVector(TForm1::Node input_node)
