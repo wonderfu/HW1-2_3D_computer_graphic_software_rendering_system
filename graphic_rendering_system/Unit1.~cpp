@@ -96,15 +96,15 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                         Err_Text->Caption = "[!] 三角形輸入發生錯誤";
                         continue;
                     }
-                    input_triangle.vertex[i].ka[0] = rand()%101/100;
-                    input_triangle.vertex[i].ka[1] = rand()%101/100;
-                    input_triangle.vertex[i].ka[2] = rand()%101/100;
-                    input_triangle.vertex[i].kd[0] = rand()%101/100;
-                    input_triangle.vertex[i].kd[1] = rand()%101/100;
-                    input_triangle.vertex[i].kd[2] = rand()%101/100;
-                    input_triangle.vertex[i].ks[0] = rand()%101/100;
-                    input_triangle.vertex[i].ks[1] = rand()%101/100;
-                    input_triangle.vertex[i].ks[2] = rand()%101/100;
+                    input_triangle.vertex[i].ka[0] = rand()%101/100.0;
+                    input_triangle.vertex[i].ka[1] = rand()%101/100.0;
+                    input_triangle.vertex[i].ka[2] = rand()%101/100.0;
+                    input_triangle.vertex[i].kd[0] = rand()%101/100.0;
+                    input_triangle.vertex[i].kd[1] = rand()%101/100.0;
+                    input_triangle.vertex[i].kd[2] = rand()%101/100.0;
+                    input_triangle.vertex[i].ks[0] = rand()%101/100.0;
+                    input_triangle.vertex[i].ks[1] = rand()%101/100.0;
+                    input_triangle.vertex[i].ks[2] = rand()%101/100.0;
                 }
                 TriList.push_back(input_triangle);
             }
@@ -219,7 +219,7 @@ double TForm1::TwoPointDis(TForm1::Node V1, TForm1::Node V2)
 
 TColor TForm1::DrawPixel(int i, int j)
 {
-    TColor color = WHITE; // 0xBBGGRR || RGB(R,G,B) [0~255]
+    TColor color = BLACK; // 0xBBGGRR || RGB(R,G,B) [0~255]
     double t, u, v;
     double select_dis = 2147483647, point_dis;
     TForm1::Node cross_point, ray_dir;
@@ -229,13 +229,12 @@ TColor TForm1::DrawPixel(int i, int j)
     {
         if( IntersectTriangle(camera.position, ray_dir, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
         {
-            cross_point = camera.position + ray_dir*t;
+            cross_point = camera.position + (ray_dir*t);
             point_dis = TwoPointDis(cross_point,camera.position);
-            if( point_dis < select_dis )
+            if( point_dis < select_dis && point_dis > camera )
             {
                 select_dis = point_dis;
                 color = (TColor)RGB(it->vertex[0].ka[0]*255 ,it->vertex[0].ka[1]*255, it->vertex[0].ka[2]*255);
-                Msg_Memo->Lines->Add("color:"+FloatToStr(it->vertex[0].ka[0]*255)+","+FloatToStr(it->vertex[0].ka[1]*255)+","+FloatToStr(it->vertex[0].ka[2]*255));
             }
         }		
 	/*
@@ -261,7 +260,7 @@ TColor TForm1::DrawPixel(int i, int j)
 // orig: origin of the ray
 // dir: direction of the ray
 // V1, V2, V3: vertices of triangle
-// t( out): weight of the intersection for the ray
+// t(out): weight of the intersection for the ray
 // u(out), v(out): barycentric coordinate of intersection 
 // O+D*t = (1-u-v)*V1 + u*V2 + v*V3
 

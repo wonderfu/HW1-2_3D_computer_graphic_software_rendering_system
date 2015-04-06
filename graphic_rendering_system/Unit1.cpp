@@ -219,7 +219,7 @@ double TForm1::TwoPointDis(TForm1::Node V1, TForm1::Node V2)
 
 TColor TForm1::DrawPixel(int i, int j)
 {
-    TColor color = WHITE; // 0xBBGGRR || RGB(R,G,B) [0~255]
+    TColor color = BLACK; // 0xBBGGRR || RGB(R,G,B) [0~255]
     double t, u, v;
     double select_dis = 2147483647, point_dis;
     TForm1::Node cross_point, ray_dir;
@@ -229,9 +229,9 @@ TColor TForm1::DrawPixel(int i, int j)
     {
         if( IntersectTriangle(camera.position, ray_dir, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
         {
-            cross_point = camera.position + ray_dir*t;
+            cross_point = camera.position + (ray_dir*t);
             point_dis = TwoPointDis(cross_point,camera.position);
-            if( point_dis < select_dis )
+            if( point_dis < select_dis && point_dis > camera.distance )
             {
                 select_dis = point_dis;
                 color = (TColor)RGB(it->vertex[0].ka[0]*255 ,it->vertex[0].ka[1]*255, it->vertex[0].ka[2]*255);
@@ -257,56 +257,59 @@ TColor TForm1::DrawPixel(int i, int j)
 
 // Determine whether a ray intersect with a triangle
 // Parameters
-// orig: origin of the ray
-// dir: direction of the ray
+// O: origin of the ray
+// D: direction of the ray
 // V1, V2, V3: vertices of triangle
-// t( out): weight of the intersection for the ray
+// t(out): weight of the intersection for the ray
 // u(out), v(out): barycentric coordinate of intersection 
+//
 // O+D*t = (1-u-v)*V1 + u*V2 + v*V3
+//   t         1       T^E1.E2 
+// [ u ] = _________ [ D^E2.T ]
+//   v     [D^E2.E1]   T^E1.D  
 
-bool TForm1::IntersectTriangle(TForm1::Node orig, TForm1::Node dir, TForm1::Node V1, TForm1::Node V2, TForm1::Node V3, double* t, double* u, double* v)
+bool TForm1::IntersectTriangle(TForm1::Node O, TForm1::Node D, TForm1::Node V1, TForm1::Node V2, TForm1::Node V3, double* t, double* u, double* v)
 {
-    TForm1::Node E1 = V2 - V1;
-    TForm1::Node E2 = V3 - V1;
-    TForm1::Node P = dir^E2; 
-    double det = E1*P; // determinant
- 
-    // keep det > 0, modify T accordingly
-    TForm1::Node T;
-    if ( det > 0 )
-    {
-        T = orig - V1;
-    }
-    else
-    {
-        T = V1 - orig;
-        det = - det;
-    }
-    // If determinant is near zero, ray lies in plane of triangle
-    if ( det < 0.0001f )
-        return false ;
-
-    // Calculate u and make sure u <= 1
-    *u = T*P;
-    if ( *u < 0.0f || *u > det )
-        return false ;
-
-    TForm1::Node Q = T^E1;
-
-    // Calculate v and make sure u + v <= 1
-    *v = dir*Q;
-    if ( *v < 0.0f || *u + *v > det )
-        return false ;
-
-    // Calculate t, scale parameters, ray intersects triangle
-    *t = E2*Q;
-
-    double fInvDet = 1.0f / det;
-    *t *= fInvDet ;
-    *u *= fInvDet;
-    *v *= fInvDet;
-
-    return true ;
+    TForm1::Node E1, E2, P, Q, T;
+	double det, inv_det;
+	
+	//Find vectors for two edges sharing V1
+	E1 = V2-V1;
+	E2 = V3-V1;
+	//Begin calculating determinant - also used to calculate u parameter
+	P = D^E2;
+	//if determinant is near zero, ray lies in plane of triangle
+	det = E1*P;
+	//NOT CULLING
+	if(det > -EPS && det < EPS) 
+		return false;
+	
+	inv_det = 1.f/det;
+	
+	//calculate distance from V1 to ray origin
+	T = O-V1;
+	
+	//Calculate u parameter and test bound
+	*u = (T*P)*inv_det;
+	//The intersection lies outside of the triangle
+	if(*u < 0.f || *u > 1.f) 
+		return false;
+	
+	//Prepare to test v parameter
+	Q = T^E1;
+	
+	//Calculate V parameter and test bound
+	*v = (D*Q)*inv_det;
+	//The intersection lies outside of the triangle
+	if(*v < 0.f || *u + *v  > 1.f) 
+		return false;
+	
+	*t = (E2*Q)*inv_det;
+	
+	if(*t > EPS) //ray intersection
+		return true; 
+  // No hit, no win
+  return false;
 }
 
 TForm1::Node TForm1::UnitVector(TForm1::Node input_node)
