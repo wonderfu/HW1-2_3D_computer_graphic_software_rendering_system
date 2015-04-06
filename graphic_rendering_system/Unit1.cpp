@@ -219,15 +219,16 @@ double TForm1::TwoPointDis(TForm1::Node V1, TForm1::Node V2)
 TColor TForm1::DrawPixel(int i, int j)
 {
     TColor color = WHITE; // 0xBBGGRR || RGB(R,G,B) [0~255]
-    double t, u, v, select_dis = 2147483647, point_dis;
-    TForm1::Node cross_point, ray_vector;
+    double t, u, v;
+    double select_dis = 2147483647, point_dis;
+    TForm1::Node cross_point, ray_dir;
 	
-    ray_vector = UnitVector(pixel_pos[i][j]-camera.position);
+    ray_dir = UnitVector(pixel_pos[i][j]-camera.position);
     for( vector<TForm1::Triangle>::iterator it = TriList.begin(); it != TriList.end(); ++it )
     {
-        if( IntersectTriangle(camera.position, ray_vector, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
+        if( IntersectTriangle(camera.position, ray_dir, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
         {
-            cross_point = camera.position + ray_vector*t;
+            cross_point = camera.position + ray_dir*t;
             point_dis = TwoPointDis(cross_point,camera.position);
             if( point_dis < select_dis )
             {
@@ -237,10 +238,10 @@ TColor TForm1::DrawPixel(int i, int j)
         }		
 	/*
         TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
-        if ( ray_vector*V != 0 )
+        if ( ray_dir*V != 0 )
         {
-            t = ( (it->vertex[0].position - pixel_pos[i][j])*V ) / (ray_vector*V);
-            cross_point = ray_vector*t + pixel_pos[i][j];
+            t = ( (it->vertex[0].position - pixel_pos[i][j])*V ) / (ray_dir*V);
+            cross_point = ray_dir*t + pixel_pos[i][j];
             point_dis = TwoPointDis(cross_point,camera.position);
             if ( isInTriangle( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, cross_point ) == true && dcmp(point_dis-select_dis) < 0 )
             {
@@ -281,7 +282,7 @@ bool TForm1::IntersectTriangle(TForm1::Node orig, TForm1::Node dir, TForm1::Node
         det = - det;
     }
     // If determinant is near zero, ray lies in plane of triangle
-    if ( det < EPS )
+    if ( det < 0.0001f )
         return false ;
 
     // Calculate u and make sure u <= 1
@@ -586,5 +587,6 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
+
 
 
