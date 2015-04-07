@@ -199,9 +199,6 @@ public:		// User declarations
 		
         double dabs(double);
         int dcmp(double);
-        double TriangleArea(Node, Node, Node);
-        double isInTriangle(Node, Node, Node, Node);
-        Node getV(Node, Node, Node);
         double TwoPointDis(Node, Node);
         TColor DrawPixel(int, int);
         Node UnitVector(Node);

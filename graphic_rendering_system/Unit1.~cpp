@@ -159,58 +159,6 @@ int TForm1::dcmp(double x)
     if( x < -EPS ) return -1; return x > EPS;
 }
 
-double TForm1::TriangleArea(TForm1::Node A, TForm1::Node B, TForm1::Node C)
-{
-    TForm1::Node  AB, AC, AP;
-    double pixel_pos = 0.0;
-    double area = 0.0;
-
-    AB.x =  B.x -  A.x;
-    AB.y =  B.y -  A.y;
-    AB.z =  B.z -  A.z;
-
-    AC.x =  C.x -  A.x;
-    AC.y =  C.y -  A.y;
-    AC.z =  C.z -  A.z;
-
-    AP.x = AB.y*AC.z - AC.y*AB.z;
-    AP.y = AC.x*AB.z - AB.x*AC.z;
-    AP.z = AB.x*AC.y - AC.x*AB.y;
-    pixel_pos = sqrt(AP.x*AP.x + AP.y*AP.y + AP.z*AP.z);
-    area = dabs(pixel_pos/2);
-
-    return area;
-}
-
-double TForm1::isInTriangle(TForm1::Node tA, TForm1::Node tB, TForm1::Node tC, TForm1::Node tP)
-{
-    double area1 = TriangleArea(tA,tB,tC);
-
-    double area2 = TriangleArea(tP,tB,tC);
-
-    double area3 = TriangleArea(tA,tP,tC);
-
-    double area4 = TriangleArea(tA,tB,tP);
-
-    double areaAll = area2 + area3 + area4;
-
-    if( dcmp(areaAll - area1 - 1) <= 0 )
-    {
-       return true;
-    }
-    return false;
-}
-// triangle normal
-TForm1::Node TForm1::getV(TForm1::Node V1, TForm1::Node V2, TForm1::Node V3)
-{
-    double a, b, c, d;
-    a = ( (V2.y-V1.y)*(V3.z-V1.z) - (V2.z-V1.z)*(V3.y-V1.y) );
-    b = ( (V2.z-V1.z)*(V3.x-V1.x) - (V2.x-V1.x)*(V3.z-V1.z) );
-    c = ( (V2.x-V1.x)*(V3.y-V1.y) - (V2.y-V1.y)*(V3.x-V1.x) );
-    d = sqrt(a*a+b*b+c*c);
-    return Node(a/d,b/d,c/d);
-}
-
 double TForm1::TwoPointDis(TForm1::Node V1, TForm1::Node V2)
 {
     TForm1::Node dis = V1-V2;
@@ -229,29 +177,14 @@ TColor TForm1::DrawPixel(int i, int j)
     {
         if( IntersectTriangle(camera.position, ray_dir, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
         {
-            //Msg_Memo->Lines->Add("t:"+FloatToStr(t)+" u:"+FloatToStr(u)+" v:"+FloatToStr(v));
             cross_point = camera.position + (ray_dir*t);
             point_dis = TwoPointDis(cross_point,camera.position);
-            if( point_dis < select_dis)
+            if( dcmp(point_dis-select_dis)<0 )
             {
                 select_dis = point_dis;
                 color = (TColor)RGB(it->vertex[0].ka[0]*255 ,it->vertex[0].ka[1]*255, it->vertex[0].ka[2]*255);
             }
-        }		
-        /*
-        TForm1::Node V = getV( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position );
-        if ( ray_dir*V != 0 )
-        {
-            t = ( (it->vertex[0].position - pixel_pos[i][j])*V ) / (ray_dir*V);
-            cross_point = ray_dir*t + pixel_pos[i][j];
-            point_dis = TwoPointDis(cross_point,camera.position);
-            if ( isInTriangle( it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, cross_point ) == true && dcmp(point_dis-select_dis) < 0 )
-            {
-                select_dis = point_dis;
-                color = (TColor) Tricolor[k];
-            }
         }
-        */
     }
     return color;
 }
@@ -598,6 +531,7 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
+
 
 
 
