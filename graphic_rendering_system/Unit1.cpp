@@ -232,7 +232,7 @@ TColor TForm1::DrawPixel(int i, int j)
             //Msg_Memo->Lines->Add("t:"+FloatToStr(t)+" u:"+FloatToStr(u)+" v:"+FloatToStr(v));
             cross_point = camera.position + (ray_dir*t);
             point_dis = TwoPointDis(cross_point,camera.position);
-            if( point_dis < select_dis && point_dis > camera.distance )
+            if( point_dis < select_dis )
             {
                 select_dis = point_dis;
                 color = (TColor)RGB(it->vertex[0].ka[0]*255 ,it->vertex[0].ka[1]*255, it->vertex[0].ka[2]*255);
@@ -598,6 +598,7 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
+
 
 
 
