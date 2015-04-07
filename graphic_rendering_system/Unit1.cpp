@@ -229,7 +229,7 @@ TColor TForm1::DrawPixel(int i, int j)
     {
         if( IntersectTriangle(camera.position, ray_dir, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
         {
-	    Msg_Memo->Lines->Add("t:"+FloatToStr(t)+" u:"+FloatToStr(u)+" v:"+FloatToStr(v));
+            //Msg_Memo->Lines->Add("t:"+FloatToStr(t)+" u:"+FloatToStr(u)+" v:"+FloatToStr(v));
             cross_point = camera.position + (ray_dir*t);
             point_dis = TwoPointDis(cross_point,camera.position);
             if( point_dis < select_dis && point_dis > camera.distance )
@@ -598,6 +598,7 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     Err_Text->Caption = "";
 }
 //---------------------------------------------------------------------------
+
 
 
 
