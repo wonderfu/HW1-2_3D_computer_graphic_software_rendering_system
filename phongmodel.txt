@@ -1,0 +1,17 @@
+#include<math.h>
+
+double* PhongModel(int Lx[3], int Ax[3], int Dx[3], int Sx[3], double Ka[3], double Kd[3], double Ks[3], double Att, double n, Node N, Node L, Node R, Node V)
+{
+  double Ix[3];
+  double Ir, Ig,Ib;
+  Ir= Ax[0]*Ka[0]*Dx[0] + Att*Lx[0]*(Kd[0]*Dx[0]*( N.x*L.x+ N.y*L.y+ N.z*L.z) + Ks[0]*Sx[0]*pow((R.x*V.x+ R.y*V.y+ R.z*V.z),n));
+
+  Ig= Ax[1]*Ka[1]*Dx[1] + Att*Lx[1]*(Kd[1]*Dx[1]*( N.x*L.x+ N.y*L.y+ N.z*L.z) + Ks[1]*Sx[1]*pow((R.x*V.x+ R.y*V.y+ R.z*V.z),n));
+
+  Iv= Ax[2]*Ka[2]*Dx[2] + Att*Lx[2]*(Kd[2]*Dx[2]*( N.x*L.x+ N.y*L.y+ N.z*L.z) + Ks[2]*Sx[2]*pow((R.x*V.x+ R.y*V.y+ R.z*V.z),n));
+
+  Ix[0]=Ir;
+  Ix[1]=Ig;
+  Ix[2]=Ib;
+  return Ix; 
+}
