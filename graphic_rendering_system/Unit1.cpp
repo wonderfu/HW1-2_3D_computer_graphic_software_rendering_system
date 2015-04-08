@@ -51,6 +51,15 @@ double* PhongModel(int Lx[3], int Ax[3], int Dx[3], int Sx[3], double Ka[3], dou
 	return Ix;
 }
 
+Node Interpolation(Node A, Node B, Node C, double u, double v){
+	double t = 1 - u - v;
+	Node renode;
+	renode.x = A.x * t + B.x * u + C.x * v;
+	renode.y = A.y * t + B.y * u + C.y * v;
+	renode.z = A.z * t + B.z * u + C.z * v;
+	return renode;
+}
+
 
 void __fastcall TForm1::OpenInputClick(TObject *Sender)
 {
