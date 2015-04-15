@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+//---	------------------------------------------------------------------------
 
 #include <vcl.h>
 #include<math.h>
@@ -15,17 +15,13 @@ TForm1::Node pixel_pos[WindowH][WindowW];
 // camera
 TForm1::Camera camera;
 // light
-//double ambient_light;
+double ambient_light;
 TForm1::Light light0;
 // vertex
 vector <TForm1::Node> VList, VNList, LList;
 vector <TForm1::Texture> VTList;
 // triangle
 vector <TForm1::Triangle> TriList;
-
-//int Tnum;	// Triangle number
-//int *Tricolor;
-//TForm1::Node **Tri = NULL;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -35,31 +31,22 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 //---------------------------------------------------------------------------
 
 
-double* PhongModel(int Lx[3], int Ax[3], int Dx[3], int Sx[3], double Ka[3], double Kd[3], double Ks[3], double Att, double n, Node N, Node L, Node R, Node V)
+void PhongModel(int* Lx, int* Ax, int* Dx, int* Sx, double* Ka, double* Kd, double* Ks, double Att, double n, Node N, Node L, Node R, Node V, double* Ix)
 {
-	double Ix[3];
-	double Ir, Ig, Ib;
-	Ir = Ax[0] * Ka[0] * Dx[0] + Att*Lx[0] * (Kd[0] * Dx[0] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[0] * Sx[0] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
-
-	Ig = Ax[1] * Ka[1] * Dx[1] + Att*Lx[1] * (Kd[1] * Dx[1] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[1] * Sx[1] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
-
-	Iv = Ax[2] * Ka[2] * Dx[2] + Att*Lx[2] * (Kd[2] * Dx[2] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[2] * Sx[2] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
-
-	Ix[0] = Ir;
-	Ix[1] = Ig;
-	Ix[2] = Ib;
+	Ix[0] = Ax[0] * Ka[0] * Dx[0] + Att*Lx[0] * (Kd[0] * Dx[0] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[0] * Sx[0] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
+	Ix[1] = Ax[1] * Ka[1] * Dx[1] + Att*Lx[1] * (Kd[1] * Dx[1] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[1] * Sx[1] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
+	Ix[2] = Ax[2] * Ka[2] * Dx[2] + Att*Lx[2] * (Kd[2] * Dx[2] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[2] * Sx[2] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
 	return Ix;
 }
 
-Node Interpolation(Node A, Node B, Node C, double u, double v){
-	double t = 1 - u - v;
+Node Interpolation(Node V1, Node V2, Node V3, double t, double u, double v)
+{
 	Node renode;
-	renode.x = A.x * t + B.x * u + C.x * v;
-	renode.y = A.y * t + B.y * u + C.y * v;
-	renode.z = A.z * t + B.z * u + C.z * v;
+	renode.x = V1.x * t + V2.x * u + V3.x * v;
+	renode.y = V1.y * t + V2.y * u + V3.y * v;
+	renode.z = V1.z * t + V2.z * u + V3.z * v;
 	return renode;
 }
-
 
 void __fastcall TForm1::OpenInputClick(TObject *Sender)
 {
@@ -79,10 +66,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         VTList.clear();
         VNList.clear();
         TriList.clear();
-        /*if( Tri != NULL )
-        {
-            CleanMem();
-        }*/
+        
         while( fscanf(fp," %s ",str) == 1 )
         {
             if( !strcmp(str,"v") ) // vertex
@@ -174,11 +158,6 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     {
         Err_Text->Caption = "[!] Open failed.";
     }
-}
-
-double TForm1::dabs(double x)
-{
-    return x < 0 ? -x : x ;
 }
 
 int TForm1::dcmp(double x)
@@ -293,16 +272,6 @@ void TForm1::PixelPositionCalculate()
     }
 }
 
-void TForm1::CleanMem(void)
-{
-    /*free(Tricolor);
-    Tricolor = NULL;
-    for( int i=0; i<Tnum; ++i )
-        free(Tri[i]);
-    free(Tri);
-    Tri = NULL;  */
-}
-
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Reset_ButtonClick(TObject *Sender)
 {
@@ -366,8 +335,6 @@ void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
-
 void __fastcall TForm1::ClearV_ButtonClick(TObject *Sender)
 {
     VX_Edit->Text = "";
@@ -419,12 +386,6 @@ void __fastcall TForm1::ClearC_ButtonClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
-
-
-
-
-
 void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
 {
     if(CX_Edit->Text == "" || CY_Edit->Text == "" || CZ_Edit->Text == "" ||
@@ -458,9 +419,6 @@ void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
     PixelPositionCalculate();
 }
 //---------------------------------------------------------------------------
-
-
-
 
 void __fastcall TForm1::AddVP_ButtonClick(TObject *Sender)
 {
@@ -505,13 +463,13 @@ void __fastcall TForm1::SetLA_ButtonClick(TObject *Sender)
 {
     if( LA_Edit->Text == "" )
 	{
-        //ambient_light = 0.0;
+        ambient_light = 0.0;
         light0.ambient = 0;
         LA_Edit->Text = "0";
     }
     else
 	{
-        //ambient_light = StrToFloat(LA_Edit->Text);
+        ambient_light = StrToFloat(LA_Edit->Text);
         light0.ambient = StrToFloat(LA_Edit->Text);
     }
     Err_Text->Caption = "";
@@ -545,11 +503,11 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     input_color[0] = StrToFloat(CR_Edit->Text);
     input_color[1] = StrToFloat(CG_Edit->Text);
     input_color[2] = StrToFloat(CB_Edit->Text);
-    if(input_color[0] < 0 || input_color[0] > 255 ||
-       input_color[1] < 0 || input_color[1] > 255 ||
-       input_color[2] < 0 || input_color[2] > 255)
+    if(input_color[0] < 0 || input_color[0] > 1 ||
+       input_color[1] < 0 || input_color[1] > 1 ||
+       input_color[2] < 0 || input_color[2] > 1)
     {
-        Err_Text->Caption = "顏色範圍需介於0~255";
+        Err_Text->Caption = "顏色範圍需介於0~1";
         return ;
     }
     light0.color[0] = input_color[0];

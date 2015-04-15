@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 200
-  Top = 150
+  Left = 446
+  Top = 239
   Width = 1300
   Height = 850
   Caption = '3D_computer_graphic_software_rendering_system'
@@ -599,7 +599,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 0
         end
         object AddLP_StaticText: TStaticText
@@ -615,7 +615,7 @@ object Form1: TForm1
           Top = 49
           Width = 145
           Height = 24
-          ItemHeight = 0
+          ItemHeight = 16
           TabOrder = 2
         end
         object AddLC_StaticText: TStaticText

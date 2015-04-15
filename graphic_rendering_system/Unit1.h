@@ -190,21 +190,21 @@ public:		// User declarations
         struct Light {
                 double ambient;
                 Node position;
-                int color[3];
+                double color[3];
         };
         struct Triangle {
                 Vertex vertex[3];
                 Node normal;
         };
 		
-        double dabs(double);
         int dcmp(double);
         double TwoPointDis(Node, Node);
         TColor DrawPixel(int, int);
         Node UnitVector(Node);
         void PixelPositionCalculate(void);
-        void CleanMem(void);
         bool IntersectTriangle(Node, Node, Node, Node, Node, double*, double*, double*);
+        Node Interpolation(Node, Node, Node, double, double);
+        void PhongModel(int*, int*, int*, int*, double*, double*, double*, double, double, Node, Node, Node, Node,double*);
 
 };
 

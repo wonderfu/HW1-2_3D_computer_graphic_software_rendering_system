@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
+//---	------------------------------------------------------------------------
 
 #include <vcl.h>
+#include<math.h>
 #pragma hdrstop
 
 #include "Unit1.h"
@@ -14,7 +15,7 @@ TForm1::Node pixel_pos[WindowH][WindowW];
 // camera
 TForm1::Camera camera;
 // light
-//double ambient_light;
+double ambient_light;
 TForm1::Light light0;
 // vertex
 vector <TForm1::Node> VList, VNList, LList;
@@ -22,16 +23,30 @@ vector <TForm1::Texture> VTList;
 // triangle
 vector <TForm1::Triangle> TriList;
 
-//int Tnum;	// Triangle number
-//int *Tricolor;
-//TForm1::Node **Tri = NULL;
-
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
 {
 }
 //---------------------------------------------------------------------------
+
+
+void PhongModel(int* Lx, int* Ax, int* Dx, int* Sx, double* Ka, double* Kd, double* Ks, double Att, double n, Node N, Node L, Node R, Node V, double* Ix)
+{
+	Ix[0] = Ax[0] * Ka[0] * Dx[0] + Att*Lx[0] * (Kd[0] * Dx[0] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[0] * Sx[0] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
+	Ix[1] = Ax[1] * Ka[1] * Dx[1] + Att*Lx[1] * (Kd[1] * Dx[1] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[1] * Sx[1] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
+	Ix[2] = Ax[2] * Ka[2] * Dx[2] + Att*Lx[2] * (Kd[2] * Dx[2] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[2] * Sx[2] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
+	return Ix;
+}
+
+Node Interpolation(Node V1, Node V2, Node V3, double t, double u, double v)
+{
+	Node renode;
+	renode.x = V1.x * t + V2.x * u + V3.x * v;
+	renode.y = V1.y * t + V2.y * u + V3.y * v;
+	renode.z = V1.z * t + V2.z * u + V3.z * v;
+	return renode;
+}
 
 
 void __fastcall TForm1::OpenInputClick(TObject *Sender)
@@ -52,10 +67,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
         VTList.clear();
         VNList.clear();
         TriList.clear();
-        /*if( Tri != NULL )
-        {
-            CleanMem();
-        }*/
+        
         while( fscanf(fp," %s ",str) == 1 )
         {
             if( !strcmp(str,"v") ) // vertex
@@ -149,11 +161,6 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     }
 }
 
-double TForm1::dabs(double x)
-{
-    return x < 0 ? -x : x ;
-}
-
 int TForm1::dcmp(double x)
 {
     if( x < -EPS ) return -1; return x > EPS;
@@ -179,7 +186,7 @@ TColor TForm1::DrawPixel(int i, int j)
         {
             cross_point = camera.position + (ray_dir*t);
             point_dis = TwoPointDis(cross_point,camera.position);
-            if( dcmp(point_dis-select_dis)<0 )
+            if( dcmp(point_dis-select_dis) < 0 )
             {
                 select_dis = point_dis;
                 color = (TColor)RGB(it->vertex[0].ka[0]*255 ,it->vertex[0].ka[1]*255, it->vertex[0].ka[2]*255);
@@ -264,16 +271,6 @@ void TForm1::PixelPositionCalculate()
             pixel_pos[i][j] = start_point - move_vector*j - camera.top*i;
         }
     }
-}
-
-void TForm1::CleanMem(void)
-{
-    /*free(Tricolor);
-    Tricolor = NULL;
-    for( int i=0; i<Tnum; ++i )
-        free(Tri[i]);
-    free(Tri);
-    Tri = NULL;  */
 }
 
 //---------------------------------------------------------------------------
@@ -478,13 +475,13 @@ void __fastcall TForm1::SetLA_ButtonClick(TObject *Sender)
 {
     if( LA_Edit->Text == "" )
 	{
-        //ambient_light = 0.0;
+        ambient_light = 0.0;
         light0.ambient = 0;
         LA_Edit->Text = "0";
     }
     else
 	{
-        //ambient_light = StrToFloat(LA_Edit->Text);
+        ambient_light = StrToFloat(LA_Edit->Text);
         light0.ambient = StrToFloat(LA_Edit->Text);
     }
     Err_Text->Caption = "";
@@ -518,11 +515,11 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     input_color[0] = StrToFloat(CR_Edit->Text);
     input_color[1] = StrToFloat(CG_Edit->Text);
     input_color[2] = StrToFloat(CB_Edit->Text);
-    if(input_color[0] < 0 || input_color[0] > 255 ||
-       input_color[1] < 0 || input_color[1] > 255 ||
-       input_color[2] < 0 || input_color[2] > 255)
+    if(input_color[0] < 0 || input_color[0] > 1 ||
+       input_color[1] < 0 || input_color[1] > 1 ||
+       input_color[2] < 0 || input_color[2] > 1)
     {
-        Err_Text->Caption = "顏色範圍需介於0~255";
+        Err_Text->Caption = "顏色範圍需介於0~1";
         return ;
     }
     light0.color[0] = input_color[0];
