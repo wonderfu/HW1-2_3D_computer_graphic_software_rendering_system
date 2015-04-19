@@ -31,24 +31,6 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 //---------------------------------------------------------------------------
 
 
-void PhongModel(int* Lx, int* Ax, int* Dx, int* Sx, double* Ka, double* Kd, double* Ks, double Att, double n, Node N, Node L, Node R, Node V, double* Ix)
-{
-	Ix[0] = Ax[0] * Ka[0] * Dx[0] + Att*Lx[0] * (Kd[0] * Dx[0] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[0] * Sx[0] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
-	Ix[1] = Ax[1] * Ka[1] * Dx[1] + Att*Lx[1] * (Kd[1] * Dx[1] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[1] * Sx[1] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
-	Ix[2] = Ax[2] * Ka[2] * Dx[2] + Att*Lx[2] * (Kd[2] * Dx[2] * (N.x*L.x + N.y*L.y + N.z*L.z) + Ks[2] * Sx[2] * pow((R.x*V.x + R.y*V.y + R.z*V.z), n));
-	return Ix;
-}
-
-Node Interpolation(Node V1, Node V2, Node V3, double t, double u, double v)
-{
-	Node renode;
-	renode.x = V1.x * t + V2.x * u + V3.x * v;
-	renode.y = V1.y * t + V2.y * u + V3.y * v;
-	renode.z = V1.z * t + V2.z * u + V3.z * v;
-	return renode;
-}
-
-
 void __fastcall TForm1::OpenInputClick(TObject *Sender)
 {
     FILE *fp;
@@ -161,6 +143,12 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
     }
 }
 
+TForm1::Node TForm1::UnitVector(TForm1::Node input_node)
+{
+    double Vdis = sqrt( input_node*input_node );
+    return input_node/Vdis ;
+}
+
 int TForm1::dcmp(double x)
 {
     if( x < -EPS ) return -1; return x > EPS;
@@ -170,30 +158,6 @@ double TForm1::TwoPointDis(TForm1::Node V1, TForm1::Node V2)
 {
     TForm1::Node dis = V1-V2;
     return sqrt(dis*dis);
-}
-
-TColor TForm1::DrawPixel(int i, int j)
-{
-    TColor color = BLACK; // 0xBBGGRR || RGB(R,G,B) [0~255]
-    double t, u, v;
-    double select_dis = 2147483647, point_dis;
-    TForm1::Node cross_point, ray_dir;
-	
-    ray_dir = UnitVector(pixel_pos[i][j]-camera.position);
-    for( vector<TForm1::Triangle>::iterator it = TriList.begin(); it != TriList.end(); ++it )
-    {
-        if( IntersectTriangle(camera.position, ray_dir, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
-        {
-            cross_point = camera.position + (ray_dir*t);
-            point_dis = TwoPointDis(cross_point,camera.position);
-            if( dcmp(point_dis-select_dis) < 0 )
-            {
-                select_dis = point_dis;
-                color = (TColor)RGB(it->vertex[0].ka[0]*255 ,it->vertex[0].ka[1]*255, it->vertex[0].ka[2]*255);
-            }
-        }
-    }
-    return color;
 }
 
 // Determine whether a ray intersect with a triangle
@@ -253,10 +217,51 @@ bool TForm1::IntersectTriangle(TForm1::Node O, TForm1::Node D, TForm1::Node V1, 
     return false;
 }
 
-TForm1::Node TForm1::UnitVector(TForm1::Node input_node)
+void TForm1::Lighting(struct Vertex vertex, Node L_ray, Node V_ray, double dis)
 {
-    double Vdis = sqrt( input_node*input_node );
-    return input_node/Vdis ;
+        int n = 2;
+        double Att = min(1,1/(dis*dis));
+        Node N = UnitVector(vertex.normal);
+        Node V = UnitVector(V_ray);
+        Node L = UnitVector(L_ray);
+        Node H = UnitVector(L_ray + V_ray);
+
+	vertex.color[0] = vertex.ka[0] * ambient_light + Att * light0.color[0] * (vertex.kd[0] * (N * L) + vertex.ks[0] * pow((N * H), n));
+	vertex.color[1] = vertex.ka[1] * ambient_light + Att * light0.color[1] * (vertex.kd[1] * (N * L) + vertex.ks[1] * pow((N * H), n));
+	vertex.color[2] = vertex.ka[2] * ambient_light + Att * light0.color[2] * (vertex.kd[2] * (N * L) + vertex.ks[2] * pow((N * H), n));
+}
+
+TForm1::Node TForm1::Interpolation(Node V1, Node V2, Node V3, double t, double u, double v)
+{ 
+	Node renode;
+	renode.x = V1.x * t + V2.x * u + V3.x * v;
+	renode.y = V1.y * t + V2.y * u + V3.y * v;
+	renode.z = V1.z * t + V2.z * u + V3.z * v;
+	return renode;
+}
+
+TColor TForm1::DrawPixel(int i, int j)
+{
+    TColor color = BLACK; // 0xBBGGRR || RGB(R,G,B) [0~255]
+    double t, u, v;
+    double select_dis = 2147483647, point_dis;
+    TForm1::Node cross_point, ray_dir;
+	
+    ray_dir = UnitVector(pixel_pos[i][j]-camera.position);
+    for( vector<TForm1::Triangle>::iterator it = TriList.begin(); it != TriList.end(); ++it )
+    {
+        if( IntersectTriangle(camera.position, ray_dir, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
+        {
+            cross_point = camera.position + (ray_dir*t);
+            point_dis = TwoPointDis(cross_point,camera.position);
+            if( dcmp(point_dis-select_dis) < 0 )
+            {
+                select_dis = point_dis;
+                color = (TColor)RGB(it->vertex[0].ka[0]*255 ,it->vertex[0].ka[1]*255, it->vertex[0].ka[2]*255);
+            }
+        }
+    }
+    return color;
 }
 
 void TForm1::PixelPositionCalculate()
@@ -336,8 +341,6 @@ void __fastcall TForm1::Draw_ButtonClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
-
 void __fastcall TForm1::ClearV_ButtonClick(TObject *Sender)
 {
     VX_Edit->Text = "";
@@ -389,12 +392,6 @@ void __fastcall TForm1::ClearC_ButtonClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
-
-
-
-
-
 void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
 {
     if(CX_Edit->Text == "" || CY_Edit->Text == "" || CZ_Edit->Text == "" ||
@@ -428,9 +425,6 @@ void __fastcall TForm1::SetC_ButtonClick(TObject *Sender)
     PixelPositionCalculate();
 }
 //---------------------------------------------------------------------------
-
-
-
 
 void __fastcall TForm1::AddVP_ButtonClick(TObject *Sender)
 {
