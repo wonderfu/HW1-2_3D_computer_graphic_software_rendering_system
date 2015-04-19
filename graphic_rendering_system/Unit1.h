@@ -179,13 +179,11 @@ public:		// User declarations
         };
         struct Texture {
                 double u,v;
-                bool enable;
                 Texture ( double _u = 0, double _v = 0 ): u(_u),v(_v) {}
         };
         struct Vertex {
                 Node position, normal;
                 Texture texture;
-                double ka[3],kd[3],ks[3];
                 double color[3];
         };
         struct Light {
@@ -197,13 +195,16 @@ public:		// User declarations
         struct Triangle {
                 Vertex vertex[3];
                 Node normal;
+                double ka[3],kd[3],ks[3];
+                bool tex_enable;
         };
         int dcmp(double);
         double TwoPointDis(Node, Node);
         TColor DrawPixel(int, int);
         Node UnitVector(Node);
-        Node Interpolation(Node, Node, Node, double, double, double);
-        void Lighting(struct Vertex, Node, Node, double);
+        Node Interpolation(Node, Node, Node, double, double);
+        void Interpolation(double*, double*, double*, double*, double, double);
+        void Lighting(struct Vertex, double*, double*, double*, Node, Node, double);
         void PixelPositionCalculate(void);
         bool IntersectTriangle(Node, Node, Node, Node, Node, double*, double*, double*);
 

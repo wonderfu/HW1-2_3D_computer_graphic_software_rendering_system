@@ -76,13 +76,11 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                     {
                         input_triangle.vertex[i].position = VList[selectV - 1];
                         input_triangle.vertex[i].texture = VTList[selectVT - 1];
-                        input_triangle.vertex[i].texture.enable = true;
                         input_triangle.vertex[i].normal = VNList[selectVN - 1];
                     }
                     else if( readitem == 2 )
                     {
                         input_triangle.vertex[i].position = VList[selectV - 1];
-                        input_triangle.vertex[i].texture.enable = false;
                         input_triangle.vertex[i].normal = VNList[selectVT - 1]; // if no vertex selectVT will be the position of selectVN
                     }
                     else
@@ -90,16 +88,23 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                         Err_Text->Caption = "[!] 三角形輸入發生錯誤";
                         continue;
                     }
-                    input_triangle.vertex[i].ka[0] = rand()%101/100.0;
-                    input_triangle.vertex[i].ka[1] = rand()%101/100.0;
-                    input_triangle.vertex[i].ka[2] = rand()%101/100.0;
-                    input_triangle.vertex[i].kd[0] = rand()%101/100.0;
-                    input_triangle.vertex[i].kd[1] = rand()%101/100.0;
-                    input_triangle.vertex[i].kd[2] = rand()%101/100.0;
-                    input_triangle.vertex[i].ks[0] = rand()%101/100.0;
-                    input_triangle.vertex[i].ks[1] = rand()%101/100.0;
-                    input_triangle.vertex[i].ks[2] = rand()%101/100.0;
+                    input_triangle.vertex[i].color[0] = rand()%101/100.0;
+                    input_triangle.vertex[i].color[1] = rand()%101/100.0;
+                    input_triangle.vertex[i].color[2] = rand()%101/100.0;
                 }
+                if( readitem == 3 )
+                    input_triangle.tex_enable = true;
+                else
+                    input_triangle.tex_enable = false;
+                input_triangle.ka[0] = rand()%101/100.0;
+                input_triangle.ka[1] = rand()%101/100.0;
+                input_triangle.ka[2] = rand()%101/100.0;
+                input_triangle.kd[0] = rand()%101/100.0;
+                input_triangle.kd[1] = rand()%101/100.0;
+                input_triangle.kd[2] = rand()%101/100.0;
+                input_triangle.ks[0] = rand()%101/100.0;
+                input_triangle.ks[1] = rand()%101/100.0;
+                input_triangle.ks[2] = rand()%101/100.0;
                 TriList.push_back(input_triangle);
             }
             else
@@ -122,7 +127,7 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
             {
                 Msg_Memo->Lines->Add(IntToStr(j)+":"+FloatToStr(it->vertex[j].normal.x)+","+FloatToStr(it->vertex[j].normal.y)+","+FloatToStr(it->vertex[j].normal.z));
             }
-            if( it->vertex[0].texture.enable == true )
+            if( it->tex_enable == true )
             {
                 Msg_Memo->Lines->Add("texture:");
                 for(int j=0; j<3; ++j)
@@ -217,7 +222,7 @@ bool TForm1::IntersectTriangle(TForm1::Node O, TForm1::Node D, TForm1::Node V1, 
     return false;
 }
 
-void TForm1::Lighting(struct Vertex vertex, Node L_ray, Node V_ray, double dis)
+void TForm1::Lighting(struct Vertex vertex, double* ka, double* ks, double* kd, Node L_ray, Node V_ray, double dis)
 {
         int n = 2;
         double Att = min(1,1/(dis*dis));
@@ -226,14 +231,16 @@ void TForm1::Lighting(struct Vertex vertex, Node L_ray, Node V_ray, double dis)
         Node L = UnitVector(L_ray);
         Node H = UnitVector(L_ray + V_ray);
 
-	vertex.color[0] = vertex.ka[0] * ambient_light + Att * light0.color[0] * (vertex.kd[0] * (N * L) + vertex.ks[0] * pow((N * H), n));
-	vertex.color[1] = vertex.ka[1] * ambient_light + Att * light0.color[1] * (vertex.kd[1] * (N * L) + vertex.ks[1] * pow((N * H), n));
-	vertex.color[2] = vertex.ka[2] * ambient_light + Att * light0.color[2] * (vertex.kd[2] * (N * L) + vertex.ks[2] * pow((N * H), n));
+	vertex.color[0] = ka[0] * ambient_light + Att * light0.color[0] * (kd[0] * (N * L) + ks[0] * pow((N * H), n));
+	vertex.color[1] = ka[1] * ambient_light + Att * light0.color[1] * (kd[1] * (N * L) + ks[1] * pow((N * H), n));
+	vertex.color[2] = ka[2] * ambient_light + Att * light0.color[2] * (kd[2] * (N * L) + ks[2] * pow((N * H), n));
 }
 
-TForm1::Node TForm1::Interpolation(Node V1, Node V2, Node V3, double t, double u, double v)
-{ 
+TForm1::Node TForm1::Interpolation(Node V1, Node V2, Node V3, double u, double v)
+{
+        double t = 1 - u - v;
 	Node renode;
+
 	renode.x = V1.x * t + V2.x * u + V3.x * v;
 	renode.y = V1.y * t + V2.y * u + V3.y * v;
 	renode.z = V1.z * t + V2.z * u + V3.z * v;
@@ -242,25 +249,37 @@ TForm1::Node TForm1::Interpolation(Node V1, Node V2, Node V3, double t, double u
 
 TColor TForm1::DrawPixel(int i, int j)
 {
-    TColor color = BLACK; // 0xBBGGRR || RGB(R,G,B) [0~255]
+    TColor color; // 0xBBGGRR || RGB(R,G,B) [0~255]
     double t, u, v;
+    double select_u, select_v;
     double select_dis = 2147483647, point_dis;
-    TForm1::Node cross_point, ray_dir;
-	
-    ray_dir = UnitVector(pixel_pos[i][j]-camera.position);
+    Node cross_point, ray_dir;
+    struct Vertex select_point;
+    vector<TForm1::Triangle>::iterator select_tri = NULL;
+
+    ray_dir = UnitVector(pixel_pos[i][j] - camera.position);
     for( vector<TForm1::Triangle>::iterator it = TriList.begin(); it != TriList.end(); ++it )
     {
         if( IntersectTriangle(camera.position, ray_dir, it->vertex[0].position, it->vertex[1].position, it->vertex[2].position, &t, &u, &v) )
         {
-            cross_point = camera.position + (ray_dir*t);
+            cross_point = camera.position + (ray_dir * t);
             point_dis = TwoPointDis(cross_point,camera.position);
-            if( dcmp(point_dis-select_dis) < 0 )
+            if( dcmp(point_dis - select_dis) < 0 )
             {
                 select_dis = point_dis;
-                color = (TColor)RGB(it->vertex[0].ka[0]*255 ,it->vertex[0].ka[1]*255, it->vertex[0].ka[2]*255);
+                select_point.position = cross_point;
+                select_tri = it;
+                select_u = u;
+                select_v = v;
             }
         }
     }
+    if( select_tri == NULL )
+        return BLACK;
+
+    select_point.normal = Interpolation(select_tri->vertex[0].normal, select_tri->vertex[1].normal, select_tri->vertex[2].normal, select_u, select_v);
+    select_point.color = Interpolation(select_tri->vertex[0].color, select_tri->vertex[1].color, select_tri->vertex[2].color, select_u, select_v);
+
     return color;
 }
 
