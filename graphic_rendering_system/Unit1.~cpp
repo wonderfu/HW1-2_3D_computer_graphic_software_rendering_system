@@ -288,7 +288,8 @@ TColor TForm1::DrawPixel(int i, int j)
     Interpolation(select_point.ks, select_tri->vertex[0].ks, select_tri->vertex[1].ks, select_tri->vertex[2].ks, select_u, select_v);
     Interpolation(select_point.kd, select_tri->vertex[0].kd, select_tri->vertex[1].kd, select_tri->vertex[2].kd, select_u, select_v);
 
-    return RGB(color[0], color[1], color[2]);
+    Lighting(select_point, (light0.position - select_point.position), (camera.position - select_point.position), select_dis, color);
+    return (TColor)RGB(color[0]*256, color[1]*256, color[2]*256);
 }
 
 void TForm1::PixelPositionCalculate()

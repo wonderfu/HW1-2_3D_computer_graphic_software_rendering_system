@@ -288,7 +288,8 @@ TColor TForm1::DrawPixel(int i, int j)
     Interpolation(select_point.ks, select_tri->vertex[0].ks, select_tri->vertex[1].ks, select_tri->vertex[2].ks, select_u, select_v);
     Interpolation(select_point.kd, select_tri->vertex[0].kd, select_tri->vertex[1].kd, select_tri->vertex[2].kd, select_u, select_v);
 
-    return (TColor)RGB(color[0], color[1], color[2]);
+    Lighting(select_point, (light0.position - select_point.position), (camera.position - select_point.position), select_dis, color);
+    return (TColor)RGB(color[0]*256, color[1]*256, color[2]*256);
 }
 
 void TForm1::PixelPositionCalculate()
@@ -529,7 +530,7 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
 {
     int input_color[3];
     if(CR_Edit->Text == "" || CG_Edit->Text == "" || CB_Edit->Text == "")
-	{
+    {
         Err_Text->Caption = "顏色不得空白";
         return ;
     }
