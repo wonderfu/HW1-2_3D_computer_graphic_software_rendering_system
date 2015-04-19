@@ -88,23 +88,20 @@ void __fastcall TForm1::OpenInputClick(TObject *Sender)
                         Err_Text->Caption = "[!] 三角形輸入發生錯誤";
                         continue;
                     }
-                    input_triangle.vertex[i].color[0] = rand()%101/100.0;
-                    input_triangle.vertex[i].color[1] = rand()%101/100.0;
-                    input_triangle.vertex[i].color[2] = rand()%101/100.0;
+                    input_triangle.vertex[i].ka[0] = rand()%101/100.0;
+                    input_triangle.vertex[i].ka[1] = rand()%101/100.0;
+                    input_triangle.vertex[i].ka[2] = rand()%101/100.0;
+                    input_triangle.vertex[i].kd[0] = rand()%101/100.0;
+                    input_triangle.vertex[i].kd[1] = rand()%101/100.0;
+                    input_triangle.vertex[i].kd[2] = rand()%101/100.0;
+                    input_triangle.vertex[i].ks[0] = rand()%101/100.0;
+                    input_triangle.vertex[i].ks[1] = rand()%101/100.0;
+                    input_triangle.vertex[i].ks[2] = rand()%101/100.0;
                 }
                 if( readitem == 3 )
                     input_triangle.tex_enable = true;
                 else
                     input_triangle.tex_enable = false;
-                input_triangle.ka[0] = rand()%101/100.0;
-                input_triangle.ka[1] = rand()%101/100.0;
-                input_triangle.ka[2] = rand()%101/100.0;
-                input_triangle.kd[0] = rand()%101/100.0;
-                input_triangle.kd[1] = rand()%101/100.0;
-                input_triangle.kd[2] = rand()%101/100.0;
-                input_triangle.ks[0] = rand()%101/100.0;
-                input_triangle.ks[1] = rand()%101/100.0;
-                input_triangle.ks[2] = rand()%101/100.0;
                 TriList.push_back(input_triangle);
             }
             else
@@ -222,7 +219,7 @@ bool TForm1::IntersectTriangle(TForm1::Node O, TForm1::Node D, TForm1::Node V1, 
     return false;
 }
 
-void TForm1::Lighting(struct Vertex vertex, double* ka, double* ks, double* kd, Node L_ray, Node V_ray, double dis)
+void TForm1::Lighting(struct Vertex vertex, Node L_ray, Node V_ray, double dis, double* color)
 {
         int n = 2;
         double Att = min(1,1/(dis*dis));
@@ -231,9 +228,9 @@ void TForm1::Lighting(struct Vertex vertex, double* ka, double* ks, double* kd, 
         Node L = UnitVector(L_ray);
         Node H = UnitVector(L_ray + V_ray);
 
-	vertex.color[0] = ka[0] * ambient_light + Att * light0.color[0] * (kd[0] * (N * L) + ks[0] * pow((N * H), n));
-	vertex.color[1] = ka[1] * ambient_light + Att * light0.color[1] * (kd[1] * (N * L) + ks[1] * pow((N * H), n));
-	vertex.color[2] = ka[2] * ambient_light + Att * light0.color[2] * (kd[2] * (N * L) + ks[2] * pow((N * H), n));
+	color[0] = vertex.ka[0] * ambient_light + Att * light0.color[0] * (vertex.kd[0] * (N * L) + vertex.ks[0] * pow((N * H), n));
+	color[1] = vertex.ka[1] * ambient_light + Att * light0.color[1] * (vertex.kd[1] * (N * L) + vertex.ks[1] * pow((N * H), n));
+	color[2] = vertex.ka[2] * ambient_light + Att * light0.color[2] * (vertex.kd[2] * (N * L) + vertex.ks[2] * pow((N * H), n));
 }
 
 TForm1::Node TForm1::Interpolation(Node V1, Node V2, Node V3, double u, double v)
@@ -247,7 +244,7 @@ TForm1::Node TForm1::Interpolation(Node V1, Node V2, Node V3, double u, double v
 	return renode;
 }
 
-void Interpolation(double* out, double* V1, double* V2, double* V3, double u, double v)
+void TForm1::Interpolation(double* out, double* V1, double* V2, double* V3, double u, double v)
 {
         double t = 1 - u - v;
 
@@ -258,7 +255,7 @@ void Interpolation(double* out, double* V1, double* V2, double* V3, double u, do
 
 TColor TForm1::DrawPixel(int i, int j)
 {
-    TColor color; // 0xBBGGRR || RGB(R,G,B) [0~255]
+    double color[3];
     double t, u, v;
     double select_u, select_v;
     double select_dis = 2147483647, point_dis;
@@ -287,9 +284,11 @@ TColor TForm1::DrawPixel(int i, int j)
         return BLACK;
 
     select_point.normal = Interpolation(select_tri->vertex[0].normal, select_tri->vertex[1].normal, select_tri->vertex[2].normal, select_u, select_v);
-    select_point.color = Interpolation(select_tri->vertex[0].color, select_tri->vertex[1].color, select_tri->vertex[2].color, select_u, select_v);
+    Interpolation(select_point.ka, select_tri->vertex[0].ka, select_tri->vertex[1].ka, select_tri->vertex[2].ka, select_u, select_v);
+    Interpolation(select_point.ks, select_tri->vertex[0].ks, select_tri->vertex[1].ks, select_tri->vertex[2].ks, select_u, select_v);
+    Interpolation(select_point.kd, select_tri->vertex[0].kd, select_tri->vertex[1].kd, select_tri->vertex[2].kd, select_u, select_v);
 
-    return color;
+    return (TColor)RGB(color[0], color[1], color[2]);
 }
 
 void TForm1::PixelPositionCalculate()

@@ -28,7 +28,7 @@
 #define WindowH 600
 #define WindowW 800
 #define StrSize 64
-#define BLACK (TColor)0x000000
+#define BLACK (TColor)0x000000  // 0xBBGGRR || RGB(R,G,B) [0~255]
 #define WHITE (TColor)0xffffff
 #define RED (TColor)0xff0000
 #define GREEN (TColor)0x00ff00
@@ -184,18 +184,17 @@ public:		// User declarations
         struct Vertex {
                 Node position, normal;
                 Texture texture;
-                double color[3];
+                double ka[3],kd[3],ks[3];
         };
         struct Light {
                 double ambient;
                 Node position;
                 double color[3];
-                double Sa[3],Sd[3],Ss[3];
+                double sa[3],sd[3],ss[3];
         };
         struct Triangle {
                 Vertex vertex[3];
                 Node normal;
-                double ka[3],kd[3],ks[3];
                 bool tex_enable;
         };
         int dcmp(double);
@@ -204,7 +203,7 @@ public:		// User declarations
         Node UnitVector(Node);
         Node Interpolation(Node, Node, Node, double, double);
         void Interpolation(double*, double*, double*, double*, double, double);
-        void Lighting(struct Vertex, double*, double*, double*, Node, Node, double);
+        void Lighting(struct Vertex, Node, Node, double, double*);
         void PixelPositionCalculate(void);
         bool IntersectTriangle(Node, Node, Node, Node, Node, double*, double*, double*);
 
