@@ -15,7 +15,7 @@ TForm1::Node pixel_pos[WindowH][WindowW];
 // camera
 TForm1::Camera camera;
 // light
-double ambient_light;
+double ambient_light = 0.5;
 TForm1::Light light0;
 // vertex
 vector <TForm1::Node> VList, VNList, LList;
@@ -228,9 +228,9 @@ void TForm1::Lighting(struct Vertex vertex, Node L_ray, Node V_ray, double dis, 
         Node L = UnitVector(L_ray);
         Node H = UnitVector(L_ray + V_ray);
 
-	color[0] = vertex.ka[0] * ambient_light + Att * light0.color[0] * (vertex.kd[0] * (N * L) + vertex.ks[0] * pow((N * H), n));
-	color[1] = vertex.ka[1] * ambient_light + Att * light0.color[1] * (vertex.kd[1] * (N * L) + vertex.ks[1] * pow((N * H), n));
-	color[2] = vertex.ka[2] * ambient_light + Att * light0.color[2] * (vertex.kd[2] * (N * L) + vertex.ks[2] * pow((N * H), n));
+	color[0] = vertex.ka[0] * light0.sa[0] * light0.sd[0] + Att * light0.color[0] * (vertex.kd[0] * light0.sd[0] * (N * L) + vertex.ks[0] * light0.ss[0] * pow((N * H), n));
+	color[1] = vertex.ka[1] * light0.sa[1] * light0.sd[1] + Att * light0.color[1] * (vertex.kd[1] * light0.sd[1] * (N * L) + vertex.ks[1] * light0.ss[1] * pow((N * H), n));
+	color[2] = vertex.ka[2] * light0.sa[2] * light0.sd[2] + Att * light0.color[2] * (vertex.kd[2] * light0.sd[2] * (N * L) + vertex.ks[2] * light0.ss[2] * pow((N * H), n));
 }
 
 TForm1::Node TForm1::Interpolation(Node V1, Node V2, Node V3, double u, double v)
@@ -498,13 +498,11 @@ void __fastcall TForm1::SetLA_ButtonClick(TObject *Sender)
     if( LA_Edit->Text == "" )
 	{
         ambient_light = 0.0;
-        light0.ambient = 0;
         LA_Edit->Text = "0";
     }
     else
 	{
         ambient_light = StrToFloat(LA_Edit->Text);
-        light0.ambient = StrToFloat(LA_Edit->Text);
     }
     Err_Text->Caption = "";
 }
@@ -530,7 +528,7 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
 {
     int input_color[3];
     if(CR_Edit->Text == "" || CG_Edit->Text == "" || CB_Edit->Text == "")
-	{
+    {
         Err_Text->Caption = "顏色不得空白";
         return ;
     }
@@ -548,8 +546,19 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     light0.color[1] = input_color[1];
     light0.color[2] = input_color[2];
     Err_Text->Caption = "";
+
+    light0.sa[0] = rand()%101/100.0;
+    light0.sa[1] = rand()%101/100.0;
+    light0.sa[2] = rand()%101/100.0;
+    light0.sd[0] = rand()%101/100.0;
+    light0.sd[1] = rand()%101/100.0;
+    light0.sd[2] = rand()%101/100.0;
+    light0.ss[0] = rand()%101/100.0;
+    light0.ss[1] = rand()%101/100.0;
+    light0.ss[2] = rand()%101/100.0;
 }
 //---------------------------------------------------------------------------
+
 
 
 

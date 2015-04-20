@@ -187,7 +187,6 @@ public:		// User declarations
                 double ka[3],kd[3],ks[3];
         };
         struct Light {
-                double ambient;
                 Node position;
                 double color[3];
                 double sa[3],sd[3],ss[3];
