@@ -233,8 +233,11 @@ void TForm1::Lighting(struct Vertex vertex, Node L_ray, Node V_ray, double dis, 
 	color[2] = vertex.ka[2] * light0.sa[2] * light0.sd[2] + Att * light0.color[2] * (vertex.kd[2] * light0.sd[2] * (N * L) + vertex.ks[2] * light0.ss[2] * pow((N * H), n));
 }
 
+// O+D*t = (1-u-v)*V1 + u*V2 + v*V3
 TForm1::Node TForm1::Interpolation(Node V1, Node V2, Node V3, double u, double v)
 {
+	return (V1*(1-u-v) + V2*u + V3*v);
+        /*
         double t = 1 - u - v;
 	Node renode;
 
@@ -242,6 +245,7 @@ TForm1::Node TForm1::Interpolation(Node V1, Node V2, Node V3, double u, double v
 	renode.y = V1.y * t + V2.y * u + V3.y * v;
 	renode.z = V1.z * t + V2.z * u + V3.z * v;
 	return renode;
+        */
 }
 
 void TForm1::Interpolation(double* out, double* V1, double* V2, double* V3, double u, double v)
@@ -547,17 +551,26 @@ void __fastcall TForm1::AddLC_ButtonClick(TObject *Sender)
     light0.color[2] = input_color[2];
     Err_Text->Caption = "";
 
-    light0.sa[0] = rand()%101/100.0;
-    light0.sa[1] = rand()%101/100.0;
-    light0.sa[2] = rand()%101/100.0;
-    light0.sd[0] = rand()%101/100.0;
-    light0.sd[1] = rand()%101/100.0;
-    light0.sd[2] = rand()%101/100.0;
-    light0.ss[0] = rand()%101/100.0;
-    light0.ss[1] = rand()%101/100.0;
-    light0.ss[2] = rand()%101/100.0;
+    light0.sa[0] = rand()%51/100.0+0.5;
+    light0.sa[1] = rand()%51/100.0+0.5;
+    light0.sa[2] = rand()%51/100.0+0.5;
+    light0.sd[0] = rand()%51/100.0+0.5;
+    light0.sd[1] = rand()%51/100.0+0.5;
+    light0.sd[2] = rand()%51/100.0+0.5;
+    light0.ss[0] = rand()%51/100.0+0.5;
+    light0.ss[1] = rand()%51/100.0+0.5;
+    light0.ss[2] = rand()%51/100.0+0.5;
 }
 //---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 
 
 

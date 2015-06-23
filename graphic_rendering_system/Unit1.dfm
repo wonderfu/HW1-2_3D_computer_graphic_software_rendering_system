@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 400
-  Top = 100
-  Width = 1300
+  Left = 263
+  Top = 137
+  Width = 1292
   Height = 850
   Caption = '3D_computer_graphic_software_rendering_system'
   Color = clBtnFace
@@ -79,14 +79,14 @@ object Form1: TForm1
     Top = 32
     Width = 615
     Height = 657
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Vertex'
@@ -314,6 +314,7 @@ object Form1: TForm1
             Height = 25
             Hint = 'Enter the three vertices of a triangle.'
             Caption = 'Add'
+            Enabled = False
             ParentShowHint = False
             ShowHint = True
             TabOrder = 3
@@ -369,6 +370,7 @@ object Form1: TForm1
             Height = 25
             Hint = 'Enter the three vertices of a triangle.'
             Caption = 'Add'
+            Enabled = False
             ParentShowHint = False
             ShowHint = True
             TabOrder = 3
@@ -424,6 +426,7 @@ object Form1: TForm1
             Height = 25
             Hint = 'Enter the three vertices of a triangle.'
             Caption = 'Add'
+            Enabled = False
             ParentShowHint = False
             ShowHint = True
             TabOrder = 3
@@ -632,6 +635,7 @@ object Form1: TForm1
           Width = 121
           Height = 25
           Caption = 'Add'
+          Enabled = False
           TabOrder = 4
         end
       end
@@ -812,6 +816,7 @@ object Form1: TForm1
         Height = 25
         Hint = 'Enter the three vertices of a triangle.'
         Caption = 'Add'
+        Enabled = False
         ParentShowHint = False
         ShowHint = True
         TabOrder = 3
