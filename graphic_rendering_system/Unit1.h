@@ -34,6 +34,8 @@
 #define GREEN (TColor)0x00ff00
 #define BLUE (TColor)0x0000ff
 
+#define TextureSize 32
+
 using namespace std;
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
@@ -202,10 +204,11 @@ public:		// User declarations
         Node UnitVector(Node);
         Node Interpolation(Node, Node, Node, double, double);
         void Interpolation(double*, double*, double*, double*, double, double);
+        double Interpolation(double V1, double V2, double V3, double u, double v);
         void Lighting(struct Vertex, Node, Node, double, double*);
         void PixelPositionCalculate(void);
         bool IntersectTriangle(Node, Node, Node, Node, Node, double*, double*, double*);
-
+        void drawtree(void);
 };
 
 //---------------------------------------------------------------------------

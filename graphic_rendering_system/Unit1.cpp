@@ -22,14 +22,79 @@ vector <TForm1::Node> VList, VNList, LList;
 vector <TForm1::Texture> VTList;
 // triangle
 vector <TForm1::Triangle> TriList;
+// texture
+int TreeText[TextureSize][TextureSize][3];
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
 {
+        drawtree();
 }
 //---------------------------------------------------------------------------
 
+void TForm1::drawtree(void){
+	int i, j, bound, lower, upper;
+
+	/*initialize*/
+	for (i = 0; i < 32; i++){
+		for (j = 0; j < 32; j++){
+			TreeText[i][j][0] = 50;
+			TreeText[i][j][1] = 50;
+			TreeText[i][j][2] = 50;
+		}
+	}
+	/*leaf*/
+	TreeText[3][15][1] = 255;
+	TreeText[3][16][1] = 255;
+
+	for (i = 4; i < 27; i++){
+		bound = i / 2 - i % 2;
+		upper = 16 + bound;
+		lower = 15 - bound;
+		for (j = 0; j<32; j++){
+			if (j>lower && j < upper)
+				TreeText[i][j][1] = 255;
+		}
+	}
+	/*trunk*/
+	for (i = 27; i < 32; i++){
+		for (j = 13; j < 19; j++){
+			TreeText[i][j][0] = 128;
+			TreeText[i][j][1] = 64;
+		}
+	}
+	/*gifts*/
+	for (i = 29; i < 32; i++){
+		for (j = 4; j < 9; j++){
+			TreeText[i][j][0] = 255;
+			if (i == 30 || j == 6)
+				TreeText[i][j][1] = 255;
+		}
+		for (j = 23; j < 28; j++){
+			TreeText[i][j][0] = 255;
+			if (i == 30 || j == 25)
+				TreeText[i][j][1] = 255;
+		}
+	}
+	/*star*/
+	for (j = 13; j < 19; j++){
+		TreeText[1][j][0] = 255;
+		TreeText[1][j][1] = 255;
+	}
+	for (j = 14; j < 18; j++){
+		TreeText[2][j][0] = 255;
+		TreeText[2][j][1] = 255;
+	}
+	TreeText[0][15][0] = 255;
+	TreeText[0][15][1] = 255;
+	TreeText[0][16][0] = 255;
+	TreeText[0][16][1] = 255;
+	TreeText[3][13][0] = 255;
+	TreeText[3][13][1] = 255;
+	TreeText[3][18][0] = 255;
+	TreeText[3][18][1] = 255;
+}
 
 void __fastcall TForm1::OpenInputClick(TObject *Sender)
 {
@@ -237,15 +302,6 @@ void TForm1::Lighting(struct Vertex vertex, Node L_ray, Node V_ray, double dis, 
 TForm1::Node TForm1::Interpolation(Node V1, Node V2, Node V3, double u, double v)
 {
 	return (V1*(1-u-v) + V2*u + V3*v);
-        /*
-        double t = 1 - u - v;
-	Node renode;
-
-	renode.x = V1.x * t + V2.x * u + V3.x * v;
-	renode.y = V1.y * t + V2.y * u + V3.y * v;
-	renode.z = V1.z * t + V2.z * u + V3.z * v;
-	return renode;
-        */
 }
 
 void TForm1::Interpolation(double* out, double* V1, double* V2, double* V3, double u, double v)
@@ -255,6 +311,11 @@ void TForm1::Interpolation(double* out, double* V1, double* V2, double* V3, doub
 	out[0] = V1[0] * t + V2[0] * u + V3[0] * v;
 	out[1] = V1[1] * t + V2[1] * u + V3[1] * v;
 	out[2] = V1[2] * t + V2[2] * u + V3[2] * v;
+}
+
+double TForm1::Interpolation(double V1, double V2, double V3, double u, double v)
+{
+        return (V1*(1-u-v) + V2*u + V3*v);
 }
 
 TColor TForm1::DrawPixel(int i, int j)
@@ -287,10 +348,22 @@ TColor TForm1::DrawPixel(int i, int j)
     if( select_tri == NULL )
         return BLACK;
 
+    if( select_tri->tex_enable == 1 )
+    {
+        select_point.texture.u = Interpolation(select_tri->vertex[0].texture.u, select_tri->vertex[1].texture.u, select_tri->vertex[2].texture.u, select_u, select_v);
+        select_point.texture.v = Interpolation(select_tri->vertex[0].texture.v, select_tri->vertex[1].texture.v, select_tri->vertex[2].texture.v, select_u, select_v);
+
+        int tu, tv;
+        tu = (int)(select_point.texture.u * TextureSize + 0.5);
+        tv = (int)(select_point.texture.v * TextureSize + 0.5);
+
+        return (TColor)RGB(TreeText[tu][tv][0],TreeText[tu][tv][1],TreeText[tu][tv][2]);
+    }
     select_point.normal = Interpolation(select_tri->vertex[0].normal, select_tri->vertex[1].normal, select_tri->vertex[2].normal, select_u, select_v);
     Interpolation(select_point.ka, select_tri->vertex[0].ka, select_tri->vertex[1].ka, select_tri->vertex[2].ka, select_u, select_v);
     Interpolation(select_point.ks, select_tri->vertex[0].ks, select_tri->vertex[1].ks, select_tri->vertex[2].ks, select_u, select_v);
     Interpolation(select_point.kd, select_tri->vertex[0].kd, select_tri->vertex[1].kd, select_tri->vertex[2].kd, select_u, select_v);
+
 
     Lighting(select_point, (light0.position - select_point.position), (camera.position - select_point.position), select_dis, color);
     return (TColor)RGB(color[0]*256, color[1]*256, color[2]*256);
